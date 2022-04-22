@@ -1,0 +1,11 @@
+module.exports = {
+  semi: true,
+  tabWidth: 2,
+  printWidth: 160,
+  singleQuote: true,
+  trailingComma: "none",
+  jsxSingleQuote: true,
+  endOfLine: "auto",
+  arrowParens: "avoid",
+  parser: "typescript"
+};
