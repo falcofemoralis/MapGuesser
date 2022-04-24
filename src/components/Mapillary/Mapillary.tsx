@@ -31,16 +31,16 @@ const Mapillary: React.FC<MapillaryProps> = ({ onMove }) => {
     //   if (images.length > 0) {
     //     const imageNum = Math.floor(Math.random() * images.length);
     //     const id = images[imageNum].id;
-        const id = '498763468214164';
+    const id = '498763468214164';
 
-        ImagesService.getImage(id).then(image => {
-          const coordinates = [image.computed_geometry.coordinates[0], image.computed_geometry.coordinates[1]];
-          onMove({ latitude: coordinates[0], longitude: coordinates[1] });
-          setImageId(id);
-        });
-      // } else {
-      //   initMapillary();
-      // }
+    ImagesService.getImage(id).then(image => {
+      const coordinates = [image.computed_geometry.coordinates[0], image.computed_geometry.coordinates[1]];
+      onMove({ latitude: coordinates[0], longitude: coordinates[1] });
+      setImageId(id);
+    });
+    //   } else {
+    //     initMapillary();
+    //   }
     // });
   };
 
@@ -61,7 +61,9 @@ const styles = StyleSheet.create({
   previewContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: '#000',
+    zIndex: 5
   }
 });
 

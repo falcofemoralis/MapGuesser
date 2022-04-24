@@ -1,14 +1,13 @@
 import React from 'react';
-import { StyleProp, StyleSheet, View, ViewStyle, Image, TouchableHighlight, Pressable, Text } from 'react-native';
+import { StyleProp, StyleSheet, View, ViewStyle, Image, TouchableHighlight, Pressable, Text, TouchableOpacity } from 'react-native';
 import MapView, { LatLng, MapEvent, Marker, UrlTile } from 'react-native-maps';
 
 interface SelectableMapProps {
   onMarkerSet: (coordinates: LatLng) => void;
   style?: StyleProp<ViewStyle>;
-  onClose: () => void;
   onComplete: () => void;
 }
-const SelectableMap: React.FC<SelectableMapProps> = ({ onMarkerSet, style, onClose, onComplete }) => {
+const SelectableMap: React.FC<SelectableMapProps> = ({ onMarkerSet, style, onComplete }) => {
   console.log('SelectableMap');
 
   const [marker, setMarker] = React.useState<LatLng | null>(null);
@@ -17,6 +16,7 @@ const SelectableMap: React.FC<SelectableMapProps> = ({ onMarkerSet, style, onClo
     onMarkerSet(event.nativeEvent.coordinate);
     setMarker(event.nativeEvent.coordinate);
   };
+
   return (
     <View style={style}>
       <MapView style={styles.map} onPress={onMarkerCreate}>
@@ -39,17 +39,14 @@ const SelectableMap: React.FC<SelectableMapProps> = ({ onMarkerSet, style, onClo
         />
         {marker && <Marker coordinate={marker} />}
       </MapView>
-      <TouchableHighlight onPress={onClose}>
-        <Image style={styles.closeBtn} source={require('./img/cancel.png')} />
-      </TouchableHighlight>
       {marker ? (
-        <Pressable style={styles.completeBtn} onPress={onComplete} disabled={!marker}>
-          <Text style={styles.completeBtnText}>Complete</Text>
-        </Pressable>
+        <TouchableOpacity style={styles.completeBtn} onPress={onComplete}>
+          <Image style={styles.img} source={require('./img/select_on.png')} />
+        </TouchableOpacity>
       ) : (
-        <Pressable style={styles.inactiveCompleteBtn} disabled={true}>
-          <Text style={styles.completeBtnText}>Choose place</Text>
-        </Pressable>
+        <TouchableOpacity style={styles.completeBtn} disabled={true}>
+          <Image style={styles.img} source={require('./img/select_off.png')} />
+        </TouchableOpacity>
       )}
     </View>
   );
@@ -57,44 +54,20 @@ const SelectableMap: React.FC<SelectableMapProps> = ({ onMarkerSet, style, onClo
 
 const styles = StyleSheet.create({
   map: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0
+    height: '100%',
+    width: '100%'
   },
-  closeBtn: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    width: 64,
-    height: 64
+  img: {
+    height: '100%',
+    width: '100%'
   },
   completeBtn: {
     position: 'absolute',
     bottom: 10,
-    width: 180,
-    height: 50,
+    width: 80,
+    height: 80,
     alignSelf: 'center',
-    backgroundColor: 'red',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 40
-  },
-  inactiveCompleteBtn: {
-    position: 'absolute',
-    bottom: 10,
-    width: 180,
-    height: 50,
-    alignSelf: 'center',
-    backgroundColor: 'gray',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 40
-  },
-  completeBtnText: {
-    color: '#fff',
-    fontSize: 20
+    zIndex: 15
   }
 });
 

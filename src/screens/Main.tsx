@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { Button, StyleSheet, View } from 'react-native';
+import { Button, StyleSheet, View, Image } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '.';
 
@@ -13,7 +13,7 @@ const Main = () => {
 
   return (
     <View style={styles.container}>
-      <Button title='Start Game' onPress={() => navigation.navigate('Game')}></Button>
+      <Button title='Start Game' onPress={() => navigation.navigate('Game')} color='red'></Button>
     </View>
   );
 };
@@ -22,7 +22,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: '#007dc2'
   }
 });
 

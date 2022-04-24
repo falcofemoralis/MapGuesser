@@ -1,13 +1,14 @@
 import { CommonActions } from '@react-navigation/native';
 import * as turf from '@turf/turf';
 import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MapView, { Marker, Polyline, UrlTile } from 'react-native-maps';
 import Props from '../types/PropsType';
 
 const Result: React.FC<Props<'Result'>> = ({ route, navigation }) => {
   console.log('Result');
   let isFree = false;
+  const mapRef = React.useRef<MapView | null>(null);
 
   React.useEffect(
     () =>
@@ -16,8 +17,8 @@ const Result: React.FC<Props<'Result'>> = ({ route, navigation }) => {
         e.preventDefault();
 
         if (isFree) {
-          navigation.dispatch(e.data.action);
           isFree = false;
+          navigation.dispatch(e.data.action);
         }
       }),
     [navigation]
@@ -46,26 +47,21 @@ const Result: React.FC<Props<'Result'>> = ({ route, navigation }) => {
     navigation.navigate('Game');
   };
 
+  // TODO LEAVE THE RESULT SCREEN IN SECOND ROUND
+
   return (
     <View style={styles.container}>
-      <MapView style={styles.map}>
-        <UrlTile
-          /**
-           * The url template of the tile server. The patterns {x} {y} {z} will be replaced at runtime
-           * For example, http://c.tile.openstreetmap.org/{z}/{x}/{y}.png
-           */
-          urlTemplate='http://c.tile.openstreetmap.org/{z}/{x}/{y}.png'
-          /**
-           * The maximum zoom level for this tile overlay. Corresponds to the maximumZ setting in
-           * MKTileOverlay. iOS only.
-           */
-          maximumZ={19}
-          /**
-           * flipY allows tiles with inverted y coordinates (origin at bottom left of map)
-           * to be used. Its default value is false.
-           */
-          flipY={false}
-        />
+      <MapView
+        ref={mapRef}
+        style={styles.map}
+        onMapReady={() =>
+          mapRef?.current?.fitToCoordinates([selectedCoordinates, currentCoordinates], {
+            edgePadding: { top: 30, right: 10, bottom: 5, left: 10 },
+            animated: true
+          })
+        }
+      >
+        <UrlTile urlTemplate='http://c.tile.openstreetmap.org/{z}/{x}/{y}.png' maximumZ={19} flipY={false} />
         <Marker coordinate={currentCoordinates} />
         <Marker coordinate={selectedCoordinates} />
         <Polyline coordinates={[currentCoordinates, selectedCoordinates]} />
@@ -74,9 +70,9 @@ const Result: React.FC<Props<'Result'>> = ({ route, navigation }) => {
         <Text style={styles.resultText}>
           Your place was <Text style={styles.resultTextDistance}>{distance}km</Text> away from the correct location.
         </Text>
-        <Pressable style={styles.nextBtn} onPress={onFinish}>
+        <TouchableOpacity style={styles.nextBtn} onPress={onFinish}>
           <Text style={styles.nextBtnText}>PLAY NEXT</Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </View>
   );

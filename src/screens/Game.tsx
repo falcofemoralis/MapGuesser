@@ -3,7 +3,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { Alert, StyleSheet } from 'react-native';
 import { LatLng } from 'react-native-maps';
-import MapButton from '../components/MapButton/MapButton';
+import MapPanel from '../components/MapPanel/MapPanel';
 import Mapillary from '../components/Mapillary/Mapillary';
 import { RootStackParamList } from '../screens';
 import { gameStore } from '../store/GameStore';
@@ -21,7 +21,7 @@ const Game = () => {
       navigation.addListener('beforeRemove', e => {
         // Prevent default behavior of leaving the screen
         e.preventDefault();
-        
+
         if (!isCompleted) {
           // Prompt the user before leaving the screen
           Alert.alert('Leave the game?', 'You have unsaved changes. Are you sure to discard them and leave the screen?', [
@@ -31,7 +31,10 @@ const Game = () => {
               style: 'destructive',
               // If the user confirmed, then we dispatch the action we blocked earlier
               // This will continue the action that had triggered the removal of the screen
-              onPress: () => navigation.dispatch(e.data.action)
+              onPress: () => {
+                isCompleted = true;
+                navigation.navigate('Main');
+              }
             }
           ]);
         } else {
@@ -59,7 +62,7 @@ const Game = () => {
   return (
     <>
       <Mapillary onMove={onMove} />
-      <MapButton onMarkerSet={onMarkerSet} onComplete={handleComplete} style={styles.mapBtn} />
+      <MapPanel onMarkerSet={onMarkerSet} onComplete={handleComplete} style={styles.mapBtn} />
     </>
   );
 };
@@ -68,9 +71,11 @@ const styles = StyleSheet.create({
   mapBtn: {
     position: 'absolute',
     bottom: 25,
-    right: 25,
+    left: 25,
+    alignSelf: 'center',
     width: 80,
-    height: 80
+    height: 80,
+    zIndex: 2
   }
 });
 
