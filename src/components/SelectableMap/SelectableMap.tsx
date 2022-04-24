@@ -1,13 +1,15 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleProp, StyleSheet, View, ViewStyle, Image, TouchableHighlight, Pressable, Text } from 'react-native';
 import MapView, { LatLng, MapEvent, Marker, UrlTile } from 'react-native-maps';
 
 interface SelectableMapProps {
   onMarkerSet: (coordinates: LatLng) => void;
+  style?: StyleProp<ViewStyle>;
+  onClose: () => void;
+  onComplete: () => void;
 }
-
-const SelectableMap: React.FC<SelectableMapProps> = ({ onMarkerSet }) => {
-  console.log("SelectableMap");
+const SelectableMap: React.FC<SelectableMapProps> = ({ onMarkerSet, style, onClose, onComplete }) => {
+  console.log('SelectableMap');
 
   const [marker, setMarker] = React.useState<LatLng | null>(null);
 
@@ -16,7 +18,7 @@ const SelectableMap: React.FC<SelectableMapProps> = ({ onMarkerSet }) => {
     setMarker(event.nativeEvent.coordinate);
   };
   return (
-    <View style={styles.container}>
+    <View style={style}>
       <MapView style={styles.map} onPress={onMarkerCreate}>
         <UrlTile
           /**
@@ -37,28 +39,45 @@ const SelectableMap: React.FC<SelectableMapProps> = ({ onMarkerSet }) => {
         />
         {marker && <Marker coordinate={marker} />}
       </MapView>
+      <TouchableHighlight onPress={onClose}>
+        <Image style={styles.closeBtn} source={require('./img/cancel.png')} />
+      </TouchableHighlight>
+      <Pressable style={styles.completeBtn} onPress={onComplete} disabled={!marker}>
+        <Text style={styles.completeBtnText}>Complete</Text>
+      </Pressable>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    // right: 0,
-    // bottom: 0,
-    width: '100%',
-    height: 400,
-    justifyContent: 'flex-end',
-    alignItems: 'center'
-  },
   map: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0
+  },
+  closeBtn: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    width: 64,
+    height: 64
+  },
+  completeBtn: {
+    position: 'absolute',
+    bottom: 10,
+    width: 180,
+    height: 64,
+    alignSelf: 'center',
+    backgroundColor: 'red',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 40
+  },
+  completeBtnText: {
+    color: '#fff',
+    fontSize: 20
   }
 });
 
