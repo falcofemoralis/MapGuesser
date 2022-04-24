@@ -42,9 +42,15 @@ const SelectableMap: React.FC<SelectableMapProps> = ({ onMarkerSet, style, onClo
       <TouchableHighlight onPress={onClose}>
         <Image style={styles.closeBtn} source={require('./img/cancel.png')} />
       </TouchableHighlight>
-      <Pressable style={styles.completeBtn} onPress={onComplete} disabled={!marker}>
-        <Text style={styles.completeBtnText}>Complete</Text>
-      </Pressable>
+      {marker ? (
+        <Pressable style={styles.completeBtn} onPress={onComplete} disabled={!marker}>
+          <Text style={styles.completeBtnText}>Complete</Text>
+        </Pressable>
+      ) : (
+        <Pressable style={styles.inactiveCompleteBtn} disabled={true}>
+          <Text style={styles.completeBtnText}>Choose place</Text>
+        </Pressable>
+      )}
     </View>
   );
 };
@@ -68,9 +74,20 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 10,
     width: 180,
-    height: 64,
+    height: 50,
     alignSelf: 'center',
     backgroundColor: 'red',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 40
+  },
+  inactiveCompleteBtn: {
+    position: 'absolute',
+    bottom: 10,
+    width: 180,
+    height: 50,
+    alignSelf: 'center',
+    backgroundColor: 'gray',
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 40
