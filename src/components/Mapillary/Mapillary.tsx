@@ -5,6 +5,7 @@ import ImagesService from '../../services/images.service';
 import MapillaryWeb from './MapillaryWeb';
 import { generateCoordinate } from '../../utils/CoordinatesUtil';
 import { StyleSheet, View } from 'react-native';
+import { Colors } from '../../constants/colors';
 
 interface MapillaryProps {
   onMove: (coordinates: LatLng) => void;
@@ -51,19 +52,19 @@ const Mapillary: React.FC<MapillaryProps> = ({ onMove }) => {
   return imageId ? (
     <MapillaryWeb imageId={imageId} />
   ) : (
-    <View style={styles.previewContainer}>
+    <View style={styles.loadingContainer}>
       <Progress.CircleSnail color={['red', 'green', 'blue']} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  previewContainer: {
+  loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#000',
-    zIndex: 5
+    backgroundColor: Colors.primaryColorBlue,
+    zIndex: 999
   }
 });
 

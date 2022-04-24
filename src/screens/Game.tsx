@@ -3,8 +3,9 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { Alert, StyleSheet } from 'react-native';
 import { LatLng } from 'react-native-maps';
-import MapPanel from '../components/MapPanel/MapPanel';
 import Mapillary from '../components/Mapillary/Mapillary';
+import MapPanel from '../components/MapPanel/MapPanel';
+import { Strings } from '../constants/strings';
 import { RootStackParamList } from '../screens';
 import { gameStore } from '../store/GameStore';
 
@@ -24,13 +25,11 @@ const Game = () => {
 
         if (!isCompleted) {
           // Prompt the user before leaving the screen
-          Alert.alert('Leave the game?', 'You have unsaved changes. Are you sure to discard them and leave the screen?', [
-            { text: 'Stay', style: 'cancel', onPress: () => {} },
+          Alert.alert(Strings.leaveGame, Strings.leaveGameHint, [
+            { text: Strings.stay, style: 'cancel', onPress: () => {} },
             {
-              text: 'Leave game',
+              text: Strings.leave,
               style: 'destructive',
-              // If the user confirmed, then we dispatch the action we blocked earlier
-              // This will continue the action that had triggered the removal of the screen
               onPress: () => {
                 isCompleted = true;
                 navigation.navigate('Main');
@@ -62,7 +61,7 @@ const Game = () => {
   return (
     <>
       <Mapillary onMove={onMove} />
-      <MapPanel onMarkerSet={onMarkerSet} onComplete={handleComplete} style={styles.mapBtn} />
+      <MapPanel onMarkerSet={onMarkerSet} onComplete={handleComplete} buttonStyle={styles.mapBtn} />
     </>
   );
 };
@@ -75,7 +74,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: 80,
     height: 80,
-    zIndex: 2
+    zIndex: 1
   }
 });
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle, Image, TouchableHighlight, Pressable, Text, TouchableOpacity } from 'react-native';
 import MapView, { LatLng, MapEvent, Marker, UrlTile } from 'react-native-maps';
+import { getRegionForCoordinates } from '../../utils/CoordinatesUtil';
 
 interface SelectableMapProps {
   onMarkerSet: (coordinates: LatLng) => void;
@@ -10,6 +11,7 @@ interface SelectableMapProps {
 const SelectableMap: React.FC<SelectableMapProps> = ({ onMarkerSet, style, onComplete }) => {
   console.log('SelectableMap');
 
+  const mapRef = React.useRef<MapView | null>(null);
   const [marker, setMarker] = React.useState<LatLng | null>(null);
 
   const onMarkerCreate = (event: MapEvent) => {
@@ -17,26 +19,14 @@ const SelectableMap: React.FC<SelectableMapProps> = ({ onMarkerSet, style, onCom
     setMarker(event.nativeEvent.coordinate);
   };
 
+  if (marker) {
+    mapRef?.current?.animateCamera({ center: marker }, { duration: 800 });
+  }
+
   return (
     <View style={style}>
-      <MapView style={styles.map} onPress={onMarkerCreate}>
-        <UrlTile
-          /**
-           * The url template of the tile server. The patterns {x} {y} {z} will be replaced at runtime
-           * For example, http://c.tile.openstreetmap.org/{z}/{x}/{y}.png
-           */
-          urlTemplate='http://c.tile.openstreetmap.org/{z}/{x}/{y}.png'
-          /**
-           * The maximum zoom level for this tile overlay. Corresponds to the maximumZ setting in
-           * MKTileOverlay. iOS only.
-           */
-          maximumZ={19}
-          /**
-           * flipY allows tiles with inverted y coordinates (origin at bottom left of map)
-           * to be used. Its default value is false.
-           */
-          flipY={false}
-        />
+      <MapView ref={mapRef} style={styles.map} onPress={onMarkerCreate}>
+        <UrlTile urlTemplate='http://c.tile.openstreetmap.org/{z}/{x}/{y}.png' maximumZ={19} flipY={false} />
         {marker && <Marker coordinate={marker} />}
       </MapView>
       {marker ? (

@@ -3,6 +3,7 @@ import * as turf from '@turf/turf';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MapView, { Marker, Polyline, UrlTile } from 'react-native-maps';
+import { Colors } from '../constants/colors';
 import Props from '../types/PropsType';
 
 const Result: React.FC<Props<'Result'>> = ({ route, navigation }) => {
@@ -91,30 +92,30 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#000'
+    backgroundColor: Colors.primaryColorBlue
   },
   resultText: {
-    color: '#fff',
+    color: Colors.white,
     textAlign: 'center',
     fontSize: 20
   },
   resultTextDistance: {
     fontWeight: 'bold',
-    color: 'red'
+    color: Colors.primaryColorRed
   },
   nextBtn: {
     marginTop: 30,
     width: 180,
     height: 40,
     alignSelf: 'center',
-    backgroundColor: 'red',
+    backgroundColor: Colors.primaryColorRed,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 40,
     zIndex: 15
   },
   nextBtnText: {
-    color: '#fff',
+    color: Colors.white,
     fontSize: 20
   }
 });
