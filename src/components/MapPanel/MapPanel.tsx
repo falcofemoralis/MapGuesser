@@ -1,7 +1,8 @@
 import React from 'react';
-import { Dimensions, Image, ImageStyle, StyleProp, StyleSheet, TouchableOpacity } from 'react-native';
+import { Button, Dimensions, Image, ImageStyle, StyleProp, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { LatLng } from 'react-native-maps';
 import { SwipeablePanel } from 'rn-swipeable-panel';
+import { Colors } from '../../constants/colors';
 import SelectableMap from '../SelectableMap/SelectableMap';
 
 interface MapPanelProps {
@@ -28,8 +29,9 @@ const MapPanel: React.FC<MapPanelProps> = ({ onMarkerSet, onComplete, buttonStyl
 
   return (
     <>
-      <TouchableOpacity style={buttonStyle} onPress={openMap}>
-        <Image style={styles.img} source={require('./img/map.png')} />
+      <TouchableOpacity style={[styles.button, buttonStyle]} onPress={openMap}>
+        {/* <Image style={styles.img} source={require('./img/location.png')} /> */}
+        <Text style={styles.buttonText}>SELECT PLACE</Text>
       </TouchableOpacity>
       <SwipeablePanel
         noBackgroundOpacity
@@ -53,12 +55,24 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%'
   },
-  panel: {
-  },
+  panel: {},
   selectableMap: {
     width: '100%',
     height: Dimensions.get('window').height - 125,
     paddingTop: 32
+  },
+  button: {
+    height: 35,
+    width: 150,
+    backgroundColor: Colors.backgroundLight,
+    borderRadius: 20,
+    textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  buttonText: {
+    color: Colors.white,
+    fontSize: 16
   }
 });
 

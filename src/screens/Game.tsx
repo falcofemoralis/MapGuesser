@@ -8,6 +8,7 @@ import MapPanel from '../components/MapPanel/MapPanel';
 import { Strings } from '../constants/strings';
 import { RootStackParamList } from '../screens';
 import { gameStore } from '../store/GameStore';
+import { TopProgressBar } from '../components/TopProgressBar/TopProgressBar';
 
 type gameScreenProp = StackNavigationProp<RootStackParamList, 'Game'>;
 
@@ -70,6 +71,7 @@ const Game = () => {
 
   return (
     <>
+      <TopProgressBar style={styles.progress} />
       <Mapillary onMove={onMove} />
       <MapPanel onMarkerSet={onMarkerSet} onComplete={handleComplete} buttonStyle={styles.mapBtn} />
     </>
@@ -77,13 +79,15 @@ const Game = () => {
 };
 
 const styles = StyleSheet.create({
+  progress: {
+    position: 'absolute',
+    top: 10,
+    zIndex: 10
+  },
   mapBtn: {
     position: 'absolute',
-    bottom: 25,
-    left: 25,
+    top: 60,
     alignSelf: 'center',
-    width: 80,
-    height: 80,
     zIndex: 1
   }
 });
