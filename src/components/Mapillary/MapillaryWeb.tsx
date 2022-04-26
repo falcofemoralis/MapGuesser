@@ -9,12 +9,12 @@ interface MapillaryWebProps {
 class MapillaryWeb extends React.Component<MapillaryWebProps> {
   getHtml = (imageId: string): string => {
     const html = (MapillaryViewer as string).replace('<ID>', imageId).replace('<TOKEN>', token);
+    console.log(html);
+    
     return html;
   };
 
   render() {
-    console.log('MapillaryWeb');
-
     return <WebView source={{ html: this.getHtml(this.props.imageId) }} />;
   }
 }

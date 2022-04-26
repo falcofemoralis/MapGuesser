@@ -12,19 +12,18 @@ import { gameStore } from '../store/GameStore';
 type gameScreenProp = StackNavigationProp<RootStackParamList, 'Game'>;
 
 const Game = () => {
-  console.log('Game');
-
-  const navigation = useNavigation<gameScreenProp>();
   let isCompleted = false;
+  const navigation = useNavigation<gameScreenProp>();
 
+  /**
+   * BackPress override. If game wasn't complete - show Alert dialog, otherwise navigate to
+   */
   React.useEffect(
     () =>
       navigation.addListener('beforeRemove', e => {
-        // Prevent default behavior of leaving the screen
         e.preventDefault();
 
         if (!isCompleted) {
-          // Prompt the user before leaving the screen
           Alert.alert(Strings.leaveGame, Strings.leaveGameHint, [
             { text: Strings.stay, style: 'cancel', onPress: () => {} },
             {
@@ -43,14 +42,25 @@ const Game = () => {
     [navigation]
   );
 
+  /**
+   * Triggered when user moves on the map
+   * @param coordinates - current user coordinates
+   */
   const onMove = (coordinates: LatLng) => {
     gameStore.currentCoordinates = coordinates;
   };
 
+  /**
+   * Triggered when user set marker on the map
+   * @param coordinates - marker coordinates
+   */
   const onMarkerSet = (coordinates: LatLng) => {
     gameStore.selectedCoordinates = coordinates;
   };
 
+  /**
+   * Triggered when user press complete button
+   */
   const handleComplete = () => {
     if (gameStore.currentCoordinates && gameStore.selectedCoordinates) {
       isCompleted = true;

@@ -17,9 +17,8 @@ export default class ImagesService {
       const bbox = `${coordinates[1] - 0.05},${coordinates[0] - 0.05},${coordinates[1] + 0.05},${coordinates[0] + 0.05}`;
 
       console.log('searchForImages');
-      console.log(`/images?access_token=${token}&fields=id&bbox=${bbox}`);
-
-      const { data } = await axiosInstance.get<SearchData>(`/images?access_token=${token}&fields=id&bbox=${bbox}`);
+      
+      const { data } = await axiosInstance.get<SearchData>(`/images?access_token=${token}&fields=id,computed_geometry&bbox=${bbox}&limit=50&min_quality_score=4`);
 
       console.log('downloaded');
 

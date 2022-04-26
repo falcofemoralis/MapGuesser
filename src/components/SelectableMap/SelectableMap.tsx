@@ -1,7 +1,6 @@
 import React from 'react';
-import { StyleProp, StyleSheet, View, ViewStyle, Image, TouchableHighlight, Pressable, Text, TouchableOpacity } from 'react-native';
+import { Image, StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native';
 import MapView, { LatLng, MapEvent, Marker, UrlTile } from 'react-native-maps';
-import { getRegionForCoordinates } from '../../utils/CoordinatesUtil';
 
 interface SelectableMapProps {
   onMarkerSet: (coordinates: LatLng) => void;
@@ -9,18 +8,22 @@ interface SelectableMapProps {
   onComplete: () => void;
 }
 const SelectableMap: React.FC<SelectableMapProps> = ({ onMarkerSet, style, onComplete }) => {
-  console.log('SelectableMap');
+  const MARKER_ANIM_DUR = 700;
+  const mapRef = React.useRef<MapView | null>(null); // map reference
+  const [marker, setMarker] = React.useState<LatLng | null>(null); // marker on the map
 
-  const mapRef = React.useRef<MapView | null>(null);
-  const [marker, setMarker] = React.useState<LatLng | null>(null);
-
+  /**
+   * Handle user click on the map. Creating marker.
+   * @param event - data with coordinates
+   */
   const onMarkerCreate = (event: MapEvent) => {
     onMarkerSet(event.nativeEvent.coordinate);
     setMarker(event.nativeEvent.coordinate);
   };
 
+  // Animation to the marker
   if (marker) {
-    mapRef?.current?.animateCamera({ center: marker }, { duration: 800 });
+    mapRef?.current?.animateCamera({ center: marker }, { duration: MARKER_ANIM_DUR });
   }
 
   return (

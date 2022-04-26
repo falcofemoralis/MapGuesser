@@ -10,14 +10,19 @@ interface MapPanelProps {
   buttonStyle: StyleProp<ImageStyle>;
 }
 const MapPanel: React.FC<MapPanelProps> = ({ onMarkerSet, onComplete, buttonStyle }) => {
-  console.log('MapPanel');
+  const [isMap, setMap] = React.useState(false); // is map panel activated
 
-  const [isMap, setMap] = React.useState(false);
-
+  /**
+   * Trigger when user set market on the map
+   * @param coordinates - marker coordinates
+   */
   const handleMarkerSet = (coordinates: LatLng) => {
     onMarkerSet(coordinates);
   };
 
+  /**
+   * Toggle map
+   */
   const openMap = () => setMap(true);
   const closeMap = () => setMap(false);
 

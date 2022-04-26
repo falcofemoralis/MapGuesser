@@ -4,35 +4,40 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MapView, { Marker, Polyline, UrlTile } from 'react-native-maps';
 import { Colors } from '../constants/colors';
+import { Strings } from '../constants/strings';
 import Props from '../types/PropsType';
 
 const Result: React.FC<Props<'Result'>> = ({ route, navigation }) => {
-  console.log('Result');
-  let isFree = false;
+  let isNext = false;
   const mapRef = React.useRef<MapView | null>(null);
+  const currentCoordinates = { ...route.params.from }; // spread fix error
+  const selectedCoordinates = { ...route.params.to };
+  const from = turf.point([currentCoordinates?.latitude, currentCoordinates?.longitude]);
+  const to = turf.point([selectedCoordinates?.latitude, selectedCoordinates?.longitude]);
+  const distance = turf.distance(from, to, { units: 'kilometers' }).toFixed(3); // calculated distance
 
+  /**
+   * BackPress override.
+   */
   React.useEffect(
     () =>
       navigation.addListener('beforeRemove', e => {
-        // Prevent default behavior of leaving the screen
         e.preventDefault();
 
-        if (isFree) {
-          isFree = false;
+        // if nextRound button was pressed - dispatch
+        if (isNext) {
+          isNext = false;
           navigation.dispatch(e.data.action);
         }
       }),
     [navigation]
   );
 
-  const currentCoordinates = { ...route.params.from }; // spread fix error
-  const selectedCoordinates = { ...route.params.to };
-  const from = turf.point([currentCoordinates?.latitude, currentCoordinates?.longitude]);
-  const to = turf.point([selectedCoordinates?.latitude, selectedCoordinates?.longitude]);
-  const distance = turf.distance(from, to, { units: 'kilometers' }).toFixed(3);
-
+  /**
+   * Navigate to nextRound
+   */
   const onFinish = () => {
-    isFree = true;
+    isNext = true;
 
     navigation.dispatch(state => {
       // Remove the home route from the stack
@@ -72,7 +77,7 @@ const Result: React.FC<Props<'Result'>> = ({ route, navigation }) => {
           Your place was <Text style={styles.resultTextDistance}>{distance}km</Text> away from the correct location.
         </Text>
         <TouchableOpacity style={styles.nextBtn} onPress={onFinish}>
-          <Text style={styles.nextBtnText}>PLAY NEXT</Text>
+          <Text style={styles.nextBtnText}>{Strings.playNext}</Text>
         </TouchableOpacity>
       </View>
     </View>

@@ -40,7 +40,8 @@
 
         var viewer = new Viewer({
             accessToken: '<TOKEN>',
-            container: 'mly', // the ID of our container defined in the HTML body
+            component: { cover: false, bearing: false, sequence: false, attribution: false, direction: true, zoom: true },
+            container: 'mly',
             imageId: '<ID>', // '1566097680389826'
         });
     </script>

@@ -1,48 +1,37 @@
 import React from 'react';
+import { StyleSheet, View } from 'react-native';
 import { LatLng } from 'react-native-maps';
 import * as Progress from 'react-native-progress';
-import ImagesService from '../../services/images.service';
-import MapillaryWeb from './MapillaryWeb';
-import { generateCoordinate } from '../../utils/CoordinatesUtil';
-import { StyleSheet, View } from 'react-native';
 import { Colors } from '../../constants/colors';
+import ImagesService from '../../services/images.service';
+import { generateCoordinate } from '../../utils/CoordinatesUtil';
+import MapillaryWeb from './MapillaryWeb';
 
 interface MapillaryProps {
   onMove: (coordinates: LatLng) => void;
 }
 const Mapillary: React.FC<MapillaryProps> = ({ onMove }) => {
-  console.log('Mapillary');
-
   const [imageId, setImageId] = React.useState<string | null>(null);
 
   const initMapillary = () => {
-    const possiblePlaces = [
-      [
-        53, //N
-        28, //S
-        -125, //W
-        -74 //E
-      ] // north america
-    ];
-    const startPoint = [generateCoordinate(possiblePlaces[0][1], possiblePlaces[0][0], 5), generateCoordinate(possiblePlaces[0][2], possiblePlaces[0][3], 5)];
+    // S W N E
+    // 0 1 2 3
+    const possiblePlaces = [[38.85682, -124.145508, 49.75288, -96.679688]];
+    const randomPlace = Math.floor(Math.random() * possiblePlaces.length);
+    const startPoint = [generateCoordinate(possiblePlaces[randomPlace][0], possiblePlaces[0][2], 5), generateCoordinate(possiblePlaces[0][1], possiblePlaces[0][3], 5)];
 
-    // ImagesService.searchForImages(startPoint).then(images => {
-    //   console.log(`Found ${images.length} images`);
+    ImagesService.searchForImages(startPoint).then(images => {
+      console.log(`Found ${images.length} images`);
 
-    //   if (images.length > 0) {
-    //     const imageNum = Math.floor(Math.random() * images.length);
-    //     const id = images[imageNum].id;
-    const id = '498763468214164';
-
-    ImagesService.getImage(id).then(image => {
-      const coordinates = [image.computed_geometry.coordinates[0], image.computed_geometry.coordinates[1]];
-      onMove({ latitude: coordinates[0], longitude: coordinates[1] });
-      setImageId(id);
+      if (images.length > 0) {
+        const imageNum = Math.floor(Math.random() * images.length);
+        const image = images[imageNum];
+        onMove({ latitude: image.computed_geometry.coordinates[1], longitude: image.computed_geometry.coordinates[0] });
+        setImageId(image.id);
+      } else {
+        initMapillary();
+      }
     });
-    //   } else {
-    //     initMapillary();
-    //   }
-    // });
   };
 
   if (!imageId) {

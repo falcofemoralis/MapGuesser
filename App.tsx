@@ -11,8 +11,6 @@ import Result from './src/screens/Result';
 const Stack = createStackNavigator<RootStackParamList>();
 
 const App = () => {
-  console.log('App');
-
   LogBox.ignoreLogs(["exported from 'deprecated-react-native-prop-types'."]);
 
   return (
