@@ -1,10 +1,12 @@
 import { CommonActions } from '@react-navigation/native';
 import * as turf from '@turf/turf';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import MapView, { Marker, Polyline, UrlTile } from 'react-native-maps';
+import { GameButton } from '../components/interface/GameButton/GameButton';
 import { Colors } from '../constants/colors';
 import { Strings } from '../constants/strings';
+import { GlobalStyles } from '../constants/styles';
 import Props from '../types/PropsType';
 
 const Result: React.FC<Props<'Result'>> = ({ route, navigation }) => {
@@ -56,7 +58,7 @@ const Result: React.FC<Props<'Result'>> = ({ route, navigation }) => {
   // TODO LEAVE THE RESULT SCREEN IN SECOND ROUND
 
   return (
-    <View style={styles.container}>
+    <>
       <MapView
         ref={mapRef}
         style={styles.map}
@@ -67,61 +69,58 @@ const Result: React.FC<Props<'Result'>> = ({ route, navigation }) => {
           })
         }
       >
-        <UrlTile urlTemplate='http://c.tile.openstreetmap.org/{z}/{x}/{y}.png' maximumZ={19} flipY={false} />
         <Marker coordinate={currentCoordinates} />
-        <Marker coordinate={selectedCoordinates} />
+        <Marker coordinate={selectedCoordinates}>
+          <Image source={require('../assets/final_user.png')} style={{ width: 26, height: 28 }} resizeMode='contain' />
+        </Marker>
         <Polyline coordinates={[currentCoordinates, selectedCoordinates]} />
       </MapView>
-      <View style={styles.resultContainer}>
-        <Text style={styles.resultText}>
-          Your place was <Text style={styles.resultTextDistance}>{distance}km</Text> away from the correct location.
-        </Text>
-        <TouchableOpacity style={styles.nextBtn} onPress={onFinish}>
-          <Text style={styles.nextBtnText}>{Strings.playNext}</Text>
-        </TouchableOpacity>
+      <View style={styles.container}>
+        <View style={styles.resultContainer}>
+          <Text style={styles.resultText}>
+            Your place was <Text style={styles.resultTextBold}>{distance}km</Text> away from the correct location.
+          </Text>
+          <Text style={[styles.resultText, { marginTop: 5 }]}>
+            Received <Text style={styles.resultTextBold}>500</Text> points.
+          </Text>
+          <View style={GlobalStyles.rcc}>
+            <GameButton img={require('../assets/settings.png')} text='Main menu' />
+            <GameButton img={require('../assets/settings.png')} text='Next round' />
+          </View>
+        </View>
       </View>
-    </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   map: {
     width: '100%',
-    height: '50%'
+    height: '70%'
   },
   container: {
-    flex: 1
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    height: '35%', // 100 - 70 + 5
+    borderTopStartRadius: 25,
+    borderTopEndRadius: 25,
+    backgroundColor: Colors.background
   },
   resultContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
-    backgroundColor: Colors.primaryColorBlue
+    padding: 25
   },
   resultText: {
     color: Colors.white,
     textAlign: 'center',
     fontSize: 20
   },
-  resultTextDistance: {
+  resultTextBold: {
     fontWeight: 'bold',
-    color: Colors.primaryColorRed
-  },
-  nextBtn: {
-    marginTop: 30,
-    width: 180,
-    height: 40,
-    alignSelf: 'center',
-    backgroundColor: Colors.primaryColorRed,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 40,
-    zIndex: 15
-  },
-  nextBtnText: {
-    color: Colors.white,
-    fontSize: 20
+    color: Colors.primaryColor
   }
 });
 

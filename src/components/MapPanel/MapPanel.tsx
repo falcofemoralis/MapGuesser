@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   button: {
     height: 35,
     width: 150,
-    backgroundColor: Colors.backgroundLight,
+    backgroundColor: Colors.backgroundOpposite,
     borderRadius: 20,
     textAlign: 'center',
     justifyContent: 'center',

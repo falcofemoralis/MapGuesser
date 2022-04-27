@@ -22,19 +22,22 @@ const styles = StyleSheet.create({
   gamePlate: {
     aspectRatio: 1,
     width: '30%',
-    backgroundColor: Colors.backgroundLight,
+    backgroundColor: Colors.backgroundOpposite,
     justifyContent: 'center',
     alignItems: 'center',
     margin: 10,
-    borderRadius: 15
+    borderRadius: 15,
+    padding: 6
   },
   img: {
     width: '45%',
     height: '45%'
   },
   text: {
+    paddingStart: 3,
+    paddingEnd: 3,
     marginTop: 5,
     color: Colors.white,
-    fontSize: 20
+    fontSize: 16
   }
 });

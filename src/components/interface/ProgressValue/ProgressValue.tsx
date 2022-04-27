@@ -19,7 +19,7 @@ export const ProgressValue: React.FC<ProgressValueProps> = ({ value, text, style
 
 const styles = StyleSheet.create({
   bg: {
-    backgroundColor: Colors.backgroundLight,
+    backgroundColor: Colors.backgroundOpposite,
     padding: 15,
     flexGrow: 1,
     borderRadius: 15,

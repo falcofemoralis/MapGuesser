@@ -1,8 +1,8 @@
 export const Colors = {
-    primaryColorBlue: '#000',
-    primaryColorRed: '#dc0000',
+    primaryColor: '#2792eb',
+    secondaryColor: '#d94042',
     white: '#fff',
     black: '#000',
-    background: '#0f1827',
-    backgroundLight: '#1b2433'
+    background: '#1d2229',
+    backgroundOpposite: '#2d343b'
 }

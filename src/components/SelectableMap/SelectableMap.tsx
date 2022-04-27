@@ -29,7 +29,6 @@ const SelectableMap: React.FC<SelectableMapProps> = ({ onMarkerSet, style, onCom
   return (
     <View style={style}>
       <MapView ref={mapRef} style={styles.map} onPress={onMarkerCreate}>
-        <UrlTile urlTemplate='http://c.tile.openstreetmap.org/{z}/{x}/{y}.png' maximumZ={19} flipY={false} />
         {marker && <Marker coordinate={marker} />}
       </MapView>
       {marker ? (
