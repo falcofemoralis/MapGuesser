@@ -4,9 +4,9 @@ import React from 'react';
 import { LogBox } from 'react-native';
 import 'react-native-gesture-handler';
 import { RootStackParamList } from './src/screens';
-import Game from './src/screens/Game';
-import Main from './src/screens/Main';
-import Result from './src/screens/Result';
+import GameScreen from './src/screens/game.screen';
+import MainScreen from './src/screens/main.screen';
+import ResultScreen from './src/screens/result.screen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -16,9 +16,9 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name='Main' component={Main} options={{ headerShown: false }} />
-        <Stack.Screen name='Game' component={Game} options={{ headerShown: false }} />
-        <Stack.Screen name='Result' component={Result} options={{ headerShown: false }} />
+        <Stack.Screen name='Main' component={MainScreen} options={{ headerShown: false }} />
+        <Stack.Screen name='Game' component={GameScreen} options={{ headerShown: false }} />
+        <Stack.Screen name='Result' component={ResultScreen} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,20 +1,27 @@
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { RootStackParamList } from '.';
 import { GameButton } from '../components/interface/GameButton/GameButton';
 import { ImageButton } from '../components/interface/ImageButton/ImageButton';
 import { ProgressAvatar } from '../components/interface/ProgressAvatar/ProgressAvatar';
 import { ProgressValue } from '../components/interface/ProgressValue/ProgressValue';
 import { Colors } from '../constants/colors';
+import { GameType } from '../constants/gametype';
+import { Mode } from '../constants/mode';
 import { Strings } from '../constants/strings';
 import { GlobalStyles } from '../constants/styles';
+import { gameStore } from '../store/game.store';
+import Props from '../types/props.type';
+import { RoundData } from './index';
 
-type mainScreenProp = StackNavigationProp<RootStackParamList, 'Main'>;
+const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
+  if (!gameStore.progress) {
+    gameStore.initProgress();
+  }
 
-const Main = () => {
-  const navigation = useNavigation<mainScreenProp>();
+  const onModeSelect = (mode: Mode, gameType: GameType, data?: RoundData) => {
+    navigation.replace('Game', { mode, data, gameType });
+  };
 
   return (
     <View style={styles.container}>
@@ -28,19 +35,19 @@ const Main = () => {
           <ProgressAvatar size={150} img={require('./../assets/user.png')} progress={0.5} />
         </View>
         <View style={styles.progressesContainer}>
-          <ProgressValue value={50} text='XP' />
-          <ProgressValue value={50} text='XP' />
-          <ProgressValue value={50} text='XP' />
+          <ProgressValue value={gameStore.progress?.xp} text='XP' />
+          <ProgressValue value={new Date(gameStore.progress?.playtime ?? 1).getMinutes()} text='Playtime' />
+          <ProgressValue value={50} text='Accuracy' />
         </View>
       </View>
       <View style={GlobalStyles.rcc}>
-        <GameButton img={require('./../assets/settings.png')} text={Strings.startGame} onPress={() => navigation.navigate('Game')} />
-        <GameButton img={require('./../assets/settings.png')} text='Classic' />
-        <GameButton img={require('./../assets/settings.png')} text='Classic' />
+        <GameButton img={require('./../assets/settings.png')} text='Single' onPress={() => onModeSelect(Mode.SINGLE, GameType.CLASSIC)} />
+        <GameButton img={require('./../assets/settings.png')} text='Rounds' onPress={() => onModeSelect(Mode.ROUND, GameType.CLASSIC, { round: 0 })} />
+        <GameButton img={require('./../assets/settings.png')} text='Regions' />
       </View>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -80,4 +87,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Main;
+export default MainScreen;

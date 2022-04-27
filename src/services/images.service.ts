@@ -18,7 +18,7 @@ export default class ImagesService {
 
       console.log('searchForImages');
       
-      const { data } = await axiosInstance.get<SearchData>(`/images?access_token=${token}&fields=id,computed_geometry&bbox=${bbox}&limit=50&min_quality_score=4`);
+      const { data } = await axiosInstance.get<SearchData>(`/images?access_token=${token}&fields=id,computed_geometry&bbox=${bbox}&limit=100&min_quality_score=4`);
 
       console.log('downloaded');
 
