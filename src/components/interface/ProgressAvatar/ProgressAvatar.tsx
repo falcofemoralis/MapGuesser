@@ -4,12 +4,12 @@ import * as Progress from 'react-native-progress';
 import { Colors } from '../../../constants/colors';
 
 interface ProgressAvatarProps {
-  img: ImageSourcePropType;
+  avatar: ImageSourcePropType;
   style?: StyleProp<ViewStyle>;
   size: number;
   progress: number;
 }
-export const ProgressAvatar: React.FC<ProgressAvatarProps> = ({ img, style, size, progress }) => {
+export const ProgressAvatar: React.FC<ProgressAvatarProps> = ({ avatar, style, size, progress }) => {
   return (
     <View
       style={[
@@ -22,21 +22,21 @@ export const ProgressAvatar: React.FC<ProgressAvatarProps> = ({ img, style, size
         }
       ]}
     >
-      <Image style={[styles.img]} source={img}></Image>
-      <Progress.Circle color={Colors.secondaryColor} style={styles.progress} progress={progress} size={size} thickness={7} />
+      <Image style={[styles.avatar]} source={avatar}></Image>
+      <Progress.Circle color={Colors.secondaryColor} fill={Colors.black} style={styles.progress} progress={progress} size={size} thickness={7} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  avatar: {
+    height: '80%',
+    width: '80%',
+    zIndex: 2
+  },
   progress: {
     position: 'absolute',
     alignSelf: 'center',
     zIndex: 1
-  },
-  img: {
-    height: '80%',
-    width: '80%',
-    zIndex: 2
   }
 });

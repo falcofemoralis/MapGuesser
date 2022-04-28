@@ -33,11 +33,11 @@ const SelectableMap: React.FC<SelectableMapProps> = ({ onMarkerSet, style, onCom
       </MapView>
       {marker ? (
         <TouchableOpacity style={styles.completeBtn} onPress={onComplete}>
-          <Image style={styles.img} source={require('./img/select_on.png')} />
+          <Image style={styles.completeBtnIcon} source={require('../../assets/select_on.png')} />
         </TouchableOpacity>
       ) : (
         <TouchableOpacity style={styles.completeBtn} disabled={true}>
-          <Image style={styles.img} source={require('./img/select_off.png')} />
+          <Image style={styles.completeBtnIcon} source={require('../../assets/select_off.png')} />
         </TouchableOpacity>
       )}
     </View>
@@ -49,10 +49,6 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%'
   },
-  img: {
-    height: '100%',
-    width: '100%'
-  },
   completeBtn: {
     position: 'absolute',
     bottom: 10,
@@ -60,6 +56,10 @@ const styles = StyleSheet.create({
     height: 80,
     alignSelf: 'center',
     zIndex: 15
+  },
+  completeBtnIcon: {
+    height: '100%',
+    width: '100%'
   }
 });
 

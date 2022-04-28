@@ -1,8 +1,9 @@
-import * as Progress from 'react-native-progress';
 import React from 'react';
-import { StyleSheet, View, Dimensions, Text, StyleProp, ViewStyle } from 'react-native';
-import { Misc } from '../../constants/misc';
+import { Dimensions, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
+import * as Progress from 'react-native-progress';
+import { ProgressStep, ProgressSteps } from 'react-native-progress-steps';
 import { Colors } from '../../constants/colors';
+import { Dimens } from '../../constants/dimens';
 
 interface TopProgressBarProps {
   style: StyleProp<ViewStyle>;
@@ -12,10 +13,22 @@ interface TopProgressBarProps {
 export const TopProgressBar: React.FC<TopProgressBarProps> = ({ style, round, max }) => {
   return (
     <View style={[styles.container, style]}>
-      <Text>
-        Round {round}/{max}
-      </Text>
-      <Progress.Bar style={styles.progress} progress={round / max} width={Dimensions.get('window').width - Dimensions.get('window').width / 4} height={15} />
+      <ProgressSteps
+        activeStep={round}
+        activeStepNumColor={Colors.white}
+        completedProgressBarColor={Colors.primaryColor}
+        completedStepIconColor={Colors.primaryColor}
+        activeStepIconBorderColor={Colors.primaryColor}
+        labelFontSize={0}
+        disabledStepIconColor={Colors.secondaryColor}
+        progressBarColor={Colors.primaryColor}
+        topOffset={15}
+        marginBottom={0}
+      >
+        {[...Array(max)].map((x, i) => (
+          <ProgressStep key={i} removeBtnRow={true} />
+        ))}
+      </ProgressSteps>
     </View>
   );
 };
@@ -27,10 +40,11 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   progress: {
-    alignSelf: 'center'
+    alignSelf: 'center',
+    marginTop: 5
   },
   text: {
     color: Colors.white,
-    fontSize: 20
+    fontSize: Dimens.headText
   }
 });

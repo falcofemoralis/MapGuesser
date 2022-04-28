@@ -1,4 +1,3 @@
-import { Text } from 'react-native';
 export const Strings = {
   appName: 'GeoView',
   startGame: 'Start game',
@@ -6,7 +5,9 @@ export const Strings = {
   leaveGameHint: 'You have unsaved changes. Are you sure to discard them and leave the screen?',
   stay: 'Stay',
   leave: 'Leave game',
-  playNext: 'PLAY NEXT'
+  playNext: 'PLAY NEXT',
+  XP: 'xp',
+  playtime: 'Playtime'
 };
 
 export const getString = (str: string, params: string[]): string => {

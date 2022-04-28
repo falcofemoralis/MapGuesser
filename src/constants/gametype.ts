@@ -1,3 +1,3 @@
-export enum GameType {
+export enum Game {
   CLASSIC
 }

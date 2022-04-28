@@ -6,14 +6,14 @@ import { Colors } from '../../../constants/colors';
 interface LoadingPreviewProps {}
 export const LoadingPreview: React.FC<LoadingPreviewProps> = () => {
   return (
-    <View style={styles.loadingContainer}>
+    <View style={styles.container}>
       <Progress.CircleSnail color={['red', 'green', 'blue']} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  loadingContainer: {
+  container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

@@ -1,5 +1,5 @@
 import { LatLng } from 'react-native-maps';
-import { GameType } from '../constants/gametype';
+import { Game } from '../constants/gametype';
 import { Mode } from '../constants/mode';
 
 export interface RoundData {
@@ -7,7 +7,7 @@ export interface RoundData {
 }
 
 interface GameProps {
-  gameType: GameType; // classic, country, region, etc
+  game: Game; // classic, country, region, etc
   mode: Mode; // round, single
   data?: RoundData;
 }

@@ -1,4 +1,5 @@
 import { Misc } from '../constants/misc';
+import { gameStore } from '../store/game.store';
 export default class ProgressManager {
   static lvl(x: number): number {
     /*    
@@ -32,5 +33,10 @@ export default class ProgressManager {
     }
 
     return sum / accuracy.length;
+  }
+
+  static getTotalPlaytime(playtime: number): string {
+    const time = new Date(playtime);
+    return `${time.getMinutes()}:${time.getSeconds()}`;
   }
 }

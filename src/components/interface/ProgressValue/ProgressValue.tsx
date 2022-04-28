@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
 import { Colors } from '../../../constants/colors';
+import { Dimens } from '../../../constants/dimens';
 import { GlobalStyles } from '../../../constants/styles';
 
 interface ProgressValueProps {
@@ -11,26 +12,25 @@ interface ProgressValueProps {
 }
 export const ProgressValue: React.FC<ProgressValueProps> = ({ value, unit, text, style }) => {
   return (
-    <View style={[GlobalStyles.rcc, style, styles.bg]}>
-      <Text style={styles.text}>
+    <View style={[GlobalStyles.ccc, style, styles.container]}>
+      <Text style={styles.value}>
         {value}
         {unit}
       </Text>
-      <Text style={styles.text}>{text}</Text>
+      <Text style={styles.title}>{text}</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  bg: {
-    backgroundColor: Colors.backgroundOpposite,
-    padding: 15,
-    flexGrow: 1,
-    borderRadius: 15,
-    marginBottom: 15
-  },
-  text: {
+  container: {},
+  value: {
     color: Colors.white,
-    fontSize: 20
+    fontSize: Dimens.headText,
+    fontWeight: 'bold'
+  },
+  title: {
+    color: Colors.gray,
+    fontSize: Dimens.normalText
   }
 });

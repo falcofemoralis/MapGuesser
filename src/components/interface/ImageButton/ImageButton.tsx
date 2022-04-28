@@ -5,18 +5,18 @@ interface ImageButtonProps {
   img: ImageSourcePropType;
   buttonStyle: StyleProp<ViewStyle>;
   onPress?: () => void;
-  imgStyle?: StyleProp<ImageStyle>;
+  iconStyle?: StyleProp<ImageStyle>;
 }
-export const ImageButton: React.FC<ImageButtonProps> = ({ buttonStyle, onPress, img, imgStyle }) => {
+export const ImageButton: React.FC<ImageButtonProps> = ({ buttonStyle, onPress, img, iconStyle }) => {
   return (
     <TouchableOpacity style={buttonStyle} onPress={onPress}>
-      <Image style={[styles.img, imgStyle]} source={img} />
+      <Image style={[styles.icon, iconStyle]} source={img} />
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  img: {
+  icon: {
     height: '100%',
     width: '100%'
   }

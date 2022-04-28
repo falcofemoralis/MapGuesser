@@ -1,25 +1,26 @@
 import React from 'react';
 import { Image, ImageSourcePropType, ImageStyle, StyleProp, StyleSheet, Text, TouchableOpacity, ViewStyle } from 'react-native';
 import { Colors } from '../../../constants/colors';
+import { Dimens } from '../../../constants/dimens';
 
 interface ImageButtonProps {
   img: ImageSourcePropType;
   text: string;
   buttonStyle?: StyleProp<ViewStyle>;
   onPress?: () => void;
-  imgStyle?: StyleProp<ImageStyle>;
+  iconStyle?: StyleProp<ImageStyle>;
 }
-export const GameButton: React.FC<ImageButtonProps> = ({ buttonStyle, onPress, img, text, imgStyle }) => {
+export const GameButton: React.FC<ImageButtonProps> = ({ buttonStyle, onPress, img, text, iconStyle }) => {
   return (
-    <TouchableOpacity style={[styles.gamePlate, buttonStyle]} onPress={onPress}>
-      <Image style={[styles.img, imgStyle]} source={img} />
-      <Text style={styles.text}>{text}</Text>
+    <TouchableOpacity style={[styles.container, buttonStyle]} onPress={onPress}>
+      <Image style={[styles.icon, iconStyle]} source={img} />
+      <Text style={styles.title}>{text}</Text>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  gamePlate: {
+  container: {
     aspectRatio: 1,
     width: '30%',
     backgroundColor: Colors.backgroundOpposite,
@@ -29,15 +30,15 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 6
   },
-  img: {
+  icon: {
     width: '45%',
     height: '45%'
   },
-  text: {
+  title: {
     paddingStart: 3,
     paddingEnd: 3,
     marginTop: 5,
     color: Colors.white,
-    fontSize: 16
+    fontSize: Dimens.normalText
   }
 });

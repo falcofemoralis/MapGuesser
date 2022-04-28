@@ -57,8 +57,14 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
    * Triggered when user press complete button
    */
   const handleComplete = () => {
+    console.log('complete?');
+    console.log(toCoordinates);
+    console.log(fromCoordinates);
+    
     if (toCoordinates && fromCoordinates) {
       const playtime = Date.now() - startTime;
+      console.log('completed!');
+
       navigation.navigate('Result', { from: fromCoordinates, to: toCoordinates, playtime, ...route.params });
     }
   };
@@ -69,7 +75,7 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
         <TopProgressBar style={styles.progress} round={route.params.data.round + 1} max={Misc.MAX_ROUNDS} />
       )}
       <Mapillary onMove={onMove} onInit={onMapillaryInit} />
-      <MapPanel onMarkerSet={onMarkerSet} onComplete={handleComplete} buttonStyle={[styles.mapBtn, { top: route.params.mode === Mode.ROUND ? 60 : 25 }]} />
+      <MapPanel onMarkerSet={onMarkerSet} onComplete={handleComplete} buttonStyle={[styles.mapBtn, { top: route.params.mode === Mode.ROUND ? 65 : 25 }]} />
     </>
   );
 };
@@ -77,7 +83,6 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   progress: {
     position: 'absolute',
-    top: 10,
     zIndex: 10
   },
   mapBtn: {

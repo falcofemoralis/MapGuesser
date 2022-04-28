@@ -6,6 +6,7 @@ import { BackHandler, Image, StyleSheet, Text, View } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { GameButton } from '../components/interface/GameButton/GameButton';
 import { Colors } from '../constants/colors';
+import { Dimens } from '../constants/dimens';
 import { Misc } from '../constants/misc';
 import { Mode } from '../constants/mode';
 import { GlobalStyles } from '../constants/styles';
@@ -22,6 +23,7 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
   const distance = turf.distance(from, to, { units: 'kilometers' }); // calculated distance
   const xp = ProgressManager.xp(distance);
   const accuracy = ProgressManager.accuracy(distance);
+  const playtime = route.params.playtime;
 
   /**
    * BackPress override.
@@ -34,7 +36,7 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
   const onNextRound = async () => {
     const data = route.params.data;
     if (data) {
-      navigation.replace('Game', { mode: route.params.mode, gameType: route.params.gameType, data: { ...data, round: data.round + 1 } });
+      navigation.replace('Game', { mode: route.params.mode, game: route.params.game, data: { ...data, round: data.round + 1 } });
     }
   };
 
@@ -51,9 +53,9 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
   if (route.params.data && route.params.data?.round + 1 != Misc.MAX_ROUNDS) {
     gameStore.addRound({ from: currentCoordinates, to: selectedCoordinates });
   }
-  
+
   gameStore.updateProgress({
-    playtime: route.params.playtime,
+    playtime,
     accuracy: [accuracy],
     xp,
     lvl: 0
@@ -72,7 +74,7 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
         }
       >
         <Marker coordinate={currentCoordinates}>
-          <Image source={require('../assets/final_user.png')} style={{ width: 26, height: 28 }} resizeMode='contain' />
+          <Image source={require('../assets/user.png')} style={{ width: 26, height: 28 }} resizeMode='contain' />
         </Marker>
         <Marker coordinate={selectedCoordinates} />
         <Polyline coordinates={[currentCoordinates, selectedCoordinates]} />
@@ -82,7 +84,7 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
           toJS(gameStore.rounds).map(round => (
             <>
               <Marker coordinate={round.from}>
-                <Image source={require('../assets/final_user.png')} style={{ width: 26, height: 28 }} resizeMode='contain' />
+                <Image source={require('../assets/user.png')} style={{ width: 26, height: 28 }} resizeMode='contain' />
               </Marker>
               <Marker coordinate={round.to} />
               <Polyline coordinates={[round.from, round.to]} />
@@ -97,10 +99,13 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
           <Text style={[styles.resultText, { marginTop: 5 }]}>
             Received <Text style={styles.resultTextBold}>{Number.parseInt(xp.toFixed(1))}</Text> points.
           </Text>
+          {/* <Text style={[styles.resultText, { marginTop: 5 }]}>
+            Playtime <Text style={styles.resultTextBold}>{ProgressManager.getTotalPlaytime(playtime)}</Text> TODOminutes.
+          </Text> */}
           <View style={GlobalStyles.rcc}>
-            <GameButton img={require('../assets/settings.png')} text='Main menu' onPress={toMenu} />
+            <GameButton img={require('../assets/menu.png')} text='Main menu' onPress={toMenu} />
             {route.params.mode === Mode.ROUND && route.params.data && route.params.data?.round + 1 !== Misc.MAX_ROUNDS && (
-              <GameButton img={require('../assets/settings.png')} text='Next round' onPress={onNextRound} />
+              <GameButton img={require('../assets/next.png')} text='Next round' onPress={onNextRound} />
             )}
           </View>
         </View>
@@ -132,7 +137,7 @@ const styles = StyleSheet.create({
   resultText: {
     color: Colors.white,
     textAlign: 'center',
-    fontSize: 20
+    fontSize: Dimens.normalText
   },
   resultTextBold: {
     fontWeight: 'bold',

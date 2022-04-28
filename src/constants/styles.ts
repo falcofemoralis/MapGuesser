@@ -10,7 +10,7 @@ export const GlobalStyles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center'
   },
-  ссс: {
+  ccc: {
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'center'
