@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image, ImageSourcePropType, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import * as Progress from 'react-native-progress';
+import { Colors } from '../../../constants/colors';
 
 interface ProgressAvatarProps {
   img: ImageSourcePropType;
@@ -22,7 +23,7 @@ export const ProgressAvatar: React.FC<ProgressAvatarProps> = ({ img, style, size
       ]}
     >
       <Image style={[styles.img]} source={img}></Image>
-      <Progress.Circle style={styles.progress} progress={progress} size={size} thickness={7} />
+      <Progress.Circle color={Colors.secondaryColor} style={styles.progress} progress={progress} size={size} thickness={7} />
     </View>
   );
 };

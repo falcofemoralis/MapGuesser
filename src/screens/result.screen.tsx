@@ -9,6 +9,7 @@ import { Colors } from '../constants/colors';
 import { Misc } from '../constants/misc';
 import { Mode } from '../constants/mode';
 import { GlobalStyles } from '../constants/styles';
+import ProgressManager from '../managers/progress.manager';
 import { gameStore } from '../store/game.store';
 import Props from '../types/props.type';
 
@@ -18,33 +19,14 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
   const selectedCoordinates = { ...route.params.to };
   const from = turf.point([currentCoordinates?.latitude, currentCoordinates?.longitude]);
   const to = turf.point([selectedCoordinates?.latitude, selectedCoordinates?.longitude]);
-  const distance = turf.distance(from, to, { units: 'kilometers' }).toFixed(3); // calculated distance
+  const distance = turf.distance(from, to, { units: 'kilometers' }); // calculated distance
+  const xp = ProgressManager.xp(distance);
+  const accuracy = ProgressManager.accuracy(distance);
 
   /**
    * BackPress override.
    */
   BackHandler.addEventListener('hardwareBackPress', () => true);
-
-  const calcXp = (): number => {
-    // TODO EXP FORMULA
-    // const ZERO_XP = 5000.0;
-    // const XP_PER_KM = 1.2;
-    // const km = (ZERO_XP - Number.parseFloat(distance));
-    // if(km > 0) {
-
-    // } else{
-    //   return 0;
-    // }
-    // return (ZERO_XP - Number.parseFloat(distance))
-    return 10;
-  };
-
-  const calcAccuracy = (): number => {
-    // const ZERO_ACCURACY = 5000.0; // in km
-    // const accuracy = 100 - (100.0 * Number.parseFloat(distance)) / ZERO_ACCURACY;
-    // return accuracy;
-    return 1;
-  };
 
   /**
    * Navigate to nextRound
@@ -69,11 +51,12 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
   if (route.params.data && route.params.data?.round + 1 != Misc.MAX_ROUNDS) {
     gameStore.addRound({ from: currentCoordinates, to: selectedCoordinates });
   }
-
+  
   gameStore.updateProgress({
-    accuracy: calcAccuracy(),
     playtime: route.params.playtime,
-    xp: calcXp()
+    accuracy: [accuracy],
+    xp,
+    lvl: 0
   });
 
   return (
@@ -109,10 +92,10 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
       <View style={styles.container}>
         <View style={styles.resultContainer}>
           <Text style={styles.resultText}>
-            Your place was <Text style={styles.resultTextBold}>{distance}km</Text> away from the correct location.
+            Your place was <Text style={styles.resultTextBold}>{distance.toFixed(3)}km</Text> away from the correct location.
           </Text>
           <Text style={[styles.resultText, { marginTop: 5 }]}>
-            Received <Text style={styles.resultTextBold}>500</Text> points.
+            Received <Text style={styles.resultTextBold}>{Number.parseInt(xp.toFixed(1))}</Text> points.
           </Text>
           <View style={GlobalStyles.rcc}>
             <GameButton img={require('../assets/settings.png')} text='Main menu' onPress={toMenu} />

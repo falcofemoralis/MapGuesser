@@ -4,16 +4,18 @@ import { Colors } from '../../../constants/colors';
 import { GlobalStyles } from '../../../constants/styles';
 
 interface ProgressValueProps {
-  value: number | undefined;
+  value: string;
+  unit?: string;
   text: string;
   style?: StyleProp<ViewStyle>;
 }
-export const ProgressValue: React.FC<ProgressValueProps> = ({ value, text, style }) => {
-  console.log(value);
-
+export const ProgressValue: React.FC<ProgressValueProps> = ({ value, unit, text, style }) => {
   return (
     <View style={[GlobalStyles.rcc, style, styles.bg]}>
-      <Text style={styles.text}>{value ?? 0}</Text>
+      <Text style={styles.text}>
+        {value}
+        {unit}
+      </Text>
       <Text style={styles.text}>{text}</Text>
     </View>
   );

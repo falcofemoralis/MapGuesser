@@ -10,6 +10,7 @@ import { GameType } from '../constants/gametype';
 import { Mode } from '../constants/mode';
 import { Strings } from '../constants/strings';
 import { GlobalStyles } from '../constants/styles';
+import ProgressManager from '../managers/progress.manager';
 import { gameStore } from '../store/game.store';
 import Props from '../types/props.type';
 import { RoundData } from './index';
@@ -23,6 +24,11 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
     navigation.replace('Game', { mode, data, gameType });
   };
 
+  const getPlayTime = (): string => {
+    const time = new Date(gameStore.progress.playtime);
+    return `${time.getMinutes()}:${time.getSeconds()}`;
+  };
+
   return (
     <View style={styles.container}>
       <View style={[GlobalStyles.rcc, styles.settingsContainer]}>
@@ -32,12 +38,13 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
       <Text style={styles.logo}>{Strings.appName}</Text>
       <View style={[GlobalStyles.rcc, styles.profileContainer]}>
         <View style={styles.avatarContainer}>
-          <ProgressAvatar size={150} img={require('./../assets/user.png')} progress={0.5} />
+          <ProgressAvatar size={150} img={require('./../assets/user.png')} progress={gameStore.progress.xp / ProgressManager.lvl(gameStore.progress.lvl + 1)} />
+          <Text style={styles.lvlText}>Level {gameStore.progress.lvl}</Text>
         </View>
         <View style={styles.progressesContainer}>
-          <ProgressValue value={gameStore.progress?.xp} text='XP' />
-          <ProgressValue value={new Date(gameStore.progress?.playtime ?? 1).getMinutes()} text='Playtime' />
-          <ProgressValue value={50} text='Accuracy' />
+          <ProgressValue value={gameStore.progress.xp.toFixed(0)} text='XP' />
+          <ProgressValue value={getPlayTime()} unit='m' text='Playtime' />
+          <ProgressValue value={ProgressManager.getTotalAccuracy(gameStore.progress.accuracy).toFixed(2)} unit='%' text='Accuracy' />
         </View>
       </View>
       <View style={GlobalStyles.rcc}>
@@ -84,6 +91,13 @@ const styles = StyleSheet.create({
   progressesContainer: {
     height: '100%',
     flexGrow: 1
+  },
+  lvlText: {
+    color: Colors.white,
+    fontSize: 16,
+    fontWeight: 'bold',
+    alignSelf: 'center',
+    marginTop: 5
   }
 });
 
