@@ -1,6 +1,55 @@
 import React from 'react';
-import { Image, StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { Image, StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle, Dimensions } from 'react-native';
 import MapView, { LatLng, MapEvent, Marker, UrlTile } from 'react-native-maps';
+import { Colors } from '../../constants/colors';
+
+interface CompleteBtnProps {
+  onComplete?: () => void;
+  disabled?: boolean;
+}
+const CompleteBtn: React.FC<CompleteBtnProps> = ({ onComplete, disabled }) => {
+  return (
+    <TouchableOpacity style={stylesBtn.completeBtn} onPress={onComplete} activeOpacity={0.5} disabled={disabled}>
+      <View style={[stylesBtn.tier1, { backgroundColor: disabled ? Colors.background : Colors.primaryColor }]} />
+      <View style={[stylesBtn.tier2, { backgroundColor: disabled ? Colors.background : Colors.primaryColor }]} />
+      <Image style={stylesBtn.completeBtnIcon} source={require('../../assets/placeholder.png')} />
+    </TouchableOpacity>
+  );
+};
+
+const BTN_RADIUS = 100;
+const BTN_SIZE = 100;
+const stylesBtn = StyleSheet.create({
+  completeBtn: {
+    position: 'absolute',
+    bottom: BTN_SIZE + 10,
+    alignSelf: 'center'
+  },
+  tier1: {
+    position: 'absolute',
+    width: BTN_SIZE,
+    height: BTN_SIZE,
+    opacity: 0.3,
+    alignSelf: 'center',
+    borderRadius: BTN_RADIUS
+  },
+  tier2: {
+    position: 'absolute',
+    top: BTN_SIZE / 5.5,
+    width: BTN_SIZE / 1.5,
+    height: BTN_SIZE / 1.5,
+    opacity: 0.5,
+    alignSelf: 'center',
+    borderRadius: BTN_RADIUS
+  },
+  completeBtnIcon: {
+    position: 'absolute',
+    top: BTN_SIZE / 3,
+    alignSelf: 'center',
+    width: BTN_SIZE / 3,
+    height: BTN_SIZE / 3
+  }
+});
 
 interface SelectableMapProps {
   onMarkerSet: (coordinates: LatLng) => void;
@@ -31,33 +80,13 @@ const SelectableMap: React.FC<SelectableMapProps> = ({ onMarkerSet, style, onCom
       <MapView ref={mapRef} style={styles.map} onPress={onMarkerCreate}>
         {marker && <Marker coordinate={marker} />}
       </MapView>
-      {marker ? (
-        <TouchableOpacity style={styles.completeBtn} onPress={onComplete}>
-          <Image style={styles.completeBtnIcon} source={require('../../assets/select_on.png')} />
-        </TouchableOpacity>
-      ) : (
-        <TouchableOpacity style={styles.completeBtn} disabled={true}>
-          <Image style={styles.completeBtnIcon} source={require('../../assets/select_off.png')} />
-        </TouchableOpacity>
-      )}
+      <CompleteBtn disabled={!Boolean(marker)} onComplete={onComplete} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   map: {
-    height: '100%',
-    width: '100%'
-  },
-  completeBtn: {
-    position: 'absolute',
-    bottom: 10,
-    width: 80,
-    height: 80,
-    alignSelf: 'center',
-    zIndex: 15
-  },
-  completeBtnIcon: {
     height: '100%',
     width: '100%'
   }

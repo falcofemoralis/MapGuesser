@@ -30,6 +30,36 @@
         *::-webkit-scrollbar-thumb {
             background-color: #888
         }
+
+        .mapillary-zoom-compact .mapillary-zoom-in-button,
+        .mapillary-zoom-compact .mapillary-zoom-in-button-inactive,
+        .mapillary-zoom-compact .mapillary-zoom-out-button,
+        .mapillary-zoom-compact .mapillary-zoom-out-button-inactive,
+        .mapillary-zoom-compact .mapillary-zoom-in-icon,
+        .mapillary-zoom-compact .mapillary-zoom-out-icon {
+            width: 38px !important;
+            height: 38px !important;
+        }
+
+        .mapillary-zoom-compact.mapillary-zoom-container {
+            height: 34px;
+            width: 16px;
+            bottom: 126px !important;
+        }
+
+        .mapillary-zoom-container {
+            position: absolute;
+            bottom: 90px;
+            right: 38px !important;
+            height: 66px;
+            width: 32px;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .mapillary-direction-perspective {
+            bottom: 8px !important;
+        }
     </style>
 </head>
 

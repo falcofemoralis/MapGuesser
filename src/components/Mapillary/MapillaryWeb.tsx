@@ -10,6 +10,7 @@ class MapillaryWeb extends React.Component<MapillaryWebProps> {
   getHtml = (imageId: string): string => {
     const html = (MapillaryViewer as string).replace('<ID>', imageId).replace('<TOKEN>', token);
     console.log('web');
+    console.log('1');
 
     return html;
   };

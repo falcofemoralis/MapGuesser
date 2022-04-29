@@ -33,7 +33,18 @@ const MapPanel: React.FC<MapPanelProps> = ({ onMarkerSet, onComplete, buttonStyl
       <TouchableOpacity style={[styles.button, buttonStyle]} onPress={openMap}>
         <Text style={styles.buttonText}>SELECT PLACE</Text>
       </TouchableOpacity>
-      <SwipeablePanel noBackgroundOpacity fullWidth onlyLarge openLarge closeOnTouchOutside showCloseButton isActive={isMap} onClose={closeMap}>
+      <SwipeablePanel
+        noBackgroundOpacity
+        fullWidth
+        onlyLarge
+        openLarge
+        closeOnTouchOutside
+        showCloseButton
+        isActive={isMap}
+        onClose={closeMap}
+        closeRootStyle={styles.closeBtn}
+        barContainerStyle={styles.bar}
+      >
         <SelectableMap style={styles.selectableMap} onMarkerSet={handleMarkerSet} onComplete={onComplete} />
       </SwipeablePanel>
     </>
@@ -43,7 +54,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ onMarkerSet, onComplete, buttonStyl
 const styles = StyleSheet.create({
   selectableMap: {
     width: '100%',
-    height: Dimensions.get('window').height - 125,
+    height: Dimensions.get('window').height - 125
   },
   button: {
     height: 35,
@@ -57,6 +68,13 @@ const styles = StyleSheet.create({
   buttonText: {
     color: Colors.white,
     fontSize: Dimens.normalText
+  },
+  closeBtn: {
+    marginTop: 25,
+    backgroundColor: Colors.background
+  },
+  bar: {
+    backgroundColor: Colors.backgroundOpposite
   }
 });
 
