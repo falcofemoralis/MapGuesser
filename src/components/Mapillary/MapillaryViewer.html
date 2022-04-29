@@ -44,7 +44,7 @@
         .mapillary-zoom-compact.mapillary-zoom-container {
             height: 34px;
             width: 16px;
-            bottom: 126px !important;
+            bottom: 150px !important;
         }
 
         .mapillary-zoom-container {
@@ -60,6 +60,29 @@
         .mapillary-direction-perspective {
             bottom: 8px !important;
         }
+
+        .mapillary-sequence-stepper {
+            height: 40.1087px !important;
+            width: 144.3914px !important;
+        }
+
+        .mapillary-sequence-controls {
+            height: 40.1087px !important;
+            transform: translate(72.05px, 0px) !important;
+            width: 98.9856px !important;
+        }
+
+        .mapillary-sequence-playback {
+            top: 45px !important;
+        }
+
+        .mapillary-sequence-timeline {
+            top: 45px !important;
+        }
+
+        .mapillary-sequence-container {
+            top: 'TOP' !important;
+        }
     </style>
 </head>
 
@@ -70,7 +93,7 @@
 
         var viewer = new Viewer({
             accessToken: '<TOKEN>',
-            component: { cover: false, bearing: false, sequence: false, attribution: true, direction: true, zoom: true },
+            component: { cover: false, bearing: false, sequence: true, attribution: true, direction: true, zoom: true },
             container: 'mly',
             imageId: '<ID>', // '1566097680389826'
         });

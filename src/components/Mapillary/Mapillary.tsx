@@ -1,5 +1,6 @@
 import React from 'react';
 import { LatLng } from 'react-native-maps';
+import { Mode } from '../../constants/mode';
 import { Regions } from '../../constants/regions';
 import ImagesService from '../../services/images.service';
 import { generateCoordinate } from '../../utils/coordinates.util';
@@ -9,8 +10,9 @@ import MapillaryWeb from './MapillaryWeb';
 interface MapillaryProps {
   onMove: (coordinates: LatLng) => void;
   onInit: () => void;
+  mode: Mode;
 }
-const Mapillary: React.FC<MapillaryProps> = ({ onMove, onInit }) => {
+const Mapillary: React.FC<MapillaryProps> = ({ onMove, onInit, mode }) => {
   const [imageId, setImageId] = React.useState<string | null>(null);
 
   const initMapillary = () => {
@@ -41,7 +43,7 @@ const Mapillary: React.FC<MapillaryProps> = ({ onMove, onInit }) => {
     initMapillary();
   }
 
-  return imageId ? <MapillaryWeb imageId={imageId} /> : <LoadingPreview />;
+  return imageId ? <MapillaryWeb imageId={imageId} mode={mode} /> : <LoadingPreview />;
 };
 
 export default Mapillary;

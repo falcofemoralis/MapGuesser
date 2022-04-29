@@ -24,6 +24,8 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
 
   const games: GameType[] = [
     { title: 'Classic', preview: require('../assets/preview.png'), mode: Mode.SINGLE, game: Game.CLASSIC },
+    { title: 'Set of rounds', preview: require('../assets/preview.png'), mode: Mode.ROUND, game: Game.CLASSIC },
+    { title: 'Set of rounds', preview: require('../assets/preview.png'), mode: Mode.ROUND, game: Game.CLASSIC },
     { title: 'Set of rounds', preview: require('../assets/preview.png'), mode: Mode.ROUND, game: Game.CLASSIC }
   ];
 

@@ -5,6 +5,7 @@ import { SwipeablePanel } from 'rn-swipeable-panel';
 import { Colors } from '../../constants/colors';
 import { Dimens } from '../../constants/dimens';
 import SelectableMap from '../SelectableMap/SelectableMap';
+import { ImageButton } from '../interface/ImageButton/ImageButton';
 
 interface MapPanelProps {
   onMarkerSet: (coordinates: LatLng) => void;
@@ -30,9 +31,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ onMarkerSet, onComplete, buttonStyl
 
   return (
     <>
-      <TouchableOpacity style={[styles.button, buttonStyle]} onPress={openMap}>
-        <Text style={styles.buttonText}>SELECT PLACE</Text>
-      </TouchableOpacity>
+      <ImageButton img={require('../../assets/map.png')} buttonStyle={[styles.button, buttonStyle]} onPress={openMap} />
       <SwipeablePanel
         noBackgroundOpacity
         fullWidth
@@ -57,17 +56,14 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height - 125
   },
   button: {
-    height: 35,
-    width: 150,
-    backgroundColor: Colors.backgroundOpposite,
-    borderRadius: 20,
+    height: 64,
+    width: 64,
+    backgroundColor: Colors.backgroundButton,
+    borderRadius: 32,
     textAlign: 'center',
     justifyContent: 'center',
-    alignItems: 'center'
-  },
-  buttonText: {
-    color: Colors.white,
-    fontSize: Dimens.normalText
+    alignItems: 'center',
+    padding: 16
   },
   closeBtn: {
     marginTop: 25,

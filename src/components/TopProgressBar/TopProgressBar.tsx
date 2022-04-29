@@ -15,13 +15,13 @@ export const TopProgressBar: React.FC<TopProgressBarProps> = ({ style, round, ma
     <View style={[styles.container, style]}>
       <ProgressSteps
         activeStep={round}
-        activeStepNumColor={Colors.white}
+        activeStepNumColor={Colors.primaryColor}
         completedProgressBarColor={Colors.primaryColor}
         completedStepIconColor={Colors.primaryColor}
         activeStepIconBorderColor={Colors.primaryColor}
         labelFontSize={0}
-        disabledStepIconColor={Colors.secondaryColor}
-        progressBarColor={Colors.primaryColor}
+        disabledStepIconColor={Colors.backgroundTransparent}
+        progressBarColor={Colors.backgroundTransparent}
         topOffset={15}
         marginBottom={0}
       >

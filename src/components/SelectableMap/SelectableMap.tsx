@@ -23,7 +23,8 @@ const stylesBtn = StyleSheet.create({
   completeBtn: {
     position: 'absolute',
     bottom: BTN_SIZE + 10,
-    alignSelf: 'center'
+    alignSelf: 'center',
+    zIndex: 15
   },
   tier1: {
     position: 'absolute',
@@ -88,7 +89,8 @@ const SelectableMap: React.FC<SelectableMapProps> = ({ onMarkerSet, style, onCom
 const styles = StyleSheet.create({
   map: {
     height: '100%',
-    width: '100%'
+    width: '100%',
+    zIndex: 10
   }
 });
 

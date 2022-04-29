@@ -74,8 +74,8 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
       {route.params.mode === Mode.ROUND && route.params.data && (
         <TopProgressBar style={styles.progress} round={route.params.data.round + 1} max={Misc.MAX_ROUNDS} />
       )}
-      <Mapillary onMove={onMove} onInit={onMapillaryInit} />
-      <MapPanel onMarkerSet={onMarkerSet} onComplete={handleComplete} buttonStyle={[styles.mapBtn, { top: route.params.mode === Mode.ROUND ? 65 : 25 }]} />
+      <Mapillary onMove={onMove} onInit={onMapillaryInit} mode={route.params.mode} />
+      <MapPanel onMarkerSet={onMarkerSet} onComplete={handleComplete} buttonStyle={[styles.mapBtn]} />
     </>
   );
 };
@@ -88,7 +88,9 @@ const styles = StyleSheet.create({
   mapBtn: {
     position: 'absolute',
     alignSelf: 'center',
-    zIndex: 1
+    zIndex: 1,
+    right: 10,
+    bottom: 25
   }
 });
 

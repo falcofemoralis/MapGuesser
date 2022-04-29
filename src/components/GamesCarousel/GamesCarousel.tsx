@@ -25,6 +25,9 @@ export const GamesCarousel: React.FC<GamesCarouselProps> = ({ games, onSelect })
 
   const _renderItem = ({ item, index }: { item: GameType; index: number }) => {
     return (
+      // <View style={styles.itemContainer}>
+      //   <Image style={styles.preview} source={item.preview} />
+      // </View>
       <TouchableOpacity style={styles.itemContainer} onPress={() => onPress(index)} disabled={index != currentIndex}>
         <Image style={styles.preview} source={item.preview} />
         <View style={styles.deck} />
@@ -38,16 +41,13 @@ export const GamesCarousel: React.FC<GamesCarouselProps> = ({ games, onSelect })
   return (
     <View>
       <Carousel
+        layout={'default'}
         data={games}
         renderItem={_renderItem}
         sliderWidth={SLIDER_WIDTH}
         itemWidth={ITEM_WIDTH}
         containerCustomStyle={styles.carouselContainer}
-        inactiveSlideShift={0}
         onSnapToItem={index => setIndex(index)}
-        scrollInterpolator={scrollInterpolator}
-        slideInterpolatedStyle={animatedStyles}
-        useScrollView={true}
       />
     </View>
   );
@@ -65,9 +65,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.backgroundOpposite
   },
   preview: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
     height: '100%',
     width: '100%',
     zIndex: 1

@@ -9,7 +9,7 @@ interface ImageButtonProps {
 }
 export const ImageButton: React.FC<ImageButtonProps> = ({ buttonStyle, onPress, img, iconStyle }) => {
   return (
-    <TouchableOpacity style={buttonStyle} onPress={onPress}>
+    <TouchableOpacity style={buttonStyle} onPress={onPress} activeOpacity={0.5}>
       <Image style={[styles.icon, iconStyle]} source={img} />
     </TouchableOpacity>
   );
