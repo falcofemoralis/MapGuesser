@@ -5,6 +5,7 @@ import { GamesCarousel } from '../components/GamesCarousel/GamesCarousel';
 import { ImageButton } from '../components/interface/ImageButton/ImageButton';
 import { ProgressAvatar } from '../components/interface/ProgressAvatar/ProgressAvatar';
 import { ProgressValue } from '../components/interface/ProgressValue/ProgressValue';
+import { Settings } from '../components/Settings/Settings';
 import { Colors } from '../constants/colors';
 import { Dimens } from '../constants/dimens';
 import { Game } from '../constants/gametype';
@@ -18,15 +19,15 @@ import Props from '../types/props.type';
 import { RoundData } from './index';
 
 const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
+  const [isSettings, setSetting] = React.useState(false);
   if (!gameStore.progress) {
     gameStore.initProgress();
   }
 
   const games: GameType[] = [
     { title: 'Classic', preview: require('../assets/preview.png'), mode: Mode.SINGLE, game: Game.CLASSIC },
-    { title: 'Set of rounds', preview: require('../assets/preview.png'), mode: Mode.ROUND, game: Game.CLASSIC },
-    { title: 'Set of rounds', preview: require('../assets/preview.png'), mode: Mode.ROUND, game: Game.CLASSIC },
-    { title: 'Set of rounds', preview: require('../assets/preview.png'), mode: Mode.ROUND, game: Game.CLASSIC }
+    { title: 'Set of rounds', preview: require('../assets/rounds.jpg'), mode: Mode.ROUND, game: Game.CLASSIC },
+    { title: 'Continents', preview: require('../assets/earth.jpg'), mode: Mode.ROUND, game: Game.CLASSIC }
   ];
 
   const onModeSelect = (game: GameType) => {
@@ -37,17 +38,22 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
     navigation.replace('Game', { game: game.game, mode: game.mode, data });
   };
 
+  const getProgress = () => {
+    return gameStore.progress.xp / ProgressManager.lvl(gameStore.progress.lvl + 1);
+  };
+
+  const toggleSettings = () => {
+    setSetting(!isSettings);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <ImageButton img={require('./../assets/settings.png')} buttonStyle={styles.settingsBtn}></ImageButton>
+        <ImageButton img={require('./../assets/settings.png')} buttonStyle={styles.settingsBtn} onPress={toggleSettings} />
       </View>
+      <Settings visible={isSettings} onClose={toggleSettings} />
       <View style={[GlobalStyles.ccc, styles.avatarContainer]}>
-        <ProgressAvatar
-          size={100}
-          avatar={require('./../assets/user.png')}
-          progress={gameStore.progress.xp / ProgressManager.lvl(gameStore.progress.lvl + 1)}
-        />
+        <ProgressAvatar size={100} avatar={require('./../assets/user.png')} progress={getProgress()} />
         <Text style={styles.username}>User #3324</Text>
         <Text style={styles.lvlText}>Level {gameStore.progress.lvl}</Text>
       </View>

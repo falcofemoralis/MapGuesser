@@ -4,7 +4,6 @@ import Carousel from 'react-native-snap-carousel'; // Version can be specified i
 import { Colors } from '../../constants/colors';
 import { Dimens } from '../../constants/dimens';
 import { GameType } from '../../types/game.type';
-import { animatedStyles, scrollInterpolator } from '../../utils/animations';
 
 const SLIDER_WIDTH = Dimensions.get('window').width;
 const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);
@@ -15,7 +14,7 @@ interface GamesCarouselProps {
   onSelect: (index: number) => void;
 }
 export const GamesCarousel: React.FC<GamesCarouselProps> = ({ games, onSelect }) => {
-  const [currentIndex, setIndex] = React.useState(0);
+  const [currentIndex, setIndex] = React.useState(1);
 
   const onPress = (i: number) => {
     if (i == currentIndex) {
@@ -41,6 +40,7 @@ export const GamesCarousel: React.FC<GamesCarouselProps> = ({ games, onSelect })
   return (
     <View>
       <Carousel
+        firstItem={currentIndex}
         layout={'default'}
         data={games}
         renderItem={_renderItem}

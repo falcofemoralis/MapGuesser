@@ -10,8 +10,10 @@ import { Dimens } from '../constants/dimens';
 import { Misc } from '../constants/misc';
 import { Mode } from '../constants/mode';
 import { GlobalStyles } from '../constants/styles';
+import { Unit } from '../constants/unit';
 import ProgressManager from '../managers/progress.manager';
 import { gameStore } from '../store/game.store';
+import { settingsStore } from '../store/settings.store';
 import Props from '../types/props.type';
 
 const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
@@ -20,7 +22,8 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
   const selectedCoordinates = { ...route.params.to };
   const from = turf.point([currentCoordinates?.latitude, currentCoordinates?.longitude]);
   const to = turf.point([selectedCoordinates?.latitude, selectedCoordinates?.longitude]);
-  const distance = turf.distance(from, to, { units: 'kilometers' }); // calculated distance
+  const distance = turf.distance(from, to, { units: Unit.KM });
+  const miles = turf.distance(from, to, { units: Unit.ML });
   const xp = ProgressManager.xp(distance);
   const accuracy = ProgressManager.accuracy(distance);
   const playtime = route.params.playtime;
@@ -94,7 +97,11 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
       <View style={styles.container}>
         <View style={styles.resultContainer}>
           <Text style={styles.resultText}>
-            Your place was <Text style={styles.resultTextBold}>{distance.toFixed(3)}km</Text> away from the correct location.
+            Your place was{' '}
+            <Text style={styles.resultTextBold}>
+              {settingsStore.unit == Unit.KM ? distance.toFixed(3) : miles.toFixed(3)} {settingsStore.unit.toString()}
+            </Text>
+            away from the correct location.
           </Text>
           <Text style={[styles.resultText, { marginTop: 5 }]}>
             Received <Text style={styles.resultTextBold}>{Number.parseInt(xp.toFixed(1))}</Text> points.

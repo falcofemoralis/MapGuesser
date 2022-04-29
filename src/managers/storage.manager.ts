@@ -2,7 +2,8 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 
 export enum KeyEnum {
   'USER',
-  'PROGRESS'
+  'PROGRESS',
+  'UNIT'
 }
 
 export default class StorageManager {
