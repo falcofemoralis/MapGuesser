@@ -3,6 +3,7 @@ import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'rea
 import Carousel from 'react-native-snap-carousel'; // Version can be specified in package.json
 import { Colors } from '../../constants/colors';
 import { Dimens } from '../../constants/dimens';
+import { gameStore } from '../../store/game.store';
 import { GameType } from '../../types/game.type';
 
 const SLIDER_WIDTH = Dimensions.get('window').width;
@@ -14,7 +15,7 @@ interface GamesCarouselProps {
   onSelect: (index: number) => void;
 }
 export const GamesCarousel: React.FC<GamesCarouselProps> = ({ games, onSelect }) => {
-  const [currentIndex, setIndex] = React.useState(1);
+  const [currentIndex, setIndex] = React.useState(0);
 
   const onPress = (i: number) => {
     if (i == currentIndex) {
@@ -22,12 +23,17 @@ export const GamesCarousel: React.FC<GamesCarouselProps> = ({ games, onSelect })
     }
   };
 
+  const isUnlocked = (lvl: number) => {
+    return (gameStore.progress?.lvl ?? 0) >= lvl;
+  };
+
   const _renderItem = ({ item, index }: { item: GameType; index: number }) => {
     return (
-      <TouchableOpacity style={styles.itemContainer} onPress={() => onPress(index)} disabled={index != currentIndex}>
+      <TouchableOpacity style={styles.itemContainer} onPress={() => onPress(index)} disabled={index != currentIndex || !isUnlocked(item.requiredLvl)}>
         <Image style={styles.preview} source={item.preview} />
         <View style={styles.deck} />
         <View style={styles.deckContainer}>
+          {!isUnlocked(item.requiredLvl) && <Text style={styles.level}>Unlocked at {item.requiredLvl} level</Text>}
           <Text style={styles.title}>{item.title}</Text>
           <Text style={styles.description}>{item.description}</Text>
         </View>
@@ -73,14 +79,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     opacity: 0.6,
     backgroundColor: '#000',
-    height: '30%',
+    height: '35%',
     width: '100%',
     bottom: 0,
     zIndex: 5
   },
   deckContainer: {
     position: 'absolute',
-    height: '30%',
+    height: '35%',
     width: '100%',
     bottom: 0,
     zIndex: 6,
@@ -94,5 +100,10 @@ const styles = StyleSheet.create({
   description: {
     color: Colors.white,
     fontSize: Dimens.normalText
+  },
+  level: {
+    color: Colors.gray,
+    fontSize: Dimens.normalText,
+    marginBottom: 5
   }
 });

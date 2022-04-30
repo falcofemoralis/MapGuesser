@@ -8,4 +8,5 @@ export interface GameType {
   description: string;
   game: Game;
   mode: Mode;
+  requiredLvl: number;
 }

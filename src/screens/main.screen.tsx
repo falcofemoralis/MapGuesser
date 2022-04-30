@@ -28,14 +28,29 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
   const [selectedData, setData] = React.useState<GameData | null>(null);
 
   const games: GameType[] = [
-    { title: 'Classic', preview: require('../assets/preview.png'), description: 'Play a single round anywhere', mode: Mode.SINGLE, game: Game.CLASSIC },
-    { title: 'Set of rounds', preview: require('../assets/rounds.jpg'), description: 'Play several rounds anywhere', mode: Mode.ROUND, game: Game.CLASSIC },
+    {
+      title: 'Classic',
+      preview: require('../assets/preview.png'),
+      description: 'Play a single round anywhere',
+      mode: Mode.SINGLE,
+      game: Game.CLASSIC,
+      requiredLvl: 0
+    },
+    {
+      title: 'Set of rounds',
+      preview: require('../assets/rounds.jpg'),
+      description: 'Play several rounds anywhere',
+      mode: Mode.ROUND,
+      game: Game.CLASSIC,
+      requiredLvl: 3
+    },
     {
       title: 'Continents',
       preview: require('../assets/earth.jpg'),
       description: 'Select on of the continents to start playing',
       mode: Mode.ROUND,
-      game: Game.CONTINENTS
+      game: Game.CONTINENTS,
+      requiredLvl: 10
     }
   ];
 
