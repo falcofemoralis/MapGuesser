@@ -1,13 +1,13 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import * as Progress from 'react-native-progress';
-import { Colors } from '../../../constants/colors';
+import { Colors } from '../../../values/colors';
 
 interface LoadingPreviewProps {}
 export const LoadingPreview: React.FC<LoadingPreviewProps> = () => {
   return (
     <View style={styles.container}>
-      <Progress.CircleSnail color={['red', 'green', 'blue']} />
+      <Progress.CircleSnail color={[Colors.primaryColor, 'red', 'green', 'blue']} />
     </View>
   );
 };

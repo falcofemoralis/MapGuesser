@@ -1,54 +1,10 @@
 import React from 'react';
-import { FlatList, Image, ImageSourcePropType, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Colors } from '../../constants/colors';
+import { FlatList, Modal, StyleSheet, View } from 'react-native';
 import { Continent } from '../../constants/continent';
+import { ContinentType } from '../../types/continent.type';
+import { Colors } from '../../values/colors';
 import { ImageButton } from '../interface/ImageButton/ImageButton';
-
-interface ContinentData {
-  name: string;
-  img: ImageSourcePropType;
-  continent: Continent;
-}
-
-interface ContinentProps {
-  data: ContinentData;
-  onSelect: (continent: Continent) => void;
-}
-const ContinentShelf: React.FC<ContinentProps> = ({ data, onSelect }) => {
-  return (
-    <TouchableOpacity style={continentStyles.cont} onPress={() => onSelect(data.continent)}>
-      <Text style={continentStyles.text}>{data.name}</Text>
-      <Image style={continentStyles.img} source={data.img} />
-    </TouchableOpacity>
-  );
-};
-
-const continentStyles = StyleSheet.create({
-  cont: {
-    flex: 1,
-    height: 150,
-    width: '100%',
-    padding: 0,
-    paddingTop: 5,
-    paddingStart: 3,
-    paddingEnd: 3,
-    paddingBottom: 5,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  img: {
-    borderRadius: 20,
-    height: '100%',
-    width: '100%'
-  },
-  text: {
-    position: 'absolute',
-    fontSize: 40,
-    color: Colors.white,
-    fontWeight: 'bold',
-    zIndex: 2
-  }
-});
+import { ContinentShelf } from './ContinentShelf';
 
 interface ContinentsSelectorProps {
   visible: boolean;
@@ -56,7 +12,7 @@ interface ContinentsSelectorProps {
   onSelect: (continent: Continent) => void;
 }
 export const ContinentsSelector: React.FC<ContinentsSelectorProps> = ({ visible, onClose, onSelect }) => {
-  const continents: ContinentData[] = [
+  const continents: ContinentType[] = [
     { name: 'Asia', img: require('../../assets/asia.jpg'), continent: Continent.as },
     { name: 'Europe', img: require('../../assets/europe.jpg'), continent: Continent.eu },
     { name: 'North America', img: require('../../assets/north_america.jpg'), continent: Continent.na },
@@ -68,7 +24,7 @@ export const ContinentsSelector: React.FC<ContinentsSelectorProps> = ({ visible,
   return (
     <View style={styles.centeredView}>
       <Modal animationType='fade' transparent={true} visible={visible} onRequestClose={onClose}>
-        <View style={[styles.centeredView, { backgroundColor: 'rgba(0, 0, 0, 0.5)' }]}>
+        <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <ImageButton img={require('../../assets/close.png')} buttonStyle={styles.closeBtn} onPress={onClose} />
             <View style={styles.list}>
@@ -90,7 +46,8 @@ const styles = StyleSheet.create({
     padding: 25,
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
   },
   modalView: {
     backgroundColor: Colors.background,

@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
-import { Colors } from '../../../constants/colors';
-import { Dimens } from '../../../constants/dimens';
-import { GlobalStyles } from '../../../constants/styles';
+import { Colors } from '../../../values/colors';
+import { Dimens } from '../../../values/dimens';
+import { GlobalStyles } from '../../../values/styles';
 
 interface ProgressValueProps {
   value: string;

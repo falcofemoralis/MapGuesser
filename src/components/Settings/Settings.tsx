@@ -1,9 +1,9 @@
 import React from 'react';
-import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
-import { Colors } from '../../constants/colors';
-import { Dimens } from '../../constants/dimens';
+import { Modal, StyleSheet, Text, View } from 'react-native';
 import { Unit } from '../../constants/unit';
 import { settingsStore } from '../../store/settings.store';
+import { Colors } from '../../values/colors';
+import { Dimens } from '../../values/dimens';
 import { ImageButton } from '../interface/ImageButton/ImageButton';
 import SwitchSelector from '../interface/SwitchSelector/SwitchSelector';
 
@@ -16,6 +16,7 @@ export const Settings: React.FC<SettingsProps> = ({ visible, onClose }) => {
     { label: 'kilometers', value: Unit.KM },
     { label: 'miles', value: Unit.ML }
   ];
+
   return (
     <View style={styles.centeredView}>
       <Modal animationType='fade' transparent={true} visible={visible} onRequestClose={onClose}>

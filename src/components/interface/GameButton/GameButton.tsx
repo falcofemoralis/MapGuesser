@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, ImageSourcePropType, ImageStyle, StyleProp, StyleSheet, Text, TouchableOpacity, ViewStyle } from 'react-native';
-import { Colors } from '../../../constants/colors';
-import { Dimens } from '../../../constants/dimens';
+import { Colors } from '../../../values/colors';
+import { Dimens } from '../../../values/dimens';
 
 interface ImageButtonProps {
   img: ImageSourcePropType;

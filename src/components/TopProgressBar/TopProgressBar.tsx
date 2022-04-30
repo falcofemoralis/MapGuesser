@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { ProgressStep, ProgressSteps } from 'react-native-progress-steps';
-import { Colors } from '../../constants/colors';
-import { Dimens } from '../../constants/dimens';
+import { Colors } from '../../values/colors';
+import { Dimens } from '../../values/dimens';
 
 interface TopProgressBarProps {
   style: StyleProp<ViewStyle>;

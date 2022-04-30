@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle, Dimensions } from 'react-native';
 import MapView, { LatLng, MapEvent, Marker, UrlTile } from 'react-native-maps';
-import { Colors } from '../../constants/colors';
+import { Colors } from '../../values/colors';
 
 interface CompleteBtnProps {
   onComplete?: () => void;

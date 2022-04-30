@@ -1,20 +1,19 @@
 import * as turf from '@turf/turf';
-import { round } from '@turf/turf';
 import { toJS } from 'mobx';
 import React from 'react';
 import { BackHandler, Image, StyleSheet, Text, View } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { GameButton } from '../components/interface/GameButton/GameButton';
-import { Colors } from '../constants/colors';
-import { Dimens } from '../constants/dimens';
-import { Misc } from '../constants/misc';
 import { Mode } from '../constants/mode';
-import { GlobalStyles } from '../constants/styles';
 import { Unit } from '../constants/unit';
 import ProgressManager from '../managers/progress.manager';
 import { gameStore } from '../store/game.store';
 import { settingsStore } from '../store/settings.store';
 import Props from '../types/props.type';
+import { Colors } from '../values/colors';
+import { Dimens } from '../values/dimens';
+import { Misc } from '../values/misc';
+import { GlobalStyles } from '../values/styles';
 
 const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
   const mapRef = React.useRef<MapView | null>(null);
@@ -28,6 +27,10 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
   const accuracy = ProgressManager.accuracy(distance);
   const playtime = route.params.playtime;
 
+  const isRounds = () => route.params.mode === Mode.ROUND && route.params.data;
+  const isMoreRounds = () => isRounds() && (route.params.data?.round ?? 0) + 1 !== Misc.MAX_ROUNDS;
+  const isLastRound = () => isRounds() && (route.params.data?.round ?? 0) + 1 == Misc.MAX_ROUNDS;
+
   /**
    * BackPress override.
    */
@@ -39,7 +42,7 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
   const onNextRound = async () => {
     const data = route.params.data;
     if (data) {
-      navigation.replace('Game', { mode: route.params.mode, game: route.params.game, data: { ...data, round: data.round + 1 } });
+      navigation.replace('Game', { mode: route.params.mode, game: route.params.game, data: { ...data, round: (data.round ?? 0) + 1 } });
     }
   };
 
@@ -47,13 +50,21 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
    * Navigate to main menu
    */
   const toMenu = () => {
-    if (route.params.mode === Mode.ROUND) {
+    if (isRounds()) {
       gameStore.resetRounds();
     }
     navigation.replace('Main');
   };
 
-  if (route.params.data && route.params.data?.round + 1 != Misc.MAX_ROUNDS) {
+  const getDistance = () => {
+    return `${settingsStore.unit == Unit.KM ? distance.toFixed(3) : miles.toFixed(3)} ${settingsStore.unit.toString()}`;
+  };
+
+  const getXP = () => {
+    return Number.parseInt(xp.toFixed(1));
+  };
+
+  if (isMoreRounds()) {
     gameStore.addRound({ from: currentCoordinates, to: selectedCoordinates });
   }
 
@@ -77,17 +88,15 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
         }
       >
         <Marker coordinate={currentCoordinates}>
-          <Image source={require('../assets/user.png')} style={{ width: 26, height: 28 }} resizeMode='contain' />
+          <Image source={require('../assets/user.png')} style={styles.userMarker} resizeMode='contain' />
         </Marker>
         <Marker coordinate={selectedCoordinates} />
         <Polyline coordinates={[currentCoordinates, selectedCoordinates]} />
-        {route.params.mode === Mode.ROUND &&
-          route.params.data &&
-          route.params.data?.round + 1 == Misc.MAX_ROUNDS &&
+        {isLastRound() &&
           toJS(gameStore.rounds).map(round => (
             <>
               <Marker coordinate={round.from}>
-                <Image source={require('../assets/user.png')} style={{ width: 26, height: 28 }} resizeMode='contain' />
+                <Image source={require('../assets/user.png')} style={styles.userMarker} resizeMode='contain' />
               </Marker>
               <Marker coordinate={round.to} />
               <Polyline coordinates={[round.from, round.to]} />
@@ -97,23 +106,17 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
       <View style={styles.container}>
         <View style={styles.resultContainer}>
           <Text style={styles.resultText}>
-            Your place was{' '}
-            <Text style={styles.resultTextBold}>
-              {settingsStore.unit == Unit.KM ? distance.toFixed(3) : miles.toFixed(3)} {settingsStore.unit.toString()}
-            </Text>
-            away from the correct location.
+            Your place was <Text style={styles.resultTextBold}>{getDistance()}</Text> away from the correct location.
           </Text>
-          <Text style={[styles.resultText, { marginTop: 5 }]}>
-            Received <Text style={styles.resultTextBold}>{Number.parseInt(xp.toFixed(1))}</Text> points.
+          <Text style={styles.resultText}>
+            Received <Text style={styles.resultTextBold}>{getXP()}</Text> points.
           </Text>
           {/* <Text style={[styles.resultText, { marginTop: 5 }]}>
             Playtime <Text style={styles.resultTextBold}>{ProgressManager.getTotalPlaytime(playtime)}</Text> TODOminutes.
           </Text> */}
           <View style={GlobalStyles.rcc}>
             <GameButton img={require('../assets/menu.png')} text='Main menu' onPress={toMenu} />
-            {route.params.mode === Mode.ROUND && route.params.data && route.params.data?.round + 1 !== Misc.MAX_ROUNDS && (
-              <GameButton img={require('../assets/next.png')} text='Next round' onPress={onNextRound} />
-            )}
+            {isMoreRounds() && <GameButton img={require('../assets/next.png')} text='Next round' onPress={onNextRound} />}
           </View>
         </View>
       </View>
@@ -144,11 +147,16 @@ const styles = StyleSheet.create({
   resultText: {
     color: Colors.white,
     textAlign: 'center',
-    fontSize: Dimens.normalText
+    fontSize: Dimens.normalText,
+    marginTop: 5
   },
   resultTextBold: {
     fontWeight: 'bold',
     color: Colors.primaryColor
+  },
+  userMarker: {
+    width: 26,
+    height: 28
   }
 });
 

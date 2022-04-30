@@ -3,7 +3,7 @@ import { LatLng } from 'react-native-maps';
 import { Continent } from '../../constants/continent';
 import { Game } from '../../constants/gametype';
 import { Mode } from '../../constants/mode';
-import { Regions } from '../../constants/regions';
+import { Regions } from '../../data/regions';
 import { GameData } from '../../screens';
 import ImagesService from '../../services/images.service';
 import { generateCoordinate } from '../../utils/coordinates.util';

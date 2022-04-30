@@ -1,10 +1,10 @@
 import React from 'react';
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Carousel from 'react-native-snap-carousel'; // Version can be specified in package.json
-import { Colors } from '../../constants/colors';
-import { Dimens } from '../../constants/dimens';
 import { gameStore } from '../../store/game.store';
 import { GameType } from '../../types/game.type';
+import { Colors } from '../../values/colors';
+import { Dimens } from '../../values/dimens';
 
 const SLIDER_WIDTH = Dimensions.get('window').width;
 const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);

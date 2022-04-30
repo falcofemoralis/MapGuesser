@@ -1,25 +1,25 @@
+import date from 'date-and-time';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { ContinentsSelector } from '../components/ContinentsSelector/ContinentsSelector';
 import { GamesCarousel } from '../components/GamesCarousel/GamesCarousel';
 import { ImageButton } from '../components/interface/ImageButton/ImageButton';
 import { ProgressAvatar } from '../components/interface/ProgressAvatar/ProgressAvatar';
 import { ProgressValue } from '../components/interface/ProgressValue/ProgressValue';
 import { Settings } from '../components/Settings/Settings';
-import { Colors } from '../constants/colors';
-import { Dimens } from '../constants/dimens';
+import { Continent } from '../constants/continent';
 import { Game } from '../constants/gametype';
 import { Mode } from '../constants/mode';
-import { Strings } from '../constants/strings';
-import { GlobalStyles } from '../constants/styles';
 import ProgressManager from '../managers/progress.manager';
 import { gameStore } from '../store/game.store';
 import { GameType } from '../types/game.type';
 import Props from '../types/props.type';
+import { Colors } from '../values/colors';
+import { Dimens } from '../values/dimens';
+import { Strings } from '../values/strings';
+import { GlobalStyles } from '../values/styles';
 import { GameData } from './index';
-import date from 'date-and-time';
-import { ContinentsSelector } from '../components/ContinentsSelector/ContinentsSelector';
-import { Continent } from '../constants/continent';
 
 const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
   const [isSettings, setSetting] = React.useState(false);

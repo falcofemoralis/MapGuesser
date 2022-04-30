@@ -2,7 +2,7 @@ import { makeAutoObservable } from 'mobx';
 import { Unit } from '../constants/unit';
 import StorageManager from '../managers/storage.manager';
 import { KeyEnum } from '../managers/storage.manager';
-import Progress from '../objects/Progress';
+import Progress from '../types/progress';
 
 class SettingsStore {
   unit: Unit = Unit.KM;

@@ -1,4 +1,4 @@
-import { Misc } from '../constants/misc';
+import { Misc } from '../values/misc';
 import { gameStore } from '../store/game.store';
 export default class ProgressManager {
   static lvl(x: number): number {

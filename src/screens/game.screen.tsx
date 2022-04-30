@@ -4,10 +4,10 @@ import { LatLng } from 'react-native-maps';
 import Mapillary from '../components/Mapillary/Mapillary';
 import MapPanel from '../components/MapPanel/MapPanel';
 import { TopProgressBar } from '../components/TopProgressBar/TopProgressBar';
-import { Misc } from '../constants/misc';
 import { Mode } from '../constants/mode';
-import { Strings } from '../constants/strings';
 import Props from '../types/props.type';
+import { Misc } from '../values/misc';
+import { Strings } from '../values/strings';
 
 const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
   let fromCoordinates: LatLng, toCoordinates: LatLng;
@@ -57,14 +57,8 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
    * Triggered when user press complete button
    */
   const handleComplete = () => {
-    console.log('complete?');
-    console.log(toCoordinates);
-    console.log(fromCoordinates);
-
     if (toCoordinates && fromCoordinates) {
       const playtime = Date.now() - startTime;
-      console.log('completed!');
-
       navigation.navigate('Result', { from: fromCoordinates, to: toCoordinates, playtime, ...route.params });
     }
   };

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, ImageSourcePropType, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import * as Progress from 'react-native-progress';
-import { Colors } from '../../../constants/colors';
+import { Colors } from '../../../values/colors';
 
 interface ProgressAvatarProps {
   avatar: ImageSourcePropType;
