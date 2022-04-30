@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { FlatList, Modal, StyleSheet, View } from 'react-native';
 import { Continent } from '../../constants/continent';
 import { ContinentType } from '../../types/continent.type';
@@ -12,13 +13,15 @@ interface ContinentsSelectorProps {
   onSelect: (continent: Continent) => void;
 }
 export const ContinentsSelector: React.FC<ContinentsSelectorProps> = ({ visible, onClose, onSelect }) => {
+  const { t } = useTranslation();
+
   const continents: ContinentType[] = [
-    { name: 'Asia', img: require('../../assets/asia.jpg'), continent: Continent.as },
-    { name: 'Europe', img: require('../../assets/europe.jpg'), continent: Continent.eu },
-    { name: 'North America', img: require('../../assets/north_america.jpg'), continent: Continent.na },
-    { name: 'South America', img: require('../../assets/south_america.jpg'), continent: Continent.sa },
-    { name: 'Africa', img: require('../../assets/africa.jpg'), continent: Continent.af },
-    { name: 'Australia', img: require('../../assets/australia.jpg'), continent: Continent.au }
+    { name: t('AS'), img: require('../../assets/asia.jpg'), continent: Continent.as },
+    { name: t('EU'), img: require('../../assets/europe.jpg'), continent: Continent.eu },
+    { name: t('NA'), img: require('../../assets/north_america.jpg'), continent: Continent.na },
+    { name: t('SA'), img: require('../../assets/south_america.jpg'), continent: Continent.sa },
+    { name: t('AF'), img: require('../../assets/africa.jpg'), continent: Continent.af },
+    { name: t('AU'), img: require('../../assets/australia.jpg'), continent: Continent.au }
   ];
 
   return (

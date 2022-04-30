@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert, BackHandler, StyleSheet } from 'react-native';
 import { LatLng } from 'react-native-maps';
 import Mapillary from '../components/Mapillary/Mapillary';
@@ -7,7 +8,6 @@ import { TopProgressBar } from '../components/TopProgressBar/TopProgressBar';
 import { Mode } from '../constants/mode';
 import Props from '../types/props.type';
 import { Misc } from '../values/misc';
-import { Strings } from '../values/strings';
 
 const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
   let fromCoordinates: LatLng, toCoordinates: LatLng;
@@ -17,10 +17,12 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
    * BackPress override. If game wasn't complete - show Alert dialog, otherwise navigate to
    */
   const onBackPress = () => {
-    Alert.alert(Strings.leaveGame, Strings.leaveGameHint, [
-      { text: Strings.stay, style: 'cancel', onPress: () => {} },
+    const { t } = useTranslation();
+
+    Alert.alert(t('LEAVE_GAME'), t('LEAVE_GAME_HINT'), [
+      { text: t('STAY'), style: 'cancel', onPress: () => {} },
       {
-        text: Strings.leave,
+        text: t('LEAVE'),
         style: 'destructive',
         onPress: () => {
           BackHandler.removeEventListener('hardwareBackPress', onBackPress);

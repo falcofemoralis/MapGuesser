@@ -2,7 +2,7 @@ import { makeAutoObservable, runInAction } from 'mobx';
 import ProgressManager from '../managers/progress.manager';
 import StorageManager, { KeyEnum } from '../managers/storage.manager';
 import Progress from '../types/progress';
-import Round from '../objects/Round';
+import Round from '../types/round';
 
 class GameStore {
   progress: Progress | null = null;
@@ -26,7 +26,7 @@ class GameStore {
       });
     });
   }
-  
+
   async updateProgress(newProgress: Progress) {
     if (this.progress) {
       newProgress.accuracy.push(...this.progress.accuracy);

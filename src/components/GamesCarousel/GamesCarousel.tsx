@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Carousel from 'react-native-snap-carousel'; // Version can be specified in package.json
 import { gameStore } from '../../store/game.store';
@@ -15,6 +16,7 @@ interface GamesCarouselProps {
   onSelect: (index: number) => void;
 }
 export const GamesCarousel: React.FC<GamesCarouselProps> = ({ games, onSelect }) => {
+  const { t } = useTranslation();
   const [currentIndex, setIndex] = React.useState(0);
 
   const onPress = (i: number) => {
@@ -33,7 +35,11 @@ export const GamesCarousel: React.FC<GamesCarouselProps> = ({ games, onSelect })
         <Image style={styles.preview} source={item.preview} />
         <View style={styles.deck} />
         <View style={styles.deckContainer}>
-          {!isUnlocked(item.requiredLvl) && <Text style={styles.level}>Unlocked at {item.requiredLvl} level</Text>}
+          {!isUnlocked(item.requiredLvl) && (
+            <Text style={styles.level}>
+              {t('UNLOCKED_AT_1')} {item.requiredLvl} {t('UNLOCKED_AT_2')}
+            </Text>
+          )}
           <Text style={styles.title}>{item.title}</Text>
           <Text style={styles.description}>{item.description}</Text>
         </View>
@@ -98,6 +104,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   description: {
+    marginTop: 4,
     color: Colors.white,
     fontSize: Dimens.normalText
   },

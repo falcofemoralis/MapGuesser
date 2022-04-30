@@ -43,8 +43,6 @@ const Mapillary: React.FC<MapillaryProps> = ({ onMove, onInit, mode, game, data 
       const startPoint = [generateCoordinate(randomPlace[1], randomPlace[3], 7), generateCoordinate(randomPlace[0], randomPlace[2], 7)];
 
       ImagesService.searchForImages(startPoint).then(images => {
-        console.log(`Found ${images.length} images`);
-
         if (images.length > 20) {
           const imageNum = Math.floor(Math.random() * images.length);
           const image = images[imageNum];

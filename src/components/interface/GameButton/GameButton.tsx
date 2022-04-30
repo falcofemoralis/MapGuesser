@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
     paddingEnd: 3,
     marginTop: 5,
     color: Colors.white,
-    fontSize: Dimens.normalText
+    fontSize: Dimens.normalText,
+    textAlign: 'center'
   }
 });

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Modal, StyleSheet, Text, View } from 'react-native';
 import { Unit } from '../../constants/unit';
 import { settingsStore } from '../../store/settings.store';
@@ -6,23 +7,26 @@ import { Colors } from '../../values/colors';
 import { Dimens } from '../../values/dimens';
 import { ImageButton } from '../interface/ImageButton/ImageButton';
 import SwitchSelector from '../interface/SwitchSelector/SwitchSelector';
+import { LanguagePicker } from '../LanguagePicker/LanguagePicker';
 
 interface SettingsProps {
   visible: boolean;
   onClose: () => void;
 }
 export const Settings: React.FC<SettingsProps> = ({ visible, onClose }) => {
+  const { t } = useTranslation();
   const options = [
-    { label: 'kilometers', value: Unit.KM },
-    { label: 'miles', value: Unit.ML }
+    { label: t('KM'), value: Unit.KM },
+    { label: t('ML'), value: Unit.ML }
   ];
 
   return (
     <View style={styles.centeredView}>
       <Modal animationType='fade' transparent={true} visible={visible} onRequestClose={onClose}>
-        <View style={[styles.centeredView, { backgroundColor: 'rgba(0, 0, 0, 0.5)' }]}>
+        <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.title}>Settings</Text>
+            <Text style={styles.title}>{t('SETTINGS')}</Text>
+            <ImageButton img={require('../../assets/close.png')} buttonStyle={styles.closeBtn} onPress={onClose} />
             <SwitchSelector
               style={styles.selector}
               options={options}
@@ -32,7 +36,7 @@ export const Settings: React.FC<SettingsProps> = ({ visible, onClose }) => {
               backgroundColor={Colors.backgroundOpposite}
               textColor={Colors.white}
             />
-            <ImageButton img={require('../../assets/close.png')} buttonStyle={styles.closeBtn} onPress={onClose} />
+            <LanguagePicker />
           </View>
         </View>
       </Modal>
@@ -44,7 +48,8 @@ const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
   },
   modalView: {
     margin: 20,

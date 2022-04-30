@@ -1,6 +1,7 @@
 import date from 'date-and-time';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, View } from 'react-native';
 import { ContinentsSelector } from '../components/ContinentsSelector/ContinentsSelector';
 import { GamesCarousel } from '../components/GamesCarousel/GamesCarousel';
@@ -17,7 +18,6 @@ import { GameType } from '../types/game.type';
 import Props from '../types/props.type';
 import { Colors } from '../values/colors';
 import { Dimens } from '../values/dimens';
-import { Strings } from '../values/strings';
 import { GlobalStyles } from '../values/styles';
 import { GameData } from './index';
 
@@ -26,28 +26,29 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
   const [isContinents, setContinents] = React.useState(false);
   const [selectedGame, setGame] = React.useState<GameType | null>(null);
   const [selectedData, setData] = React.useState<GameData | null>(null);
+  const { t } = useTranslation();
 
   const games: GameType[] = [
     {
-      title: 'Classic',
+      title: t('CLASSIC_NAME'),
       preview: require('../assets/preview.png'),
-      description: 'Play a single round anywhere',
+      description: t('CLASSIC_TITLE'),
       mode: Mode.SINGLE,
       game: Game.CLASSIC,
       requiredLvl: 0
     },
     {
-      title: 'Set of rounds',
+      title: t('SETS_ROUND_NAME'),
       preview: require('../assets/rounds.jpg'),
-      description: 'Play several rounds anywhere',
+      description: t('SETS_ROUND_TITLE'),
       mode: Mode.ROUND,
       game: Game.CLASSIC,
       requiredLvl: 3
     },
     {
-      title: 'Continents',
+      title: t('CONTINENTS_NAME'),
       preview: require('../assets/earth.jpg'),
-      description: 'Select on of the continents to start playing',
+      description: t('CONTINENTS_TITLE'),
       mode: Mode.ROUND,
       game: Game.CONTINENTS,
       requiredLvl: 10
@@ -121,13 +122,15 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
       <Settings visible={isSettings} onClose={toggleSettings} />
       <View style={[GlobalStyles.ccc, styles.avatarContainer]}>
         <ProgressAvatar size={100} avatar={require('./../assets/user.png')} progress={getProgress()} />
-        <Text style={styles.username}>User #3324</Text>
-        <Text style={styles.lvlText}>Level {getLvl()}</Text>
+        <Text style={styles.username}>{t('LOCAL_USER')}</Text>
+        <Text style={styles.lvlText}>
+          {t('LEVEL')} {getLvl()}
+        </Text>
       </View>
       <View style={[GlobalStyles.rcc, styles.progressesContainer]}>
-        <ProgressValue value={getXP()} text={Strings.XP} />
-        <ProgressValue value={getTime()} unit='' text={Strings.playtime} />
-        <ProgressValue value={getAccuracy()} unit='%' text='Accuracy' />
+        <ProgressValue value={getXP()} text={t('XP')} />
+        <ProgressValue value={getTime()} unit='' text={t('PLAYTIME')} />
+        <ProgressValue value={getAccuracy()} unit='%' text={t('ACCURACY')} />
       </View>
       <GamesCarousel games={games} onSelect={i => onGameSelect(games[i])} />
       <ContinentsSelector visible={isContinents} onClose={toggleContinents} onSelect={onContinentSelect} />

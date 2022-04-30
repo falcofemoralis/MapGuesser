@@ -1,6 +1,7 @@
 import * as turf from '@turf/turf';
 import { toJS } from 'mobx';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { BackHandler, Image, StyleSheet, Text, View } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { GameButton } from '../components/interface/GameButton/GameButton';
@@ -16,6 +17,7 @@ import { Misc } from '../values/misc';
 import { GlobalStyles } from '../values/styles';
 
 const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
+  const { t } = useTranslation();
   const mapRef = React.useRef<MapView | null>(null);
   const currentCoordinates = { ...route.params.from }; // spread fix error
   const selectedCoordinates = { ...route.params.to };
@@ -57,7 +59,7 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
   };
 
   const getDistance = () => {
-    return `${settingsStore.unit == Unit.KM ? distance.toFixed(3) : miles.toFixed(3)} ${settingsStore.unit.toString()}`;
+    return `${settingsStore.unit == Unit.KM ? distance.toFixed(3) : miles.toFixed(3)} ${settingsStore.unit == Unit.KM ? t('KM_SHORT') : t('ML_SHORT')}`;
   };
 
   const getXP = () => {
@@ -106,17 +108,17 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
       <View style={styles.container}>
         <View style={styles.resultContainer}>
           <Text style={styles.resultText}>
-            Your place was <Text style={styles.resultTextBold}>{getDistance()}</Text> away from the correct location.
+            {t('RESULT_DISTANCE_1')} <Text style={styles.resultTextBold}>{getDistance()}</Text> {t('RESULT_DISTANCE_2')}
           </Text>
           <Text style={styles.resultText}>
-            Received <Text style={styles.resultTextBold}>{getXP()}</Text> points.
+            {t('RECEIVED_POINTS_1')} <Text style={styles.resultTextBold}>{getXP()}</Text> {t('RECEIVED_POINTS_2')}
           </Text>
           {/* <Text style={[styles.resultText, { marginTop: 5 }]}>
             Playtime <Text style={styles.resultTextBold}>{ProgressManager.getTotalPlaytime(playtime)}</Text> TODOminutes.
           </Text> */}
           <View style={GlobalStyles.rcc}>
-            <GameButton img={require('../assets/menu.png')} text='Main menu' onPress={toMenu} />
-            {isMoreRounds() && <GameButton img={require('../assets/next.png')} text='Next round' onPress={onNextRound} />}
+            <GameButton img={require('../assets/menu.png')} text={t('MAIN_MENU')} onPress={toMenu} />
+            {isMoreRounds() && <GameButton img={require('../assets/next.png')} text={t('NEXT_ROUND')} onPress={onNextRound} />}
           </View>
         </View>
       </View>

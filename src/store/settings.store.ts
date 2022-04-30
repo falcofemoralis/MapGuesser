@@ -1,8 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 import { Unit } from '../constants/unit';
-import StorageManager from '../managers/storage.manager';
-import { KeyEnum } from '../managers/storage.manager';
-import Progress from '../types/progress';
+import StorageManager, { KeyEnum } from '../managers/storage.manager';
 
 class SettingsStore {
   unit: Unit = Unit.KM;
