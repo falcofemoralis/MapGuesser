@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import { LogBox, SafeAreaView, StatusBar, StyleSheet } from 'react-native';
 import 'react-native-gesture-handler';
+import { Colors } from './src/constants/colors';
 import { RootStackParamList } from './src/screens';
 import GameScreen from './src/screens/game.screen';
 import MainScreen from './src/screens/main.screen';
@@ -19,7 +20,7 @@ const App = () => {
       <StatusBar
         animated={true}
         showHideTransition='fade'
-        // backgroundColor={'transparent'}
+        backgroundColor={Colors.black}
         // translucent={true}
       />
       <NavigationContainer>
@@ -37,7 +38,7 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'center'
   }
 });
 
