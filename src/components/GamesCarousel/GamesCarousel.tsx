@@ -24,14 +24,12 @@ export const GamesCarousel: React.FC<GamesCarouselProps> = ({ games, onSelect })
 
   const _renderItem = ({ item, index }: { item: GameType; index: number }) => {
     return (
-      // <View style={styles.itemContainer}>
-      //   <Image style={styles.preview} source={item.preview} />
-      // </View>
       <TouchableOpacity style={styles.itemContainer} onPress={() => onPress(index)} disabled={index != currentIndex}>
         <Image style={styles.preview} source={item.preview} />
         <View style={styles.deck} />
         <View style={styles.deckContainer}>
           <Text style={styles.title}>{item.title}</Text>
+          <Text style={styles.description}>{item.description}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -62,7 +60,9 @@ const styles = StyleSheet.create({
     height: ITEM_HEIGHT,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.backgroundOpposite
+    backgroundColor: Colors.backgroundOpposite,
+    borderRadius: 16,
+    overflow: 'hidden'
   },
   preview: {
     height: '100%',
@@ -73,22 +73,26 @@ const styles = StyleSheet.create({
     position: 'absolute',
     opacity: 0.6,
     backgroundColor: '#000',
-    height: '40%',
+    height: '30%',
     width: '100%',
     bottom: 0,
     zIndex: 5
   },
   deckContainer: {
     position: 'absolute',
-    height: '40%',
+    height: '30%',
     width: '100%',
     bottom: 0,
     zIndex: 6,
-    padding: 25
+    padding: 16
   },
   title: {
     color: Colors.white,
     fontSize: Dimens.headText,
     fontWeight: 'bold'
+  },
+  description: {
+    color: Colors.white,
+    fontSize: Dimens.normalText
   }
 });

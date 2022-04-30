@@ -9,7 +9,12 @@ interface CompleteBtnProps {
 }
 const CompleteBtn: React.FC<CompleteBtnProps> = ({ onComplete, disabled }) => {
   return (
-    <TouchableOpacity style={stylesBtn.completeBtn} onPress={onComplete} activeOpacity={0.5} disabled={disabled}>
+    <TouchableOpacity
+      style={stylesBtn.completeBtn}
+      onPress={onComplete}
+      activeOpacity={0.5}
+      disabled={disabled}
+    >
       <View style={[stylesBtn.tier1, { backgroundColor: disabled ? Colors.background : Colors.primaryColor }]} />
       <View style={[stylesBtn.tier2, { backgroundColor: disabled ? Colors.background : Colors.primaryColor }]} />
       <Image style={stylesBtn.completeBtnIcon} source={require('../../assets/placeholder.png')} />
@@ -19,12 +24,15 @@ const CompleteBtn: React.FC<CompleteBtnProps> = ({ onComplete, disabled }) => {
 
 const BTN_RADIUS = 100;
 const BTN_SIZE = 100;
+const ZINDEX = 20;
 const stylesBtn = StyleSheet.create({
   completeBtn: {
     position: 'absolute',
-    bottom: BTN_SIZE + 10,
+    bottom: 10,
     alignSelf: 'center',
-    zIndex: 15
+    zIndex: ZINDEX,
+    height: BTN_SIZE,
+    width: BTN_SIZE
   },
   tier1: {
     position: 'absolute',
@@ -32,7 +40,8 @@ const stylesBtn = StyleSheet.create({
     height: BTN_SIZE,
     opacity: 0.3,
     alignSelf: 'center',
-    borderRadius: BTN_RADIUS
+    borderRadius: BTN_RADIUS,
+    zIndex: ZINDEX - 3
   },
   tier2: {
     position: 'absolute',
@@ -41,14 +50,16 @@ const stylesBtn = StyleSheet.create({
     height: BTN_SIZE / 1.5,
     opacity: 0.5,
     alignSelf: 'center',
-    borderRadius: BTN_RADIUS
+    borderRadius: BTN_RADIUS,
+    zIndex: ZINDEX - 2
   },
   completeBtnIcon: {
     position: 'absolute',
     top: BTN_SIZE / 3,
     alignSelf: 'center',
     width: BTN_SIZE / 3,
-    height: BTN_SIZE / 3
+    height: BTN_SIZE / 3,
+    zIndex: ZINDEX - 1
   }
 });
 
@@ -78,10 +89,10 @@ const SelectableMap: React.FC<SelectableMapProps> = ({ onMarkerSet, style, onCom
 
   return (
     <View style={style}>
+      <CompleteBtn disabled={!Boolean(marker)} onComplete={onComplete} />
       <MapView ref={mapRef} style={styles.map} onPress={onMarkerCreate}>
         {marker && <Marker coordinate={marker} />}
       </MapView>
-      <CompleteBtn disabled={!Boolean(marker)} onComplete={onComplete} />
     </View>
   );
 };

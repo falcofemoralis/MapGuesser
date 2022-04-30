@@ -1,15 +1,17 @@
+import { Continent } from './../constants/continent';
 import { LatLng } from 'react-native-maps';
 import { Game } from '../constants/gametype';
 import { Mode } from '../constants/mode';
 
-export interface RoundData {
-  round: number;
+export interface GameData {
+  round?: number;
+  continent?: Continent;
 }
 
 interface GameProps {
   game: Game; // classic, country, region, etc
   mode: Mode; // round, single
-  data?: RoundData;
+  data?: GameData;
 }
 
 interface ResultProps extends GameProps {

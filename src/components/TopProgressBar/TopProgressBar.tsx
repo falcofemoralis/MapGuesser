@@ -1,6 +1,5 @@
 import React from 'react';
-import { Dimensions, StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
-import * as Progress from 'react-native-progress';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { ProgressStep, ProgressSteps } from 'react-native-progress-steps';
 import { Colors } from '../../constants/colors';
 import { Dimens } from '../../constants/dimens';

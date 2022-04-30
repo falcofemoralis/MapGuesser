@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Colors } from '../../constants/colors';
+import { Dimens } from '../../constants/dimens';
 import { Unit } from '../../constants/unit';
 import { settingsStore } from '../../store/settings.store';
 import { ImageButton } from '../interface/ImageButton/ImageButton';
@@ -20,6 +21,7 @@ export const Settings: React.FC<SettingsProps> = ({ visible, onClose }) => {
       <Modal animationType='fade' transparent={true} visible={visible} onRequestClose={onClose}>
         <View style={[styles.centeredView, { backgroundColor: 'rgba(0, 0, 0, 0.5)' }]}>
           <View style={styles.modalView}>
+            <Text style={styles.title}>Settings</Text>
             <SwitchSelector
               style={styles.selector}
               options={options}
@@ -41,13 +43,13 @@ const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   modalView: {
     margin: 20,
     backgroundColor: Colors.background,
     borderRadius: 20,
-    padding: 35,
+    padding: 25,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -58,17 +60,22 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5
   },
+  title: {
+    color: Colors.white,
+    fontSize: Dimens.headText,
+    fontWeight: 'bold'
+  },
   closeBtn: {
     position: 'absolute',
-    top: 5,
-    right: 5,
+    top: 10,
+    right: 10,
     height: 42,
     width: 42,
-    padding: 12,
+    padding: 14,
     borderRadius: 32,
     backgroundColor: Colors.backgroundTransparent
   },
   selector: {
-    marginTop: 15
+    marginTop: 25
   }
 });

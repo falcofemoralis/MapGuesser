@@ -23,7 +23,7 @@ export const ProgressAvatar: React.FC<ProgressAvatarProps> = ({ avatar, style, s
       ]}
     >
       <Image style={[styles.avatar]} source={avatar}></Image>
-      <Progress.Circle color={Colors.secondaryColor} fill={Colors.black} style={styles.progress} progress={progress} size={size} thickness={7} />
+      <Progress.Circle color={Colors.primaryColor} fill={Colors.black} style={styles.progress} progress={progress} size={size} thickness={7} />
     </View>
   );
 };

@@ -5,27 +5,28 @@ import Progress from '../objects/Progress';
 import Round from '../objects/Round';
 
 class GameStore {
-  progress: Progress = {
-    playtime: 0,
-    accuracy: [100],
-    xp: 0,
-    lvl: 1
-  };
+  progress: Progress | null = null;
   rounds: Round[] = [];
 
   constructor() {
     makeAutoObservable(this, {}, { deep: true });
-  }
 
-  async initProgress() {
-    const p = await StorageManager.read<Progress>(KeyEnum.PROGRESS);
-    runInAction(() => {
-      if (p) {
-        this.progress = p;
-      }
+    StorageManager.read<Progress>(KeyEnum.PROGRESS).then(p => {
+      runInAction(() => {
+        if (p) {
+          this.progress = p;
+        } else {
+          this.progress = {
+            playtime: 0,
+            accuracy: [100],
+            xp: 0,
+            lvl: 1
+          };
+        }
+      });
     });
   }
-
+  
   async updateProgress(newProgress: Progress) {
     if (this.progress) {
       newProgress.accuracy.push(...this.progress.accuracy);

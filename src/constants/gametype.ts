@@ -1,3 +1,4 @@
 export enum Game {
-  CLASSIC
+  CLASSIC,
+  CONTINENTS
 }

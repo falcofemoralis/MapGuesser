@@ -34,9 +34,4 @@ export default class ProgressManager {
 
     return sum / accuracy.length;
   }
-
-  static getTotalPlaytime(playtime: number): string {
-    const time = new Date(playtime);
-    return `${time.getMinutes()}:${time.getSeconds()}`;
-  }
 }

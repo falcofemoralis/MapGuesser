@@ -1,11 +1,10 @@
 import React from 'react';
-import { Button, Dimensions, Image, ImageStyle, StyleProp, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Dimensions, ImageStyle, StyleProp, StyleSheet } from 'react-native';
 import { LatLng } from 'react-native-maps';
 import { SwipeablePanel } from 'rn-swipeable-panel';
 import { Colors } from '../../constants/colors';
-import { Dimens } from '../../constants/dimens';
-import SelectableMap from '../SelectableMap/SelectableMap';
 import { ImageButton } from '../interface/ImageButton/ImageButton';
+import SelectableMap from '../SelectableMap/SelectableMap';
 
 interface MapPanelProps {
   onMarkerSet: (coordinates: LatLng) => void;
