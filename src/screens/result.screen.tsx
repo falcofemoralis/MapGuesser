@@ -2,7 +2,7 @@ import * as turf from '@turf/turf';
 import { toJS } from 'mobx';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { BackHandler, Image, StyleSheet, Text, View } from 'react-native';
+import { BackHandler, Dimensions, Image, StyleSheet, Text, View } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { GameButton } from '../components/interface/GameButton/GameButton';
 import { Mode } from '../constants/mode';
@@ -15,6 +15,8 @@ import { Colors } from '../values/colors';
 import { Dimens } from '../values/dimens';
 import { Misc } from '../values/misc';
 import { GlobalStyles } from '../values/styles';
+import * as Progress from 'react-native-progress';
+import { LinearBackground } from '../components/LinearBackground/LinearBackground';
 
 const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
   const { t } = useTranslation();
@@ -66,6 +68,10 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
     return Number.parseInt(xp.toFixed(1));
   };
 
+  const getXProgress = () => {
+    return getXP() / Misc.MAX_XP;
+  };
+
   if (isMoreRounds()) {
     gameStore.addRound({ from: currentCoordinates, to: selectedCoordinates });
   }
@@ -107,11 +113,12 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
       </MapView>
       <View style={styles.container}>
         <View style={styles.resultContainer}>
+          <Text style={styles.resultTextXP}>
+            {getXP()} {t('RECEIVED_POINTS_2')}
+          </Text>
+          <Progress.Bar style={styles.bar} progress={getXProgress()} width={Dimensions.get('window').width - 50} />
           <Text style={styles.resultText}>
             {t('RESULT_DISTANCE_1')} <Text style={styles.resultTextBold}>{getDistance()}</Text> {t('RESULT_DISTANCE_2')}
-          </Text>
-          <Text style={styles.resultText}>
-            {t('RECEIVED_POINTS_1')} <Text style={styles.resultTextBold}>{getXP()}</Text> {t('RECEIVED_POINTS_2')}
           </Text>
           {/* <Text style={[styles.resultText, { marginTop: 5 }]}>
             Playtime <Text style={styles.resultTextBold}>{ProgressManager.getTotalPlaytime(playtime)}</Text> TODOminutes.
@@ -156,9 +163,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: Colors.primaryColor
   },
+  resultTextXP: {
+    fontWeight: 'bold',
+    color: Colors.primaryColor,
+    fontSize: 30
+  },
   userMarker: {
     width: 26,
     height: 28
+  },
+  bar: {
+    marginTop: 5,
+    marginBottom: 5
   }
 });
 

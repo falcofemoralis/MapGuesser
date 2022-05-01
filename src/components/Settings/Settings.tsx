@@ -35,6 +35,7 @@ export const Settings: React.FC<SettingsProps> = ({ visible, onClose }) => {
               buttonColor={Colors.primaryColor}
               backgroundColor={Colors.backgroundOpposite}
               textColor={Colors.white}
+              fontSize={Dimens.normalText}
             />
             <LanguagePicker />
           </View>

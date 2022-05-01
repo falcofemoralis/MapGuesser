@@ -1,16 +1,31 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import { en, ru } from './src/translations';
+import { en, ua, es, ru, fr, de, pl } from './src/translations';
 const { languageDetectorPlugin } = require('./src/utils/languageDetectorPlugin');
-import "intl-pluralrules"
+import 'intl-pluralrules';
 
 //empty for now
 const resources = {
   en: {
     translation: en
   },
+  ua: {
+    translation: ua
+  },
+  es: {
+    translation: es
+  },
   ru: {
     translation: ru
+  },
+  fr: {
+    translation: fr
+  },
+  de: {
+    translation: de
+  },
+  pl: {
+    translation: pl
   }
 };
 

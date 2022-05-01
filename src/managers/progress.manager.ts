@@ -15,7 +15,7 @@ export default class ProgressManager {
 
   static xp(distance: number): number {
     /*    
-    1 250
+    1 250 // MISC.MAX_XP !!!
     2500 125
     5000 0 
     */

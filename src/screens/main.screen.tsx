@@ -3,11 +3,13 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, View } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import { ContinentsSelector } from '../components/ContinentsSelector/ContinentsSelector';
 import { GamesCarousel } from '../components/GamesCarousel/GamesCarousel';
 import { ImageButton } from '../components/interface/ImageButton/ImageButton';
 import { ProgressAvatar } from '../components/interface/ProgressAvatar/ProgressAvatar';
 import { ProgressValue } from '../components/interface/ProgressValue/ProgressValue';
+import { LinearBackground } from '../components/LinearBackground/LinearBackground';
 import { Settings } from '../components/Settings/Settings';
 import { Continent } from '../constants/continent';
 import { Game } from '../constants/gametype';
@@ -31,7 +33,7 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
   const games: GameType[] = [
     {
       title: t('CLASSIC_NAME'),
-      preview: require('../assets/preview.png'),
+      preview: require('../assets/classic.jpg'),
       description: t('CLASSIC_TITLE'),
       mode: Mode.SINGLE,
       game: Game.CLASSIC,
@@ -142,14 +144,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: Colors.background,
+    backgroundColor: Colors.mainBackground,
     padding: 16,
-    paddingTop: Dimens.statusBarHeight
   },
   headerContainer: {
     position: 'absolute',
     right: 16,
-    top: 16 + Dimens.statusBarHeight
+    top: 16
   },
   settingsBtn: {
     height: 50,

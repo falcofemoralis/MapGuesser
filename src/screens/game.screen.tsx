@@ -10,6 +10,7 @@ import Props from '../types/props.type';
 import { Misc } from '../values/misc';
 
 const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
+  const { t } = useTranslation();
   let fromCoordinates: LatLng, toCoordinates: LatLng;
   let startTime = -1;
 
@@ -17,8 +18,6 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
    * BackPress override. If game wasn't complete - show Alert dialog, otherwise navigate to
    */
   const onBackPress = () => {
-    const { t } = useTranslation();
-
     Alert.alert(t('LEAVE_GAME'), t('LEAVE_GAME_HINT'), [
       { text: t('STAY'), style: 'cancel', onPress: () => {} },
       {
