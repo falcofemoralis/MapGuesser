@@ -3,9 +3,13 @@ import { toJS } from 'mobx';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BackHandler, Dimensions, Image, StyleSheet, Text, View } from 'react-native';
+import { AdEventType, InterstitialAd, TestIds } from 'react-native-google-mobile-ads';
 import MapView, { Marker, Polyline } from 'react-native-maps';
+import * as Progress from 'react-native-progress';
+import { Banner } from '../components/Banner/Banner';
 import { GameButton } from '../components/interface/GameButton/GameButton';
 import { Mode } from '../constants/mode';
+import { Position } from '../constants/position';
 import { Unit } from '../constants/unit';
 import ProgressManager from '../managers/progress.manager';
 import { gameStore } from '../store/game.store';
@@ -15,8 +19,11 @@ import { Colors } from '../values/colors';
 import { Dimens } from '../values/dimens';
 import { Misc } from '../values/misc';
 import { GlobalStyles } from '../values/styles';
-import * as Progress from 'react-native-progress';
-import { LinearBackground } from '../components/LinearBackground/LinearBackground';
+
+const interstitial = InterstitialAd.createForAdRequest(TestIds.INTERSTITIAL, {
+  requestNonPersonalizedAdsOnly: true,
+  keywords: ['fashion', 'clothing']
+});
 
 const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
   const { t } = useTranslation();
@@ -35,6 +42,20 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
   const isMoreRounds = () => isRounds() && (route.params.data?.round ?? 0) + 1 !== Misc.MAX_ROUNDS;
   const isLastRound = () => isRounds() && (route.params.data?.round ?? 0) + 1 == Misc.MAX_ROUNDS;
 
+  const [loaded, setLoaded] = React.useState(false);
+
+  React.useEffect(() => {
+    const unsubscribe = interstitial.addAdEventListener(AdEventType.LOADED, () => {
+      setLoaded(true);
+    });
+
+    // Start loading the interstitial straight away
+    interstitial.load();
+
+    // Unsubscribe from events on unmount
+    return unsubscribe;
+  }, []);
+
   /**
    * BackPress override.
    */
@@ -45,6 +66,12 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
    */
   const onNextRound = async () => {
     const data = route.params.data;
+    if (loaded && settingsStore.adsCounter % Misc.ADS_PER_COUNTER == 0) {
+      interstitial.show();
+    }
+
+    settingsStore.updateAdsCounter();
+
     if (data) {
       navigation.replace('Game', { mode: route.params.mode, game: route.params.game, data: { ...data, round: (data.round ?? 0) + 1 } });
     }
@@ -57,6 +84,13 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
     if (isRounds()) {
       gameStore.resetRounds();
     }
+
+    if (loaded && settingsStore.adsCounter % Misc.ADS_PER_COUNTER == 0) {
+      interstitial.show();
+    }
+
+    settingsStore.updateAdsCounter();
+
     navigation.replace('Main');
   };
 
@@ -85,6 +119,7 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
 
   return (
     <>
+      <Banner position={Position.TOP} />
       <MapView
         ref={mapRef}
         style={styles.map}

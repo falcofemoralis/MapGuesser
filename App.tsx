@@ -3,11 +3,18 @@ import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import { LogBox, SafeAreaView, StatusBar, StyleSheet } from 'react-native';
 import 'react-native-gesture-handler';
+import mobileAds from 'react-native-google-mobile-ads';
 import { RootStackParamList } from './src/screens';
 import GameScreen from './src/screens/game.screen';
 import MainScreen from './src/screens/main.screen';
 import ResultScreen from './src/screens/result.screen';
 import { Colors } from './src/values/colors';
+
+mobileAds()
+  .initialize()
+  .then(adapterStatuses => {
+    // Initialization complete!
+  });
 
 const Stack = createStackNavigator<RootStackParamList>();
 

@@ -3,7 +3,9 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, View } from 'react-native';
+import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
 import LinearGradient from 'react-native-linear-gradient';
+import { Banner } from '../components/Banner/Banner';
 import { ContinentsSelector } from '../components/ContinentsSelector/ContinentsSelector';
 import { GamesCarousel } from '../components/GamesCarousel/GamesCarousel';
 import { ImageButton } from '../components/interface/ImageButton/ImageButton';
@@ -14,6 +16,7 @@ import { Settings } from '../components/Settings/Settings';
 import { Continent } from '../constants/continent';
 import { Game } from '../constants/gametype';
 import { Mode } from '../constants/mode';
+import { Position } from '../constants/position';
 import ProgressManager from '../managers/progress.manager';
 import { gameStore } from '../store/game.store';
 import { GameType } from '../types/game.type';
@@ -136,6 +139,7 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
       </View>
       <GamesCarousel games={games} onSelect={i => onGameSelect(games[i])} />
       <ContinentsSelector visible={isContinents} onClose={toggleContinents} onSelect={onContinentSelect} />
+      <Banner position={Position.BOTTOM} />
     </View>
   );
 });
@@ -145,7 +149,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: Colors.mainBackground,
-    padding: 16,
+    padding: 16
   },
   headerContainer: {
     position: 'absolute',

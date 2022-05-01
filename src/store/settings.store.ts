@@ -4,6 +4,7 @@ import StorageManager, { KeyEnum } from '../managers/storage.manager';
 
 class SettingsStore {
   unit: Unit = Unit.KM;
+  adsCounter: number = 0;
 
   constructor() {
     makeAutoObservable(this, {}, { deep: true });
@@ -13,11 +14,22 @@ class SettingsStore {
         this.unit = u;
       }
     });
+
+    StorageManager.read<number>(KeyEnum.ADS).then(c => {
+      if (c) {
+        this.adsCounter = c;
+      }
+    });
   }
 
   updateUnit(unit: Unit) {
     this.unit = unit;
     StorageManager.write<Unit>(KeyEnum.UNIT, unit);
+  }
+
+  async updateAdsCounter() {
+    this.adsCounter++;
+    StorageManager.write<number>(KeyEnum.ADS, this.adsCounter);
   }
 }
 
