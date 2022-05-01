@@ -4,7 +4,7 @@ export enum KeyEnum {
   'USER',
   'PROGRESS',
   'UNIT',
-  'ADS'
+  'ADS',
 }
 
 export default class StorageManager {

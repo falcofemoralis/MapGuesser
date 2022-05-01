@@ -1,15 +1,26 @@
 import React from 'react';
-import { Image, ImageSourcePropType, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
+import { ImageSourcePropType, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import * as Progress from 'react-native-progress';
 import { Colors } from '../../../values/colors';
+import { ImageButton } from '../ImageButton/ImageButton';
+import { launchImageLibrary } from 'react-native-image-picker';
+import { settingsStore } from '../../../store/settings.store';
+import { observer } from 'mobx-react-lite';
 
 interface ProgressAvatarProps {
-  avatar: ImageSourcePropType;
   style?: StyleProp<ViewStyle>;
   size: number;
   progress: number;
 }
-export const ProgressAvatar: React.FC<ProgressAvatarProps> = ({ avatar, style, size, progress }) => {
+export const ProgressAvatar: React.FC<ProgressAvatarProps> = observer(({ style, size, progress }) => {
+  const onAvatarPress = async () => {
+    const result = await launchImageLibrary({ mediaType: 'photo', maxHeight: size * 2, maxWidth: size * 2 });
+    if (result.assets && result.assets.length > 0) {
+      const asset = result.assets[0];
+      settingsStore.updateUser({ avatar: asset.uri });
+    }
+  };
+
   return (
     <View
       style={[
@@ -22,11 +33,15 @@ export const ProgressAvatar: React.FC<ProgressAvatarProps> = ({ avatar, style, s
         }
       ]}
     >
-      <Image style={[styles.avatar]} source={avatar}></Image>
+      <ImageButton
+        buttonStyle={styles.avatar}
+        img={settingsStore.user ? settingsStore.user.avatar : require('../../../assets/user.png')}
+        onPress={onAvatarPress}
+      />
       <Progress.Circle color={Colors.primaryColor} fill={Colors.black} style={styles.progress} progress={progress} size={size} thickness={7} />
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   avatar: {

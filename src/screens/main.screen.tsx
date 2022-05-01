@@ -126,8 +126,8 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
       </View>
       <Settings visible={isSettings} onClose={toggleSettings} />
       <View style={[GlobalStyles.ccc, styles.avatarContainer]}>
-        <ProgressAvatar size={100} avatar={require('./../assets/user.png')} progress={getProgress()} />
-        <Text style={styles.username}>{t('LOCAL_USER')}</Text>
+        <ProgressAvatar size={100} progress={getProgress()} />
+        {/* <Text style={styles.username}>{t('LOCAL_USER')}</Text> */}
         <Text style={styles.lvlText}>
           {t('LEVEL')} {getLvl()}
         </Text>
