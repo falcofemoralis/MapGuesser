@@ -1,4 +1,4 @@
-package com.geoview.newarchitecture.components;
+package com.bslcommunity.mapguesser.newarchitecture.components;
 
 import com.facebook.jni.HybridData;
 import com.facebook.proguard.annotations.DoNotStrip;

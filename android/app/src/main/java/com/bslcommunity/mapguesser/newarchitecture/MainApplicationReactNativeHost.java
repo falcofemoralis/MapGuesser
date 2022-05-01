@@ -1,4 +1,4 @@
-package com.geoview.newarchitecture;
+package com.bslcommunity.mapguesser.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -19,9 +19,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.EmptyReactNativeConfig;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.geoview.BuildConfig;
-import com.geoview.newarchitecture.components.MainComponentsRegistry;
-import com.geoview.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import com.bslcommunity.mapguesser.BuildConfig;
+import com.bslcommunity.mapguesser.newarchitecture.components.MainComponentsRegistry;
+import com.bslcommunity.mapguesser.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,11 +1,11 @@
+import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { ImageSourcePropType, StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
+import { launchImageLibrary } from 'react-native-image-picker';
 import * as Progress from 'react-native-progress';
+import { settingsStore } from '../../../store/settings.store';
 import { Colors } from '../../../values/colors';
 import { ImageButton } from '../ImageButton/ImageButton';
-import { launchImageLibrary } from 'react-native-image-picker';
-import { settingsStore } from '../../../store/settings.store';
-import { observer } from 'mobx-react-lite';
 
 interface ProgressAvatarProps {
   style?: StyleProp<ViewStyle>;
@@ -35,7 +35,7 @@ export const ProgressAvatar: React.FC<ProgressAvatarProps> = observer(({ style, 
     >
       <ImageButton
         buttonStyle={styles.avatar}
-        img={settingsStore.user ? settingsStore.user.avatar : require('../../../assets/user.png')}
+        img={settingsStore.user ? { uri: settingsStore.user.avatar } : require('../../../assets/user.png')}
         onPress={onAvatarPress}
       />
       <Progress.Circle color={Colors.primaryColor} fill={Colors.black} style={styles.progress} progress={progress} size={size} thickness={7} />

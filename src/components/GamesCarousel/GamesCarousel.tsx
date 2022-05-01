@@ -48,18 +48,18 @@ export const GamesCarousel: React.FC<GamesCarouselProps> = ({ games, onSelect })
   };
 
   return (
-    <View>
-      <Carousel
-        firstItem={currentIndex}
-        layout={'default'}
-        data={games}
-        renderItem={_renderItem}
-        sliderWidth={SLIDER_WIDTH}
-        itemWidth={ITEM_WIDTH}
-        containerCustomStyle={styles.carouselContainer}
-        onSnapToItem={index => setIndex(index)}
-      />
-    </View>
+    <Carousel
+      containerCustomStyle={styles.carouselContainer}
+      firstItem={currentIndex}
+      layout={'default'}
+      data={games}
+      enableMomentum={true}
+      decelerationRate={0.9}
+      renderItem={_renderItem}
+      sliderWidth={SLIDER_WIDTH}
+      itemWidth={ITEM_WIDTH}
+      onSnapToItem={index => setIndex(index)}
+    />
   );
 };
 
