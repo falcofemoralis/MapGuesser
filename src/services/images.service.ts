@@ -1,5 +1,5 @@
-import { axiosInstance, token } from './index';
-import MapillaryViewer from 'MapillaryViewer.html';
+import { Keys } from '../values/keys';
+import { axiosInstance } from './index';
 
 export interface Image {
   id: string;
@@ -16,7 +16,7 @@ export default class ImagesService {
     try {
       const bbox = `${coordinates[1] - 0.05},${coordinates[0] - 0.05},${coordinates[1] + 0.05},${coordinates[0] + 0.05}`;
       const { data } = await axiosInstance.get<SearchData>(
-        `/images?access_token=${token}&fields=id,computed_geometry&bbox=${bbox}&limit=100&min_quality_score=4`
+        `/images?access_token=${Keys.mapillaryToken}&fields=id,computed_geometry&bbox=${bbox}&limit=100&min_quality_score=4`
       );
       return data.data;
     } catch (e: any) {

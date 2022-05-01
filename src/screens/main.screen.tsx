@@ -9,7 +9,7 @@ import { Banner } from '../components/Banner/Banner';
 import { ContinentsSelector } from '../components/ContinentsSelector/ContinentsSelector';
 import { GamesCarousel } from '../components/GamesCarousel/GamesCarousel';
 import { ImageButton } from '../components/interface/ImageButton/ImageButton';
-import { ProgressAvatar } from '../components/interface/ProgressAvatar/ProgressAvatar';
+import { ProgressAvatar } from '../components/ProgressAvatar/ProgressAvatar';
 import { ProgressValue } from '../components/interface/ProgressValue/ProgressValue';
 import { LinearBackground } from '../components/LinearBackground/LinearBackground';
 import { Settings } from '../components/Settings/Settings';

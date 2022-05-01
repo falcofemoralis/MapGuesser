@@ -3,9 +3,9 @@ import React from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
 import * as Progress from 'react-native-progress';
-import { settingsStore } from '../../../store/settings.store';
-import { Colors } from '../../../values/colors';
-import { ImageButton } from '../ImageButton/ImageButton';
+import { settingsStore } from '../../store/settings.store';
+import { Colors } from '../../values/colors';
+import { ImageButton } from '../interface/ImageButton/ImageButton';
 
 interface ProgressAvatarProps {
   style?: StyleProp<ViewStyle>;
@@ -25,17 +25,16 @@ export const ProgressAvatar: React.FC<ProgressAvatarProps> = observer(({ style, 
     <View
       style={[
         style,
+        styles.container,
         {
           height: size,
-          width: size,
-          justifyContent: 'center',
-          alignItems: 'center'
+          width: size
         }
       ]}
     >
       <ImageButton
         buttonStyle={styles.avatar}
-        img={settingsStore.user ? { uri: settingsStore.user.avatar } : require('../../../assets/user.png')}
+        img={settingsStore.user ? { uri: settingsStore.user.avatar } : require('../../assets/africa.jpg')}
         onPress={onAvatarPress}
       />
       <Progress.Circle color={Colors.primaryColor} fill={Colors.black} style={styles.progress} progress={progress} size={size} thickness={7} />
@@ -44,10 +43,16 @@ export const ProgressAvatar: React.FC<ProgressAvatarProps> = observer(({ style, 
 });
 
 const styles = StyleSheet.create({
+  container: {
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   avatar: {
     height: '80%',
     width: '80%',
-    zIndex: 2
+    zIndex: 2,
+    borderRadius: 100,
+    overflow: 'hidden',
   },
   progress: {
     position: 'absolute',

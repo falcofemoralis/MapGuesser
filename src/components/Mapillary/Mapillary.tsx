@@ -7,6 +7,7 @@ import { Regions } from '../../data/regions';
 import { GameData } from '../../screens';
 import ImagesService from '../../services/images.service';
 import { generateCoordinate } from '../../utils/coordinates.util';
+import { Misc } from '../../values/misc';
 import { LoadingPreview } from '../interface/LoadingPreview/LoadingPreview';
 import MapillaryWeb from './MapillaryWeb';
 
@@ -19,6 +20,11 @@ interface MapillaryProps {
 }
 const Mapillary: React.FC<MapillaryProps> = ({ onMove, onInit, mode, game, data }) => {
   const [imageId, setImageId] = React.useState<string | null>(null);
+  const [attempts, setAttempts] = React.useState(0);
+
+  const runAsync = async (id: string) => {
+    setTimeout(() => setImageId(id), 500);
+  };
 
   const initMapillary = () => {
     let region;
@@ -49,13 +55,18 @@ const Mapillary: React.FC<MapillaryProps> = ({ onMove, onInit, mode, game, data 
             const image = images[imageNum];
             onMove({ latitude: image.computed_geometry.coordinates[1], longitude: image.computed_geometry.coordinates[0] });
             onInit();
-            setImageId(image.id);
+            runAsync(image.id);
+            setAttempts(Misc.MAX_SEARCH_ATTEMPTS);
           } else {
+            setAttempts(attempts + 1);
             initMapillary();
           }
         });
       } catch (e) {
+        console.error('error: searchForImages');
+
         console.log(e);
+        setAttempts(attempts + 1);
         initMapillary();
       }
     } else {
@@ -63,11 +74,11 @@ const Mapillary: React.FC<MapillaryProps> = ({ onMove, onInit, mode, game, data 
     }
   };
 
-  if (!imageId) {
+  if (!imageId && attempts == 0) {
     initMapillary();
   }
 
-  return imageId ? <MapillaryWeb imageId={imageId} mode={mode} /> : <LoadingPreview />;
+  return imageId ? <MapillaryWeb imageId={imageId} mode={mode} /> : <LoadingPreview attempts={attempts} />;
 };
 
 export default Mapillary;
