@@ -24,13 +24,13 @@ const CompleteBtn: React.FC<CompleteBtnProps> = ({ onComplete, disabled }) => {
 
 const BTN_RADIUS = 100;
 const BTN_SIZE = 100;
-const ZINDEX = 20;
+const Z_INDEX = 20;
 const stylesBtn = StyleSheet.create({
   completeBtn: {
     position: 'absolute',
     bottom: 10,
     alignSelf: 'center',
-    zIndex: ZINDEX,
+    zIndex: Z_INDEX,
     height: BTN_SIZE,
     width: BTN_SIZE
   },
@@ -41,7 +41,7 @@ const stylesBtn = StyleSheet.create({
     opacity: 0.3,
     alignSelf: 'center',
     borderRadius: BTN_RADIUS,
-    zIndex: ZINDEX - 3
+    zIndex: Z_INDEX - 3
   },
   tier2: {
     position: 'absolute',
@@ -51,7 +51,7 @@ const stylesBtn = StyleSheet.create({
     opacity: 0.5,
     alignSelf: 'center',
     borderRadius: BTN_RADIUS,
-    zIndex: ZINDEX - 2
+    zIndex: Z_INDEX - 2
   },
   completeBtnIcon: {
     position: 'absolute',
@@ -59,7 +59,7 @@ const stylesBtn = StyleSheet.create({
     alignSelf: 'center',
     width: BTN_SIZE / 3,
     height: BTN_SIZE / 3,
-    zIndex: ZINDEX - 1
+    zIndex: Z_INDEX - 1
   }
 });
 

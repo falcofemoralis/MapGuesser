@@ -1,4 +1,3 @@
-import * as turf from '@turf/turf';
 import { toJS } from 'mobx';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +18,8 @@ import { Colors } from '../values/colors';
 import { Dimens } from '../values/dimens';
 import { Misc } from '../values/misc';
 import { GlobalStyles } from '../values/styles';
+import turfDistance from '@turf/distance';
+import { point } from '@turf/helpers';
 
 const interstitial = InterstitialAd.createForAdRequest(TestIds.INTERSTITIAL, {
   requestNonPersonalizedAdsOnly: true,
@@ -30,10 +31,10 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
   const mapRef = React.useRef<MapView | null>(null);
   const currentCoordinates = { ...route.params.from }; // spread fix error
   const selectedCoordinates = { ...route.params.to };
-  const from = turf.point([currentCoordinates?.latitude, currentCoordinates?.longitude]);
-  const to = turf.point([selectedCoordinates?.latitude, selectedCoordinates?.longitude]);
-  const distance = turf.distance(from, to, { units: Unit.KM });
-  const miles = turf.distance(from, to, { units: Unit.ML });
+  const from = point([currentCoordinates?.latitude, currentCoordinates?.longitude]);
+  const to = point([selectedCoordinates?.latitude, selectedCoordinates?.longitude]);
+  const distance = turfDistance(from, to, { units: Unit.KM });
+  const miles = turfDistance(from, to, { units: Unit.ML });
   const xp = ProgressManager.xp(distance);
   const accuracy = ProgressManager.accuracy(distance);
   const playtime = route.params.playtime;

@@ -48,8 +48,8 @@ const Mapillary: React.FC<MapillaryProps> = ({ onMove, onInit, mode, game, data 
       const randomPlace = region[Math.floor(Math.random() * region.length)];
       const startPoint = [generateCoordinate(randomPlace[1], randomPlace[3], 7), generateCoordinate(randomPlace[0], randomPlace[2], 7)];
 
-      try {
-        ImagesService.searchForImages(startPoint).then(images => {
+      ImagesService.searchForImages(startPoint)
+        .then(images => {
           if (images.length > 20) {
             const imageNum = Math.floor(Math.random() * images.length);
             const image = images[imageNum];
@@ -61,14 +61,12 @@ const Mapillary: React.FC<MapillaryProps> = ({ onMove, onInit, mode, game, data 
             setAttempts(attempts + 1);
             initMapillary();
           }
+        })
+        .catch(e => {
+          console.error('error: searchForImages');
+          setAttempts(attempts + 1);
+          initMapillary();
         });
-      } catch (e) {
-        console.error('error: searchForImages');
-
-        console.log(e);
-        setAttempts(attempts + 1);
-        initMapillary();
-      }
     } else {
       console.error('region is null');
     }

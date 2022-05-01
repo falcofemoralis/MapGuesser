@@ -1,8 +1,7 @@
-import { User } from './../types/user';
 import { makeAutoObservable } from 'mobx';
 import { Unit } from '../constants/unit';
 import StorageManager, { KeyEnum } from '../managers/storage.manager';
-import { Use } from 'react-native-svg';
+import { User } from './../types/user';
 
 class SettingsStore {
   unit: Unit = Unit.KM;

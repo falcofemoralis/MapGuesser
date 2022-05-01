@@ -1,6 +1,6 @@
-import { Mode } from './../constants/mode';
-import { Game } from './../constants/gametype';
 import { ImageSourcePropType } from 'react-native';
+import { Game } from './../constants/gametype';
+import { Mode } from './../constants/mode';
 
 export interface GameType {
   title: string;
