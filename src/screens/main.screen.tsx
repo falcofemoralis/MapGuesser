@@ -98,7 +98,7 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
   };
 
   const getXP = () => {
-    return gameStore.progress?.xp?.toFixed(0) ?? '';
+    return gameStore.progress?.totalXp?.toFixed(0) ?? '0';
   };
 
   const getTime = () => {

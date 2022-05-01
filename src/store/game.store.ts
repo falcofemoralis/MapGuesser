@@ -20,7 +20,8 @@ class GameStore {
             playtime: 0,
             accuracy: [100],
             xp: 0,
-            lvl: 1
+            lvl: 1,
+            totalXp: 0
           };
         }
       });
@@ -33,6 +34,7 @@ class GameStore {
       newProgress.playtime += this.progress.playtime;
       newProgress.xp += this.progress.xp;
       newProgress.lvl = this.progress.lvl;
+      newProgress.totalXp += this.progress.totalXp;
     }
 
     while (newProgress.xp > ProgressManager.lvl(newProgress?.lvl + 1)) {

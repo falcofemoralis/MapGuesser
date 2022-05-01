@@ -114,7 +114,8 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
     playtime,
     accuracy: [accuracy],
     xp,
-    lvl: 0
+    lvl: 0,
+    totalXp: xp
   });
 
   return (
