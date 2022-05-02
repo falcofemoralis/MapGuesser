@@ -85,9 +85,18 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
   };
 
   const refreshLocation = () => {
-    core.refresh(() => {
-      ToastAndroid.showWithGravityAndOffset(t('NO_REFRESH'), ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
-    });
+    Alert.alert(t('REFRESH_GAME'), t('REFRESH_GAME_HINT'), [
+      { text: t('STAY'), style: 'cancel', onPress: () => {} },
+      {
+        text: t('REFRESH'),
+        style: 'destructive',
+        onPress: () => {
+          core.refresh(() => {
+            ToastAndroid.showWithGravityAndOffset(t('NO_REFRESH'), ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
+          });
+        }
+      }
+    ]);
   };
 
   const getButtonHeight = () => {

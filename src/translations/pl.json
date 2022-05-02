@@ -19,7 +19,7 @@
     "RESULT_DISTANCE_1": "Twoje miejsce było",
     "RESULT_DISTANCE_2": "z dala od prawidłowej lokalizacji.",
     "RECEIVED_POINTS_1": "Otrzymano",
-    "RECEIVED_POINTS_2": "punktów",
+    "RECEIVED_POINTS_2": "xp",
     "AS": "Azja",
     "EU": "Europa",
     "NA": "Ameryka Północna",
@@ -34,5 +34,8 @@
     "ML_SHORT": "mile",
     "SETTINGS": "Ustawienia",
     "NO_REFRESH": "Nie ma więcej dostępnych lokalizacji!",
-    "NO_INTERNET": "Brak połączenia z internetem"
+    "NO_INTERNET": "Brak połączenia z internetem",
+    "REFRESH": "Odśwież",
+    "REFRESH_GAME": "Odśwież grę?",
+    "REFRESH_GAME_HINT": "Zostaniesz nową lokalizację obok obecnej"
 }

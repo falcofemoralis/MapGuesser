@@ -17,6 +17,9 @@ class MapillaryWeb extends React.Component<MapillaryWebProps> {
       .replace('<ID>', imageId)
       .replace('<TOKEN>', Keys.mapillaryToken)
       .replace(`'TOP'`, this.props.mode == Mode.ROUND ? `${14 + TOP_PROGRESS_BAR_HEIGHT}px` : '14px');
+
+      console.log(html);
+      
     return html;
   };
 

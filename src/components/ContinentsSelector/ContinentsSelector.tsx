@@ -46,7 +46,6 @@ const styles = StyleSheet.create({
     paddingTop: 0
   },
   centeredView: {
-    padding: 25,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -55,6 +54,8 @@ const styles = StyleSheet.create({
   modalView: {
     backgroundColor: Colors.background,
     borderRadius: 20,
+    width: '100%',
+    padding: 3,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -64,8 +65,6 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
     height: '70%',
-    width: '100%',
-    padding: 3
   },
   closeBtn: {
     position: 'absolute',

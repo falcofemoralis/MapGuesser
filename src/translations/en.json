@@ -34,5 +34,8 @@
   "ML_SHORT": "miles",
   "SETTINGS": "Settings",
   "NO_REFRESH": "No more locations available!",
-  "NO_INTERNET": "No Internet connection"
+  "NO_INTERNET": "No Internet connection",
+  "REFRESH": "Refresh",
+  "REFRESH_GAME": "Refresh the game?",
+  "REFRESH_GAME_HINT": "You will get a new location next to the current one"
 }

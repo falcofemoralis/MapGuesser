@@ -34,5 +34,8 @@
     "ML_SHORT": "miles",
     "SETTINGS": "Paramètres",
     "NO_REFRESH": "Plus d'emplacements disponibles!",
-    "NO_INTERNET": "Pas de connexion Internet"
+    "NO_INTERNET": "Pas de connexion Internet",
+    "REFRESH": "Actualiser",
+    "REFRESH_GAME": "Actualiser le jeu ?",
+    "REFRESH_GAME_HINT": "Vous obtiendrez un nouvel emplacement à côté de l'actuel"
 }
