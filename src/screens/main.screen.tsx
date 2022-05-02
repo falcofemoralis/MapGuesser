@@ -21,6 +21,7 @@ import { GameType } from '../types/game.type';
 import Props from '../types/props.type';
 import { Colors } from '../values/colors';
 import { Dimens } from '../values/dimens';
+import { Keys } from '../values/keys';
 import { GlobalStyles } from '../values/styles';
 import { GameData } from './index';
 
@@ -143,7 +144,7 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
       </View>
       <GamesCarousel games={games} onSelect={i => onGameSelect(games[i])} />
       <ContinentsSelector visible={isContinents} onClose={toggleContinents} onSelect={onContinentSelect} />
-      <Banner position={Position.BOTTOM} />
+      <Banner position={Position.BOTTOM} id={Keys.bannersIds.MainScreen} />
     </View>
   );
 });

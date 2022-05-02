@@ -20,11 +20,9 @@ import { Misc } from '../values/misc';
 import { GlobalStyles } from '../values/styles';
 import turfDistance from '@turf/distance';
 import { point } from '@turf/helpers';
+import { Keys } from '../values/keys';
 
-const interstitial = InterstitialAd.createForAdRequest(TestIds.INTERSTITIAL, {
-  requestNonPersonalizedAdsOnly: true,
-  keywords: ['fashion', 'clothing']
-});
+const interstitial = InterstitialAd.createForAdRequest(Keys.interstellarIds.ResultScreenNext);
 
 const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
   const { t } = useTranslation();
@@ -122,7 +120,7 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
 
   return (
     <>
-      <Banner position={Position.TOP} />
+      <Banner position={Position.TOP} id={Keys.bannersIds.ResultScreen} />
       <MapView
         ref={mapRef}
         style={styles.map}

@@ -5,12 +5,13 @@ import { Position } from '../../constants/position';
 
 interface BannerProps {
   position: Position;
+  id: string;
 }
 
-export const Banner: React.FC<BannerProps> = ({ position }) => {
+export const Banner: React.FC<BannerProps> = ({ position, id }) => {
   return (
     <View style={[styles.banner, position == Position.TOP ? { top: 0 } : { bottom: 0 }]}>
-      <BannerAd unitId={TestIds.BANNER} size={BannerAdSize.BANNER} />
+      <BannerAd unitId={id ? id : TestIds.BANNER} size={BannerAdSize.BANNER} />
     </View>
   );
 };
@@ -21,6 +22,6 @@ const styles = StyleSheet.create({
     width: '100%',
     zIndex: 999,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   }
 });
