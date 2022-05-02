@@ -45,7 +45,7 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
       description: t('SETS_ROUND_TITLE'),
       mode: Mode.ROUND,
       game: Game.CLASSIC,
-      requiredLvl: 3
+      requiredLvl: 0 //3
     },
     {
       title: t('CONTINENTS_NAME'),
@@ -53,7 +53,7 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
       description: t('CONTINENTS_TITLE'),
       mode: Mode.ROUND,
       game: Game.CONTINENTS,
-      requiredLvl: 10
+      requiredLvl: 0 // 10
     }
   ];
 

@@ -30,7 +30,7 @@ const MapPanel: React.FC<MapPanelProps> = ({ onMarkerSet, onComplete, buttonStyl
 
   return (
     <>
-      <ImageButton img={require('../../assets/map.png')} buttonStyle={[styles.button, buttonStyle]} onPress={openMap} />
+      <ImageButton img={require('../../assets/map.png')} buttonStyle={buttonStyle} onPress={openMap} />
       <SwipeablePanel
         noBackgroundOpacity
         fullWidth
@@ -53,16 +53,6 @@ const styles = StyleSheet.create({
   selectableMap: {
     width: '100%',
     height: Dimensions.get('window').height - 125
-  },
-  button: {
-    height: 64,
-    width: 64,
-    backgroundColor: Colors.backgroundButton,
-    borderRadius: 32,
-    textAlign: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16
   },
   closeBtn: {
     marginTop: 25,

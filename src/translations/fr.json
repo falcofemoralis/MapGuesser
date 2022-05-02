@@ -32,5 +32,6 @@
     "ML": "miles",
     "KM_SHORT": "km",
     "ML_SHORT": "miles",
-    "SETTINGS": "Paramètres"
+    "SETTINGS": "Paramètres",
+    "NO_REFRESH": "Plus d'emplacements disponibles !"
 }

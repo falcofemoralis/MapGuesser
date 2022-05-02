@@ -8,12 +8,15 @@ interface LoadingPreviewProps {
   attempts?: number;
 }
 export const LoadingPreview: React.FC<LoadingPreviewProps> = ({ attempts }) => {
-  console.log(attempts);
-
   return (
     <View style={styles.container}>
       <Progress.CircleSnail color={[Colors.primaryColor, 'red', 'green', 'blue']} />
-      <Progress.Bar style={styles.bar} progress={(attempts ?? 0) / Misc.MAX_SEARCH_ATTEMPTS} width={Dimensions.get('window').width - 50} />
+      <Progress.Bar
+        style={styles.bar}
+        color={Colors.primaryColor}
+        progress={(attempts ?? 0) / Misc.MAX_SEARCH_ATTEMPTS}
+        width={Dimensions.get('window').width - 50}
+      />
     </View>
   );
 };

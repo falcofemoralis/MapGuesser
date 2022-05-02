@@ -9,18 +9,21 @@ interface TopProgressBarProps {
   round: number;
   max: number;
 }
+
+export const TOP_PROGRESS_BAR_HEIGHT = 56;
+
 export const TopProgressBar: React.FC<TopProgressBarProps> = ({ style, round, max }) => {
   return (
     <View style={[styles.container, style]}>
       <ProgressSteps
-        activeStep={round}
+        activeStep={round - 1}
         activeStepNumColor={Colors.primaryColor}
         completedProgressBarColor={Colors.primaryColor}
         completedStepIconColor={Colors.primaryColor}
         activeStepIconBorderColor={Colors.primaryColor}
         labelFontSize={0}
-        disabledStepIconColor={Colors.backgroundTransparent}
-        progressBarColor={Colors.backgroundTransparent}
+        disabledStepIconColor={Colors.gray}
+        progressBarColor={Colors.gray}
         topOffset={15}
         marginBottom={0}
       >

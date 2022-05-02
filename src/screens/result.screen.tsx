@@ -50,6 +50,8 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
       setLoaded(true);
     });
 
+    //TODO
+
     // Start loading the interstitial straight away
     interstitial.load();
 
@@ -153,7 +155,7 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
           <Text style={styles.resultTextXP}>
             {getXP()} {t('RECEIVED_POINTS_2')}
           </Text>
-          <Progress.Bar style={styles.bar} progress={getXProgress()} width={Dimensions.get('window').width - 50} />
+          <Progress.Bar style={styles.bar} color={Colors.primaryColor} progress={getXProgress()} width={Dimensions.get('window').width - 50} />
           <Text style={styles.resultText}>
             {t('RESULT_DISTANCE_1')} <Text style={styles.resultTextBold}>{getDistance()}</Text> {t('RESULT_DISTANCE_2')}
           </Text>

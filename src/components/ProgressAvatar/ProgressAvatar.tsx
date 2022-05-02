@@ -34,7 +34,7 @@ export const ProgressAvatar: React.FC<ProgressAvatarProps> = observer(({ style, 
     >
       <ImageButton
         buttonStyle={styles.avatar}
-        img={settingsStore.user ? { uri: settingsStore.user.avatar } : require('../../assets/africa.jpg')}
+        img={settingsStore.user ? { uri: settingsStore.user.avatar } : require('../../assets/user.png')}
         onPress={onAvatarPress}
       />
       <Progress.Circle color={Colors.primaryColor} fill={Colors.black} style={styles.progress} progress={progress} size={size} thickness={7} />

@@ -1,12 +1,16 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, BackHandler, StyleSheet } from 'react-native';
+import { Alert, BackHandler, StyleSheet, ToastAndroid } from 'react-native';
 import { LatLng } from 'react-native-maps';
+import { ImageButton } from '../components/interface/ImageButton/ImageButton';
 import Mapillary from '../components/Mapillary/Mapillary';
 import MapPanel from '../components/MapPanel/MapPanel';
-import { TopProgressBar } from '../components/TopProgressBar/TopProgressBar';
+import { TopProgressBar, TOP_PROGRESS_BAR_HEIGHT } from '../components/TopProgressBar/TopProgressBar';
 import { Mode } from '../constants/mode';
+import { Image } from '../services/images.service';
+import { core } from '../store/core.store';
 import Props from '../types/props.type';
+import { Colors } from '../values/colors';
 import { Misc } from '../values/misc';
 
 const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
@@ -24,8 +28,7 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
         text: t('LEAVE'),
         style: 'destructive',
         onPress: () => {
-          BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-          navigation.replace('Main');
+          leaveGame();
         }
       }
     ]);
@@ -60,8 +63,30 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
   const handleComplete = () => {
     if (toCoordinates && fromCoordinates) {
       const playtime = Date.now() - startTime;
+      core.reset();
       navigation.navigate('Result', { from: fromCoordinates, to: toCoordinates, playtime, ...route.params });
     }
+  };
+
+  const leaveGame = () => {
+    Alert.alert(t('LEAVE_GAME'), t('LEAVE_GAME_HINT'), [
+      { text: t('STAY'), style: 'cancel', onPress: () => {} },
+      {
+        text: t('LEAVE'),
+        style: 'destructive',
+        onPress: () => {
+          BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+          core.reset();
+          navigation.replace('Main');
+        }
+      }
+    ]);
+  };
+
+  const refreshLocation = () => {
+    core.refresh(() => {
+      ToastAndroid.showWithGravityAndOffset(t('NO_REFRESH'), ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
+    });
   };
 
   return (
@@ -69,8 +94,18 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
       {route.params.mode === Mode.ROUND && route.params.data && (
         <TopProgressBar style={styles.progress} round={(route.params.data.round ?? 0) + 1} max={Misc.MAX_ROUNDS} />
       )}
+      <ImageButton
+        img={require('../assets/logout.png')}
+        buttonStyle={[styles.leaveBtn, styles.button, { top: 15 + TOP_PROGRESS_BAR_HEIGHT }]}
+        onPress={leaveGame}
+      />
+      <ImageButton
+        img={require('../assets/refresh.png')}
+        buttonStyle={[styles.refreshBtn, styles.button, { top: 15 + TOP_PROGRESS_BAR_HEIGHT }]}
+        onPress={refreshLocation}
+      />
       <Mapillary onMove={onMove} onInit={onMapillaryInit} game={route.params.game} mode={route.params.mode} data={route.params.data} />
-      <MapPanel onMarkerSet={onMarkerSet} onComplete={handleComplete} buttonStyle={[styles.mapBtn]} />
+      <MapPanel onMarkerSet={onMarkerSet} onComplete={handleComplete} buttonStyle={[styles.mapBtn, styles.button]} />
     </>
   );
 };
@@ -80,12 +115,34 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 10
   },
-  mapBtn: {
+  button: {
     position: 'absolute',
+    backgroundColor: Colors.backgroundButton,
+    borderRadius: 32,
+    textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
     alignSelf: 'center',
-    zIndex: 1,
+    zIndex: 1
+  },
+  mapBtn: {
+    height: 64,
+    width: 64,
+    padding: 16,
     right: 15,
     bottom: 25
+  },
+  leaveBtn: {
+    height: 52,
+    width: 52,
+    padding: 14,
+    left: 10
+  },
+  refreshBtn: {
+    height: 52,
+    width: 52,
+    padding: 14,
+    right: 10
   }
 });
 

@@ -97,6 +97,11 @@
             container: 'mly',
             imageId: '<ID>', // '1566097680389826'
         });
+
+        viewer.on('position', async (event) => {
+            const position = await viewer.getPosition();
+            window.ReactNativeWebView.postMessage(JSON.stringify(position));
+        });
     </script>
 </body>
 
