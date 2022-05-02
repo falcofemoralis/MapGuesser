@@ -6,6 +6,7 @@ import { ImageButton } from '../components/interface/ImageButton/ImageButton';
 import Mapillary from '../components/Mapillary/Mapillary';
 import MapPanel from '../components/MapPanel/MapPanel';
 import { TopProgressBar, TOP_PROGRESS_BAR_HEIGHT } from '../components/TopProgressBar/TopProgressBar';
+import { Game } from '../constants/gametype';
 import { Mode } from '../constants/mode';
 import { Image } from '../services/images.service';
 import { core } from '../store/core.store';
@@ -89,19 +90,20 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
     });
   };
 
+  const getButtonHeight = () => {
+    const height = 15;
+    return route.params.mode == Mode.ROUND ? height + TOP_PROGRESS_BAR_HEIGHT : height;
+  };
+
   return (
     <>
       {route.params.mode === Mode.ROUND && route.params.data && (
         <TopProgressBar style={styles.progress} round={(route.params.data.round ?? 0) + 1} max={Misc.MAX_ROUNDS} />
       )}
-      <ImageButton
-        img={require('../assets/logout.png')}
-        buttonStyle={[styles.leaveBtn, styles.button, { top: 15 + TOP_PROGRESS_BAR_HEIGHT }]}
-        onPress={leaveGame}
-      />
+      <ImageButton img={require('../assets/logout.png')} buttonStyle={[styles.leaveBtn, styles.button, { top: getButtonHeight() }]} onPress={leaveGame} />
       <ImageButton
         img={require('../assets/refresh.png')}
-        buttonStyle={[styles.refreshBtn, styles.button, { top: 15 + TOP_PROGRESS_BAR_HEIGHT }]}
+        buttonStyle={[styles.refreshBtn, styles.button, { top: getButtonHeight() }]}
         onPress={refreshLocation}
       />
       <Mapillary onMove={onMove} onInit={onMapillaryInit} game={route.params.game} mode={route.params.mode} data={route.params.data} />

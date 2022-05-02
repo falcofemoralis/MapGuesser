@@ -6,7 +6,7 @@ import { settingsStore } from '../../store/settings.store';
 import { Colors } from '../../values/colors';
 import { Dimens } from '../../values/dimens';
 import { ImageButton } from '../interface/ImageButton/ImageButton';
-import SwitchSelector from '../interface/SwitchSelector/SwitchSelector';
+import SwitchSelector from '../libs/SwitchSelector/SwitchSelector';
 import { LanguagePicker } from '../LanguagePicker/LanguagePicker';
 
 interface SettingsProps {

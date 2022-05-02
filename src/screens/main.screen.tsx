@@ -1,8 +1,9 @@
+import NetInfo from '@react-native-community/netinfo';
 import date from 'date-and-time';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ToastAndroid } from 'react-native';
 import { Banner } from '../components/Banner/Banner';
 import { ContinentsSelector } from '../components/ContinentsSelector/ContinentsSelector';
 import { GamesCarousel } from '../components/GamesCarousel/GamesCarousel';
@@ -45,7 +46,7 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
       description: t('SETS_ROUND_TITLE'),
       mode: Mode.ROUND,
       game: Game.CLASSIC,
-      requiredLvl: 0 //3
+      requiredLvl: 3
     },
     {
       title: t('CONTINENTS_NAME'),
@@ -53,7 +54,7 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
       description: t('CONTINENTS_TITLE'),
       mode: Mode.ROUND,
       game: Game.CONTINENTS,
-      requiredLvl: 0 // 10
+      requiredLvl: 8
     }
   ];
 
@@ -83,7 +84,13 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
   };
 
   const startGame = (game: GameType, data: GameData) => {
-    navigation.replace('Game', { game: game.game, mode: game.mode, data });
+    NetInfo.fetch().then(state => {
+      if (state.isConnected) {
+        navigation.replace('Game', { game: game.game, mode: game.mode, data });
+      } else {
+        ToastAndroid.showWithGravityAndOffset(t('NO_INTERNET'), ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
+      }
+    });
   };
 
   const getProgress = () => {

@@ -50,10 +50,10 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
       setLoaded(true);
     });
 
-    //TODO
-
-    // Start loading the interstitial straight away
-    interstitial.load();
+    if (settingsStore.adsCounter % Misc.ADS_PER_COUNTER == 0) {
+      // Start loading the interstitial straight away
+      interstitial.load();
+    }
 
     // Unsubscribe from events on unmount
     return unsubscribe;
@@ -69,7 +69,7 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
    */
   const onNextRound = async () => {
     const data = route.params.data;
-    if (loaded && settingsStore.adsCounter % Misc.ADS_PER_COUNTER == 0) {
+    if (loaded) {
       interstitial.show();
     }
 
@@ -88,12 +88,11 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
       gameStore.resetRounds();
     }
 
-    if (loaded && settingsStore.adsCounter % Misc.ADS_PER_COUNTER == 0) {
+    if (loaded) {
       interstitial.show();
     }
 
     settingsStore.updateAdsCounter();
-
     navigation.replace('Main');
   };
 

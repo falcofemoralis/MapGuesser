@@ -4,7 +4,7 @@
     "CONTINENTS_NAME": "Kontynenty",
     "CLASSIC_TITLE": "Zagraj jedną rundę w dowolnym miejscu",
     "SETS_ROUND_TITLE": "Zagraj w wiele rund w dowolnym miejscu",
-    "CONTINENTS_TITLE": "Wybierz jeden z kontynentów, aby rozpocząć grę",
+    "CONTINENTS_TITLE": "Graj na jednym z kontynentów",
     "LOCAL_USER": "Użytkownik lokalny",
     "LEVEL": "Poziom",
     "XP": "Punkty",
@@ -28,10 +28,11 @@
     "AU": "Australia",
     "UNLOCKED_AT_1": "Odblokowany na",
     "UNLOCKED_AT_2": "poziom",
-    "KM": "kilometry",
-    "ML": "mile",
+    "KM": "Kilometry",
+    "ML": "Mile",
     "KM_SHORT": "km",
     "ML_SHORT": "mile",
     "SETTINGS": "Ustawienia",
-    "NO_REFRESH": "Nie ma więcej dostępnych lokalizacji!"
+    "NO_REFRESH": "Nie ma więcej dostępnych lokalizacji!",
+    "NO_INTERNET": "Brak połączenia z internetem"
 }

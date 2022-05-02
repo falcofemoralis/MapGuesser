@@ -4,7 +4,7 @@
     "CONTINENTS_NAME": "Kontinente",
     "CLASSIC_TITLE": "Eine Runde überall spielen",
     "SETS_ROUND_TITLE": "Mehrere Runden überall spielen",
-    "CONTINENTS_TITLE": "Einen der Kontinente auswählen, um das Spiel zu starten",
+    "CONTINENTS_TITLE": "Spielen Sie auf einem der Kontinente",
     "LOCAL_USER": "Lokaler Benutzer",
     "LEVEL": "Level",
     "XP": "Punkte",
@@ -33,5 +33,6 @@
     "KM_SHORT": "km",
     "ML_SHORT": "Meilen",
     "SETTINGS": "Einstellungen",
-    "NO_REFRESH": "Keine weiteren Standorte verfügbar!"
+    "NO_REFRESH": "Keine weiteren Standorte verfügbar!",
+    "NO_INTERNET": "Keine Internetverbindung"
 }

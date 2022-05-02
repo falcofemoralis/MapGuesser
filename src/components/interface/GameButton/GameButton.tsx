@@ -35,8 +35,8 @@ const styles = StyleSheet.create({
     height: '45%'
   },
   title: {
-    paddingStart: 3,
-    paddingEnd: 3,
+    paddingStart: 0,
+    paddingEnd: 0,
     marginTop: 5,
     color: Colors.white,
     fontSize: Dimens.normalText,

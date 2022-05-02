@@ -4,7 +4,7 @@
   "CONTINENTS_NAME": "Continents",
   "CLASSIC_TITLE": "Play one round anywhere",
   "SETS_ROUND_TITLE": "Play multiple rounds anywhere",
-  "CONTINENTS_TITLE": "Select one of the continents to start the game",
+  "CONTINENTS_TITLE": "Play on one of the continents",
   "LOCAL_USER": "Local User",
   "LEVEL": "Level",
   "XP": "Points",
@@ -28,10 +28,11 @@
   "AU": "Australia",
   "UNLOCKED_AT_1": "Unlocked at",
   "UNLOCKED_AT_2": "level",
-  "KM": "kilometers",
-  "ML": "miles",
+  "KM": "Kilometers",
+  "ML": "Miles",
   "KM_SHORT": "km",
   "ML_SHORT": "miles",
   "SETTINGS": "Settings",
-  "NO_REFRESH": "No more locations available!"
+  "NO_REFRESH": "No more locations available!",
+  "NO_INTERNET": "No Internet connection"
 }

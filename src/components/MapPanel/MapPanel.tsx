@@ -1,9 +1,9 @@
 import React from 'react';
 import { Dimensions, ImageStyle, StyleProp, StyleSheet } from 'react-native';
 import { LatLng } from 'react-native-maps';
-import { SwipeablePanel } from 'rn-swipeable-panel';
 import { Colors } from '../../values/colors';
 import { ImageButton } from '../interface/ImageButton/ImageButton';
+import { SwipeablePanel } from '../libs/SwipeablePanel';
 import SelectableMap from '../SelectableMap/SelectableMap';
 
 interface MapPanelProps {
