@@ -23,19 +23,10 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
    * BackPress override. If game wasn't complete - show Alert dialog, otherwise navigate to
    */
   const onBackPress = () => {
-    Alert.alert(t('LEAVE_GAME'), t('LEAVE_GAME_HINT'), [
-      { text: t('STAY'), style: 'cancel', onPress: () => {} },
-      {
-        text: t('LEAVE'),
-        style: 'destructive',
-        onPress: () => {
-          leaveGame();
-        }
-      }
-    ]);
-
+    leaveGame();
     return true;
   };
+
   BackHandler.addEventListener('hardwareBackPress', onBackPress);
 
   const onMapillaryInit = () => {
@@ -64,6 +55,7 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
   const handleComplete = () => {
     if (toCoordinates && fromCoordinates) {
       const playtime = Date.now() - startTime;
+      BackHandler.removeEventListener('hardwareBackPress', onBackPress);
       core.reset();
       navigation.navigate('Result', { from: fromCoordinates, to: toCoordinates, playtime, ...route.params });
     }
