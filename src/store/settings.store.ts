@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { Unit } from '../constants/unit';
 import StorageManager, { KeyEnum } from '../managers/storage.manager';
 import { User } from './../types/user';
@@ -13,36 +13,48 @@ class SettingsStore {
 
     StorageManager.read<Unit>(KeyEnum.UNIT).then(u => {
       if (u) {
-        this.unit = u;
+        runInAction(() => {
+          this.unit = u;
+        });
       }
     });
 
     StorageManager.read<number>(KeyEnum.ADS).then(c => {
       if (c) {
-        this.adsCounter = c;
+        runInAction(() => {
+          this.adsCounter = c;
+        });
       }
     });
 
     StorageManager.read<User>(KeyEnum.USER).then(u => {
       if (u) {
-        this.user = u;
+        runInAction(() => {
+          this.user = u;
+        });
       }
     });
   }
 
   updateUnit(unit: Unit) {
-    this.unit = unit;
     StorageManager.write<Unit>(KeyEnum.UNIT, unit);
+    this.unit = unit;
   }
 
   async updateAdsCounter() {
-    this.adsCounter++;
     StorageManager.write<number>(KeyEnum.ADS, this.adsCounter);
+
+    runInAction(() => {
+      this.adsCounter++;
+    });
   }
 
   async updateUser(user: User) {
-    this.user = user;
     StorageManager.write<User>(KeyEnum.USER, user);
+
+    runInAction(() => {
+      this.user = user;
+    });
   }
 }
 

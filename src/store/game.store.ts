@@ -1,10 +1,18 @@
 import { makeAutoObservable, runInAction } from 'mobx';
+import { MutableRefObject } from 'react';
+import MapView from 'react-native-maps';
 import ProgressManager from '../managers/progress.manager';
 import StorageManager, { KeyEnum } from '../managers/storage.manager';
 import Progress from '../types/progress';
 import Round from '../types/round';
+import { SearchPlace } from './../services/map.service';
 
 class GameStore {
+  mapRef?: MutableRefObject<MapView | null>;
+  foundPlace: SearchPlace | null = null;
+  isSearching: boolean = false;
+  searchDelay: number = 0;
+  placeForSearch: string | null = null;
   progress: Progress | null = null;
   rounds: Round[] = [];
 

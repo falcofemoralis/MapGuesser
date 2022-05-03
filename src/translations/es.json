@@ -37,5 +37,6 @@
   "NO_INTERNET": "Sin conexión a Internet",
   "REFRESH": "Actualizar",
   "REFRESH_GAME": "¿Actualizar el juego?",
-  "REFRESH_GAME_HINT": "Obtendrás una nueva ubicación junto a la actual"
+  "REFRESH_GAME_HINT": "Obtendrás una nueva ubicación junto a la actual",
+  "SEARCH": "Búsqueda"
 }

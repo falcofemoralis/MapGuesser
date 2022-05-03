@@ -4,6 +4,7 @@ import { LatLng } from 'react-native-maps';
 import { Colors } from '../../values/colors';
 import { ImageButton } from '../interface/ImageButton/ImageButton';
 import { SwipeablePanel } from '../libs/SwipeablePanel';
+import { SearchPanel } from '../SearchPanel/SearchPanel';
 import SelectableMap from '../SelectableMap/SelectableMap';
 
 interface MapPanelProps {
@@ -13,13 +14,17 @@ interface MapPanelProps {
 }
 const MapPanel: React.FC<MapPanelProps> = ({ onMarkerSet, onComplete, buttonStyle }) => {
   const [isMap, setMap] = React.useState(false); // is map panel activated
-
+  const [isSearch, setSearch] = React.useState(false);
   /**
    * Trigger when user set market on the map
    * @param coordinates - marker coordinates
    */
   const handleMarkerSet = (coordinates: LatLng) => {
     onMarkerSet(coordinates);
+  };
+
+  const toggleSearch = () => {
+   setSearch(!isSearch);
   };
 
   /**
@@ -38,13 +43,17 @@ const MapPanel: React.FC<MapPanelProps> = ({ onMarkerSet, onComplete, buttonStyl
         openLarge
         closeOnTouchOutside
         showCloseButton
+        showSearchButton
         isActive={isMap}
         onClose={closeMap}
+        onSearch={toggleSearch}
         closeRootStyle={styles.closeBtn}
+        searchRootStyle={styles.searchBtn}
         barContainerStyle={styles.bar}
       >
         <SelectableMap style={styles.selectableMap} onMarkerSet={handleMarkerSet} onComplete={onComplete} />
       </SwipeablePanel>
+      <SearchPanel visible={isSearch} onClose={toggleSearch} />
     </>
   );
 };
@@ -56,6 +65,12 @@ const styles = StyleSheet.create({
   },
   closeBtn: {
     marginTop: 25,
+    left: 15,
+    backgroundColor: Colors.background
+  },
+  searchBtn: {
+    marginTop: 25,
+    right: 15,
     backgroundColor: Colors.background
   },
   bar: {

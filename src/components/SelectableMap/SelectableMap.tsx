@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image, StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle, Dimensions } from 'react-native';
 import MapView, { LatLng, MapEvent, Marker, UrlTile } from 'react-native-maps';
+import { gameStore } from '../../store/game.store';
 import { Colors } from '../../values/colors';
 
 interface CompleteBtnProps {
@@ -9,12 +10,7 @@ interface CompleteBtnProps {
 }
 const CompleteBtn: React.FC<CompleteBtnProps> = ({ onComplete, disabled }) => {
   return (
-    <TouchableOpacity
-      style={stylesBtn.completeBtn}
-      onPress={onComplete}
-      activeOpacity={0.5}
-      disabled={disabled}
-    >
+    <TouchableOpacity style={stylesBtn.completeBtn} onPress={onComplete} activeOpacity={0.5} disabled={disabled}>
       <View style={[stylesBtn.tier1, { backgroundColor: disabled ? Colors.background : Colors.primaryColor }]} />
       <View style={[stylesBtn.tier2, { backgroundColor: disabled ? Colors.background : Colors.primaryColor }]} />
       <Image style={stylesBtn.completeBtnIcon} source={require('../../assets/placeholder.png')} />
@@ -71,6 +67,7 @@ interface SelectableMapProps {
 const SelectableMap: React.FC<SelectableMapProps> = ({ onMarkerSet, style, onComplete }) => {
   const MARKER_ANIM_DUR = 700;
   const mapRef = React.useRef<MapView | null>(null); // map reference
+  gameStore.mapRef = mapRef;
   const [marker, setMarker] = React.useState<LatLng | null>(null); // marker on the map
 
   /**
@@ -82,8 +79,22 @@ const SelectableMap: React.FC<SelectableMapProps> = ({ onMarkerSet, style, onCom
     setMarker(event.nativeEvent.coordinate);
   };
 
-  // Animation to the marker
-  if (marker) {
+  if (gameStore.foundPlace) {
+    const bbox = gameStore.foundPlace.bbox;
+    const leftTop = [bbox[0], bbox[3]]; // lng, lat
+    const rightBottom = [bbox[2], bbox[1]];
+    const leftBottom = [leftTop[0], rightBottom[1]];
+    const rightTop = [rightBottom[0], leftTop[1]];
+
+    gameStore.mapRef?.current?.animateToRegion({
+      longitude: gameStore.foundPlace.geometry.coordinates[0],
+      latitude: gameStore.foundPlace.geometry.coordinates[1],
+      longitudeDelta: rightTop[0] - leftTop[0],
+      latitudeDelta: rightTop[1] - rightBottom[1]
+    }, MARKER_ANIM_DUR);
+
+    gameStore.foundPlace = null;
+  } else if (marker) {
     mapRef?.current?.animateCamera({ center: marker }, { duration: MARKER_ANIM_DUR });
   }
 

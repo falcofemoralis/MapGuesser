@@ -37,5 +37,6 @@
     "NO_INTERNET": "Brak połączenia z internetem",
     "REFRESH": "Odśwież",
     "REFRESH_GAME": "Odśwież grę?",
-    "REFRESH_GAME_HINT": "Zostaniesz nową lokalizację obok obecnej"
+    "REFRESH_GAME_HINT": "Zostaniesz nową lokalizację obok obecnej",
+    "SEARCH": "Szukaj"
 }

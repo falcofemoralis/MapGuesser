@@ -6,8 +6,8 @@ import { settingsStore } from '../../store/settings.store';
 import { Colors } from '../../values/colors';
 import { Dimens } from '../../values/dimens';
 import { ImageButton } from '../interface/ImageButton/ImageButton';
-import SwitchSelector from '../libs/SwitchSelector/SwitchSelector';
 import { LanguagePicker } from '../LanguagePicker/LanguagePicker';
+import SwitchSelector from '../libs/SwitchSelector/SwitchSelector';
 
 interface SettingsProps {
   visible: boolean;
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   modalView: {
     margin: 20,
     backgroundColor: Colors.background,
-    borderRadius: 20,
+    borderRadius: 10,
     padding: 25,
     alignItems: 'center',
     shadowColor: '#000',

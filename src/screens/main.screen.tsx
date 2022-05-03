@@ -3,7 +3,7 @@ import date from 'date-and-time';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, Text, View, ToastAndroid } from 'react-native';
+import { StyleSheet, Text, ToastAndroid, View } from 'react-native';
 import { Banner } from '../components/Banner/Banner';
 import { ContinentsSelector } from '../components/ContinentsSelector/ContinentsSelector';
 import { GamesCarousel } from '../components/GamesCarousel/GamesCarousel';

@@ -3,6 +3,7 @@ import { Animated, Dimensions, PanResponder, ScrollView, ScrollViewProps, StyleS
 import { Colors } from '../../../values/colors';
 import { Bar } from './Bar';
 import { Close } from './Close';
+import { Search } from './Search';
 
 let FULL_HEIGHT = Dimensions.get('window').height;
 let FULL_WIDTH = Dimensions.get('window').width;
@@ -18,12 +19,16 @@ type SwipeablePanelProps = {
   children: React.ReactNode;
   isActive: boolean;
   onClose: () => void;
+  onSearch: () => void;
   showCloseButton?: boolean;
+  showSearchButton?: boolean;
   fullWidth?: boolean;
   noBackgroundOpacity?: boolean;
   style?: object;
   closeRootStyle?: object;
   closeIconStyle?: object;
+  searchRootStyle?: object;
+  searchIconStyle?: object;
   closeOnTouchOutside?: boolean;
   onlyLarge?: boolean;
   onlySmall?: boolean;
@@ -35,8 +40,6 @@ type SwipeablePanelProps = {
   allowTouchOutside?: boolean;
   scrollViewProps?: ScrollViewProps;
 };
-
-type MaybeAnimated<T> = T | Animated.Value;
 
 type SwipeablePanelState = {
   status: number;
@@ -198,7 +201,7 @@ class SwipeablePanel extends Component<SwipeablePanelProps, SwipeablePanelState>
 
   render() {
     const { showComponent, deviceWidth, deviceHeight, panelHeight } = this.state;
-    const { noBackgroundOpacity, style, barStyle, barContainerStyle, closeRootStyle, closeIconStyle, onClose, allowTouchOutside, closeOnTouchOutside } =
+    const { noBackgroundOpacity, style, barStyle, barContainerStyle, closeRootStyle, closeIconStyle, onClose, allowTouchOutside, closeOnTouchOutside, searchRootStyle, searchIconStyle } =
       this.props;
 
     return (
@@ -243,6 +246,7 @@ class SwipeablePanel extends Component<SwipeablePanelProps, SwipeablePanelState>
         >
           {!this.props.noBar && <Bar barStyle={barStyle} barContainerStyle={barContainerStyle} />}
           {this.props.showCloseButton && <Close rootStyle={closeRootStyle} iconStyle={closeIconStyle} onPress={this.props.onClose} />}
+          {this.props.showSearchButton && <Search rootStyle={searchRootStyle} iconStyle={searchIconStyle} onPress={this.props.onSearch} />}
           <ScrollView
             onTouchStart={() => {
               return false;
