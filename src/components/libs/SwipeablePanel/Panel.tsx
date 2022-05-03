@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Animated, Dimensions, PanResponder, ScrollView, ScrollViewProps, StyleSheet, TouchableHighlight, TouchableWithoutFeedback, View } from 'react-native';
+import { Colors } from '../../../values/colors';
 import { Bar } from './Bar';
 import { Close } from './Close';
 
@@ -48,6 +49,7 @@ type SwipeablePanelState = {
   deviceWidth: number;
   deviceHeight: number;
   panelHeight: number;
+  fix: boolean; // fix blinking
 };
 
 class SwipeablePanel extends Component<SwipeablePanelProps, SwipeablePanelState> {
@@ -55,6 +57,7 @@ class SwipeablePanel extends Component<SwipeablePanelProps, SwipeablePanelState>
   isClosing: boolean;
   _panResponder: any;
   animatedValueY: number;
+
   constructor(props: SwipeablePanelProps) {
     super(props);
     this.state = {
@@ -67,7 +70,8 @@ class SwipeablePanel extends Component<SwipeablePanelProps, SwipeablePanelState>
       orientation: FULL_HEIGHT >= FULL_WIDTH ? 'portrait' : 'landscape',
       deviceWidth: FULL_WIDTH,
       deviceHeight: FULL_HEIGHT,
-      panelHeight: PANEL_HEIGHT
+      panelHeight: PANEL_HEIGHT,
+      fix: true
     };
 
     this.pan = new Animated.ValueXY({ x: 0, y: FULL_HEIGHT });
@@ -117,7 +121,7 @@ class SwipeablePanel extends Component<SwipeablePanelProps, SwipeablePanelState>
 
     this.setState({ isActive });
 
-    if (isActive) this._animateTo(onlySmall ? STATUS.SMALL : openLarge ? STATUS.LARGE : onlyLarge ? STATUS.LARGE : STATUS.SMALL);
+    if (isActive || this.state.fix) this._animateTo(onlySmall ? STATUS.SMALL : openLarge ? STATUS.LARGE : onlyLarge ? STATUS.LARGE : STATUS.SMALL);
 
     Dimensions.addEventListener('change', this._onOrientationChange);
   };
@@ -179,6 +183,10 @@ class SwipeablePanel extends Component<SwipeablePanelProps, SwipeablePanelState>
       restDisplacementThreshold: 10,
       restSpeedThreshold: 10
     }).start(() => {
+      if (this.state.fix) {
+        this.setState({ fix: false });
+        this._animateTo(STATUS.CLOSED);
+      }
       if (newStatus === 0) {
         this.props.onClose();
         this.setState({
@@ -193,9 +201,12 @@ class SwipeablePanel extends Component<SwipeablePanelProps, SwipeablePanelState>
     const { noBackgroundOpacity, style, barStyle, barContainerStyle, closeRootStyle, closeIconStyle, onClose, allowTouchOutside, closeOnTouchOutside } =
       this.props;
 
-    return showComponent ? (
+    return (
       <Animated.View
         style={[
+          {
+            display: showComponent ? 'flex' : 'none'
+          },
           SwipeablePanelStyles.background,
           {
             backgroundColor: noBackgroundOpacity ? 'rgba(0,0,0,0)' : 'rgba(0,0,0,0.5)',
@@ -252,11 +263,21 @@ class SwipeablePanel extends Component<SwipeablePanelProps, SwipeablePanelState>
           </ScrollView>
         </Animated.View>
       </Animated.View>
-    ) : null;
+    );
   }
 }
 
 const SwipeablePanelStyles = StyleSheet.create({
+  test: {
+    position: 'absolute',
+    zIndex: 1,
+    bottom: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+    width: '100%',
+    backgroundColor: Colors.background
+  },
   background: {
     position: 'absolute',
     zIndex: 1,
