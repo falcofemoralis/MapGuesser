@@ -48,11 +48,11 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
       setLoaded(true);
     });
 
+    console.log(settingsStore.adsCounter % Misc.ADS_PER_COUNTER);
     if (settingsStore.adsCounter % Misc.ADS_PER_COUNTER == 0) {
       // Start loading the interstitial straight away
       interstitial.load();
     }
-
     // Unsubscribe from events on unmount
     return unsubscribe;
   }, []);
