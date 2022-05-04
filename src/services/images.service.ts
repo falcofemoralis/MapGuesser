@@ -7,6 +7,8 @@ export interface Image {
     coordinates: number[];
   };
   sequence: string;
+  quality_score: number;
+  camera_type: string;
 }
 export interface SearchData {
   data: Image[];
@@ -17,7 +19,7 @@ export default class ImagesService {
   static async searchForImages(coordinates: number[]): Promise<Image[]> {
     try {
       const bbox = `${coordinates[1] - AREA_TO_SCAN},${coordinates[0] - AREA_TO_SCAN},${coordinates[1] + AREA_TO_SCAN},${coordinates[0] + AREA_TO_SCAN}`;
-      const uri = `/images?access_token=${Keys.mapillaryToken}&fields=id,computed_geometry,sequence&bbox=${bbox}&limit=100`;
+      const uri = `/images?access_token=${Keys.mapillaryToken}&fields=id,computed_geometry,sequence,quality_score,camera_type&bbox=${bbox}&limit=100`;
       //console.log(uri);
       const { data } = await axiosMapillary.get<SearchData>(uri);
       return data.data;

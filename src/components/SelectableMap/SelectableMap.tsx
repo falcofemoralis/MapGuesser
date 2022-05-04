@@ -3,6 +3,7 @@ import { Image, StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle, Dimens
 import MapView, { LatLng, MapEvent, Marker, UrlTile } from 'react-native-maps';
 import { gameStore } from '../../store/game.store';
 import { Colors } from '../../values/colors';
+import {searchStore} from '../../store/search.store';
 
 interface CompleteBtnProps {
   onComplete?: () => void;
@@ -67,7 +68,7 @@ interface SelectableMapProps {
 const SelectableMap: React.FC<SelectableMapProps> = ({ onMarkerSet, style, onComplete }) => {
   const MARKER_ANIM_DUR = 700;
   const mapRef = React.useRef<MapView | null>(null); // map reference
-  gameStore.mapRef = mapRef;
+  searchStore.mapRef = mapRef;
   const [marker, setMarker] = React.useState<LatLng | null>(null); // marker on the map
 
   /**
@@ -79,21 +80,21 @@ const SelectableMap: React.FC<SelectableMapProps> = ({ onMarkerSet, style, onCom
     setMarker(event.nativeEvent.coordinate);
   };
 
-  if (gameStore.foundPlace) {
-    const bbox = gameStore.foundPlace.bbox;
+  if (searchStore.foundPlace) {
+    const bbox = searchStore.foundPlace.bbox;
     const leftTop = [bbox[0], bbox[3]]; // lng, lat
     const rightBottom = [bbox[2], bbox[1]];
     const leftBottom = [leftTop[0], rightBottom[1]];
     const rightTop = [rightBottom[0], leftTop[1]];
 
-    gameStore.mapRef?.current?.animateToRegion({
-      longitude: gameStore.foundPlace.geometry.coordinates[0],
-      latitude: gameStore.foundPlace.geometry.coordinates[1],
+    searchStore.mapRef?.current?.animateToRegion({
+      longitude: searchStore.foundPlace.geometry.coordinates[0],
+      latitude: searchStore.foundPlace.geometry.coordinates[1],
       longitudeDelta: rightTop[0] - leftTop[0],
       latitudeDelta: rightTop[1] - rightBottom[1]
     }, MARKER_ANIM_DUR);
 
-    gameStore.foundPlace = null;
+    searchStore.foundPlace = null;
   } else if (marker) {
     mapRef?.current?.animateCamera({ center: marker }, { duration: MARKER_ANIM_DUR });
   }

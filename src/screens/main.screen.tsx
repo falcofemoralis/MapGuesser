@@ -95,25 +95,25 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
   };
 
   const getProgress = () => {
-    return (gameStore.progress?.xp ?? 1) / ProgressManager.lvl((gameStore.progress?.lvl ?? 1) + 1);
+    return gameStore.progress.xp / ProgressManager.lvl(gameStore.progress.lvl + 1);
   };
 
   const getLvl = () => {
-    return gameStore.progress?.lvl ?? 1;
+    return gameStore.progress.lvl;
   };
 
   const getXP = () => {
-    return gameStore.progress?.totalXp?.toFixed(0) ?? '0';
+    return gameStore.progress.totalXp.toFixed(0)
   };
 
   const getTime = () => {
-    const time = gameStore.progress?.playtime ?? 0;
+    const time = gameStore.progress.playtime;
     const now = new Date(time);
     return date.format(now, 'HH:mm:ss', true);
   };
 
   const getAccuracy = () => {
-    return ProgressManager.getTotalAccuracy(gameStore.progress?.accuracy ?? [1]).toFixed(2);
+    return ProgressManager.getTotalAccuracy(gameStore.progress.accuracy).toFixed(2);
   };
 
   const toggleSettings = () => {

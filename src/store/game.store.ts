@@ -8,12 +8,13 @@ import Round from '../types/round';
 import { SearchPlace } from './../services/map.service';
 
 class GameStore {
-  mapRef?: MutableRefObject<MapView | null>;
-  foundPlace: SearchPlace | null = null;
-  isSearching: boolean = false;
-  searchDelay: number = 0;
-  placeForSearch: string | null = null;
-  progress: Progress | null = null;
+  progress: Progress = {
+    playtime: 0,
+    accuracy: [100],
+    xp: 0,
+    lvl: 1,
+    totalXp: 0
+  };
   rounds: Round[] = [];
 
   constructor() {
@@ -23,14 +24,6 @@ class GameStore {
       runInAction(() => {
         if (p) {
           this.progress = p;
-        } else {
-          this.progress = {
-            playtime: 0,
-            accuracy: [100],
-            xp: 0,
-            lvl: 1,
-            totalXp: 0
-          };
         }
       });
     });

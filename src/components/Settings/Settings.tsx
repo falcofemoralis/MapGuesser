@@ -21,27 +21,25 @@ export const Settings: React.FC<SettingsProps> = ({ visible, onClose }) => {
   ];
 
   return (
-    <View style={styles.centeredView}>
-      <Modal animationType='fade' transparent={true} visible={visible} onRequestClose={onClose}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.title}>{t('SETTINGS')}</Text>
-            <ImageButton img={require('../../assets/close.png')} buttonStyle={styles.closeBtn} onPress={onClose} />
-            <SwitchSelector
-              style={styles.selector}
-              options={options}
-              initial={settingsStore.unit == Unit.KM ? 0 : 1}
-              onPress={(value: Unit) => settingsStore.updateUnit(value)}
-              buttonColor={Colors.primaryColor}
-              backgroundColor={Colors.backgroundOpposite}
-              textColor={Colors.white}
-              fontSize={Dimens.normalText}
-            />
-            <LanguagePicker />
-          </View>
+    <Modal animationType='fade' transparent={true} visible={visible} onRequestClose={onClose}>
+      <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+          <Text style={styles.title}>{t('SETTINGS')}</Text>
+          <ImageButton img={require('../../assets/close.png')} buttonStyle={styles.closeBtn} onPress={onClose} />
+          <SwitchSelector
+            style={styles.selector}
+            options={options}
+            initial={settingsStore.unit == Unit.KM ? 0 : 1}
+            onPress={(value: Unit) => settingsStore.updateUnit(value)}
+            buttonColor={Colors.primaryColor}
+            backgroundColor={Colors.backgroundOpposite}
+            textColor={Colors.white}
+            fontSize={Dimens.normalText}
+          />
+          <LanguagePicker />
         </View>
-      </Modal>
-    </View>
+      </View>
+    </Modal>
   );
 };
 

@@ -7,6 +7,7 @@ import { Dimens } from '../../values/dimens';
 import { useTranslation } from 'react-i18next';
 import MapService, { SearchPlace } from '../../services/map.service';
 import { gameStore } from '../../store/game.store';
+import { searchStore } from '../../store/search.store';
 
 interface ItemProps {
   text: string;
@@ -41,7 +42,7 @@ export const SearchPanel: React.FC<SearchPanelProps> = ({ visible, onClose }) =>
   };
 
   const select = (place: SearchPlace) => {
-    gameStore.foundPlace = place;
+    searchStore.foundPlace = place;
     close();
   };
 
@@ -53,26 +54,26 @@ export const SearchPanel: React.FC<SearchPanelProps> = ({ visible, onClose }) =>
     );
 
   const search = async (q: string) => {
-    gameStore.placeForSearch = q;
+    searchStore.placeForSearch = q;
 
-    if (!gameStore.isSearching) {
-      gameStore.isSearching = true;
+    if (!searchStore.isSearching) {
+      searchStore.isSearching = true;
       setLoading(true);
 
-      while (gameStore.searchDelay < SEARCH_DELAY_MS) {
+      while (searchStore.searchDelay < SEARCH_DELAY_MS) {
         await sleep(1);
-        gameStore.searchDelay++;
+        searchStore.searchDelay++;
       }
 
-      MapService.searchForPlace(gameStore.placeForSearch).then(data => {
+      MapService.searchForPlace(searchStore.placeForSearch).then(data => {
         setLoading(false);
         setData(data.features);
       });
 
-      gameStore.isSearching = false;
-      gameStore.searchDelay = 0;
+      searchStore.isSearching = false;
+      searchStore.searchDelay = 0;
     } else {
-      gameStore.searchDelay = 0;
+      searchStore.searchDelay = 0;
     }
   };
 

@@ -26,7 +26,7 @@ export const GamesCarousel: React.FC<GamesCarouselProps> = ({ games, onSelect })
   };
 
   const isUnlocked = (lvl: number) => {
-    return (gameStore.progress?.lvl ?? 0) >= lvl;
+    return gameStore.progress.lvl >= lvl
   };
 
   const _renderItem = ({ item, index }: { item: GameType; index: number }) => {
@@ -54,7 +54,7 @@ export const GamesCarousel: React.FC<GamesCarouselProps> = ({ games, onSelect })
       layout={'default'}
       data={games}
       enableMomentum={true}
-      decelerationRate={0.9}
+      decelerationRate={'normal'}
       renderItem={_renderItem}
       sliderWidth={SLIDER_WIDTH}
       itemWidth={ITEM_WIDTH}

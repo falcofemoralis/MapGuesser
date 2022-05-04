@@ -16,10 +16,12 @@ export default class ProgressManager {
   static xp(distance: number): number {
     /*    
     1 250 // MISC.MAX_XP !!!
-    2500 125
+    100 150 
+    1000 70
+    2500 25
     5000 0 
     */
-    return distance > Misc.ZERO_XP ? 1 : 250.04167 - 0.05001 * distance;
+    return distance > Misc.ZERO_XP ? 1 : Math.pow(15.808187 - 0.16448967 * Math.pow(Math.log(distance), 2), 2); //y^2 =
   }
 
   static accuracy(distance: number): number {
