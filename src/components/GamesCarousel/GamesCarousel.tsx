@@ -2,8 +2,10 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Carousel from 'react-native-snap-carousel'; // Version can be specified in package.json
+import { getGameCards } from '../../data/gameCards';
 import { gameStore } from '../../store/game.store';
-import { GameType } from '../../types/game.type';
+import { userStore } from '../../store/user.store';
+import { GameCard } from '../../types/gamecard.type';
 import { Colors } from '../../values/colors';
 import { Dimens } from '../../values/dimens';
 
@@ -12,26 +14,25 @@ const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);
 const ITEM_HEIGHT = Math.round((ITEM_WIDTH * 5) / 4);
 
 interface GamesCarouselProps {
-  games: GameType[];
-  onSelect: (index: number) => void;
+  /** Triggered on game select */
+  onSelect: (gameCard: GameCard) => void;
 }
-export const GamesCarousel: React.FC<GamesCarouselProps> = ({ games, onSelect }) => {
+export const GamesCarousel: React.FC<GamesCarouselProps> = ({ onSelect }) => {
   const { t } = useTranslation();
-  const [currentIndex, setIndex] = React.useState(0);
+  const [currentIndex, setIndex] = React.useState(0); // index of current item
 
-  const onPress = (i: number) => {
-    if (i == currentIndex) {
-      onSelect(currentIndex);
-    }
-  };
-
+  /**
+   * Return true if game is available to play
+   * @param lvl - minimum lvl of the game
+   * @returns true if game is unlocked, false otherwise
+   */
   const isUnlocked = (lvl: number) => {
-    return gameStore.progress.lvl >= lvl
+    return userStore.progress.lvl >= lvl;
   };
 
-  const _renderItem = ({ item, index }: { item: GameType; index: number }) => {
+  const _renderItem = ({ item, index }: { item: GameCard; index: number }) => {
     return (
-      <TouchableOpacity style={styles.itemContainer} onPress={() => onPress(index)} disabled={index != currentIndex || !isUnlocked(item.requiredLvl)}>
+      <TouchableOpacity style={styles.itemContainer} onPress={() => onSelect(item)} disabled={index != currentIndex || !isUnlocked(item.requiredLvl)}>
         <Image style={styles.preview} source={item.preview} />
         <View style={styles.deck} />
         <View style={styles.deckContainer}>
@@ -52,7 +53,7 @@ export const GamesCarousel: React.FC<GamesCarouselProps> = ({ games, onSelect })
       containerCustomStyle={styles.carouselContainer}
       firstItem={currentIndex}
       layout={'default'}
-      data={games}
+      data={getGameCards(t)}
       enableMomentum={true}
       decelerationRate={'normal'}
       renderItem={_renderItem}

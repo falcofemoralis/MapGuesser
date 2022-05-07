@@ -4,14 +4,16 @@ import { ProgressStep, ProgressSteps } from 'react-native-progress-steps';
 import { Colors } from '../../values/colors';
 import { Dimens } from '../../values/dimens';
 
-interface TopProgressBarProps {
-  style: StyleProp<ViewStyle>;
-  round: number;
-  max: number;
-}
-
 export const TOP_PROGRESS_BAR_HEIGHT = 56;
 
+interface TopProgressBarProps {
+  /** Container style */
+  style: StyleProp<ViewStyle>;
+  /** Current round in range 1...n */
+  round: number;
+  /** Max rounds */
+  max: number;
+}
 export const TopProgressBar: React.FC<TopProgressBarProps> = ({ style, round, max }) => {
   return (
     <View style={[styles.container, style]}>

@@ -1,9 +1,75 @@
 import React from 'react';
-import { Image, StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle, Dimensions } from 'react-native';
-import MapView, { LatLng, MapEvent, Marker, UrlTile } from 'react-native-maps';
-import { gameStore } from '../../store/game.store';
+import { Image, StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native';
+import MapView, { LatLng, MapEvent, Marker } from 'react-native-maps';
+import { searchStore } from '../../store/search.store';
 import { Colors } from '../../values/colors';
-import {searchStore} from '../../store/search.store';
+
+const ANIM_DUR = 700; // fling animation duration
+
+interface SelectableMapProps {
+  /** Triggered on marker setting */
+  onMarkerSet: (coordinates: LatLng) => void;
+  /** Container style */
+  style?: StyleProp<ViewStyle>;
+  /** Triggered when complete button was pressed */
+  onComplete: () => void;
+}
+export const SelectableMap: React.FC<SelectableMapProps> = ({ onMarkerSet, style, onComplete }) => {
+  const mapRef = React.useRef<MapView | null>(null); // map reference
+  searchStore.mapRef = mapRef;
+  const [marker, setMarker] = React.useState<LatLng | null>(null); // marker on the map
+
+  /**
+   * Creating marker handler.
+   * @param event - data with coordinates
+   */
+  const onMarkerCreate = (event: MapEvent) => {
+    onMarkerSet(event.nativeEvent.coordinate);
+    setMarker(event.nativeEvent.coordinate);
+  };
+
+  /**
+   * If user selected place in found list, then animate to it, otherwise animate to the marker
+   */
+  if (searchStore.foundPlace) {
+    const bbox = searchStore.foundPlace.bbox;
+    const leftTop = [bbox[0], bbox[3]]; // lng, lat
+    const rightBottom = [bbox[2], bbox[1]];
+    const leftBottom = [leftTop[0], rightBottom[1]];
+    const rightTop = [rightBottom[0], leftTop[1]];
+
+    searchStore.mapRef?.current?.animateToRegion(
+      {
+        longitude: searchStore.foundPlace.geometry.coordinates[0],
+        latitude: searchStore.foundPlace.geometry.coordinates[1],
+        longitudeDelta: rightTop[0] - leftTop[0],
+        latitudeDelta: rightTop[1] - rightBottom[1]
+      },
+      ANIM_DUR
+    );
+
+    searchStore.foundPlace = null;
+  } else if (marker) {
+    mapRef?.current?.animateCamera({ center: marker }, { duration: ANIM_DUR });
+  }
+
+  return (
+    <View style={style}>
+      <CompleteBtn disabled={!Boolean(marker)} onComplete={onComplete} />
+      <MapView ref={mapRef} style={styles.map} onPress={onMarkerCreate}>
+        {marker && <Marker coordinate={marker} />}
+      </MapView>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  map: {
+    height: '100%',
+    width: '100%',
+    zIndex: 10
+  }
+});
 
 interface CompleteBtnProps {
   onComplete?: () => void;
@@ -59,62 +125,3 @@ const stylesBtn = StyleSheet.create({
     zIndex: Z_INDEX - 1
   }
 });
-
-interface SelectableMapProps {
-  onMarkerSet: (coordinates: LatLng) => void;
-  style?: StyleProp<ViewStyle>;
-  onComplete: () => void;
-}
-const SelectableMap: React.FC<SelectableMapProps> = ({ onMarkerSet, style, onComplete }) => {
-  const MARKER_ANIM_DUR = 700;
-  const mapRef = React.useRef<MapView | null>(null); // map reference
-  searchStore.mapRef = mapRef;
-  const [marker, setMarker] = React.useState<LatLng | null>(null); // marker on the map
-
-  /**
-   * Handle user click on the map. Creating marker.
-   * @param event - data with coordinates
-   */
-  const onMarkerCreate = (event: MapEvent) => {
-    onMarkerSet(event.nativeEvent.coordinate);
-    setMarker(event.nativeEvent.coordinate);
-  };
-
-  if (searchStore.foundPlace) {
-    const bbox = searchStore.foundPlace.bbox;
-    const leftTop = [bbox[0], bbox[3]]; // lng, lat
-    const rightBottom = [bbox[2], bbox[1]];
-    const leftBottom = [leftTop[0], rightBottom[1]];
-    const rightTop = [rightBottom[0], leftTop[1]];
-
-    searchStore.mapRef?.current?.animateToRegion({
-      longitude: searchStore.foundPlace.geometry.coordinates[0],
-      latitude: searchStore.foundPlace.geometry.coordinates[1],
-      longitudeDelta: rightTop[0] - leftTop[0],
-      latitudeDelta: rightTop[1] - rightBottom[1]
-    }, MARKER_ANIM_DUR);
-
-    searchStore.foundPlace = null;
-  } else if (marker) {
-    mapRef?.current?.animateCamera({ center: marker }, { duration: MARKER_ANIM_DUR });
-  }
-
-  return (
-    <View style={style}>
-      <CompleteBtn disabled={!Boolean(marker)} onComplete={onComplete} />
-      <MapView ref={mapRef} style={styles.map} onPress={onMarkerCreate}>
-        {marker && <Marker coordinate={marker} />}
-      </MapView>
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  map: {
-    height: '100%',
-    width: '100%',
-    zIndex: 10
-  }
-});
-
-export default SelectableMap;

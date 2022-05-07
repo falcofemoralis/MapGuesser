@@ -1,4 +1,4 @@
 export enum Unit {
-    KM = 'kilometers',
-    ML = 'miles'
+  KM = 'kilometers',
+  ML = 'miles'
 }

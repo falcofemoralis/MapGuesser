@@ -8,51 +8,44 @@ import { useTranslation } from 'react-i18next';
 import MapService, { SearchPlace } from '../../services/map.service';
 import { gameStore } from '../../store/game.store';
 import { searchStore } from '../../store/search.store';
+import { Utils } from '../../utils/utils';
+import { Misc } from '../../values/misc';
 
-interface ItemProps {
-  text: string;
-  onPress: () => void;
-}
-const Item: React.FC<ItemProps> = ({ text, onPress }) => {
-  return (
-    <TouchableOpacity style={styles.item} onPress={onPress} activeOpacity={0.5}>
-      <Text style={styles.itemText}>{text}</Text>
-    </TouchableOpacity>
-  );
-};
-
-const SEARCH_DELAY_MS = 80;
+ //
 
 interface SearchPanelProps {
+  /** Windows visibility */
   visible: boolean;
+  /** Triggered on windows close */
   onClose: () => void;
 }
 export const SearchPanel: React.FC<SearchPanelProps> = ({ visible, onClose }) => {
   const { t } = useTranslation();
-  const [value, setValue] = React.useState('');
-  const [data, setData] = React.useState<SearchPlace[]>([]);
-  const [loading, setLoading] = React.useState(false);
+  const [value, setValue] = React.useState(''); // state of the search bar value
+  const [data, setData] = React.useState<SearchPlace[]>([]); // state of retrieved places
+  const [loading, setLoading] = React.useState(false); // state of visibility of the loading bar
 
-  const close = () => {
-    onClose();
-  };
-
+  /**
+   * Clear the retrieved places list
+   */
   const clear = () => {
     setData([]);
   };
 
+  /**
+   * Select place item handler
+   * @param place - search place item
+   */
   const select = (place: SearchPlace) => {
     searchStore.foundPlace = place;
-    close();
+    onClose();
   };
 
-  const sleep = (ms: number) =>
-    new Promise(resolve =>
-      setTimeout(() => {
-        resolve(0);
-      }, ms)
-    );
 
+  /**
+   * Search for places by query
+   * @param q - any text for search
+   */
   const search = async (q: string) => {
     searchStore.placeForSearch = q;
 
@@ -60,8 +53,8 @@ export const SearchPanel: React.FC<SearchPanelProps> = ({ visible, onClose }) =>
       searchStore.isSearching = true;
       setLoading(true);
 
-      while (searchStore.searchDelay < SEARCH_DELAY_MS) {
-        await sleep(1);
+      while (searchStore.searchDelay < Misc.SEARCH_DELAY_MS) {
+        await Utils.sleep(1);
         searchStore.searchDelay++;
       }
 
@@ -82,7 +75,7 @@ export const SearchPanel: React.FC<SearchPanelProps> = ({ visible, onClose }) =>
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
           <Text style={styles.title}>{t('SEARCH')}</Text>
-          <ImageButton img={require('../../assets/close.png')} buttonStyle={styles.closeBtn} onPress={close} />
+          <ImageButton img={require('../../assets/close.png')} buttonStyle={styles.closeBtn} onPress={onClose} />
           <SearchBar
             value={value}
             onChangeText={v => {
@@ -173,3 +166,15 @@ const styles = StyleSheet.create({
     fontSize: 18
   }
 });
+
+interface ItemProps {
+  text: string;
+  onPress: () => void;
+}
+const Item: React.FC<ItemProps> = ({ text, onPress }) => {
+  return (
+    <TouchableOpacity style={styles.item} onPress={onPress} activeOpacity={0.5}>
+      <Text style={styles.itemText}>{text}</Text>
+    </TouchableOpacity>
+  );
+};

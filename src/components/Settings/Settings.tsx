@@ -10,12 +10,14 @@ import { LanguagePicker } from '../LanguagePicker/LanguagePicker';
 import SwitchSelector from '../libs/SwitchSelector/SwitchSelector';
 
 interface SettingsProps {
+  /** Windows visibility */
   visible: boolean;
+  /** Triggered on windows close */
   onClose: () => void;
 }
 export const Settings: React.FC<SettingsProps> = ({ visible, onClose }) => {
   const { t } = useTranslation();
-  const options = [
+  const units = [
     { label: t('KM'), value: Unit.KM },
     { label: t('ML'), value: Unit.ML }
   ];
@@ -28,7 +30,7 @@ export const Settings: React.FC<SettingsProps> = ({ visible, onClose }) => {
           <ImageButton img={require('../../assets/close.png')} buttonStyle={styles.closeBtn} onPress={onClose} />
           <SwitchSelector
             style={styles.selector}
-            options={options}
+            options={units}
             initial={settingsStore.unit == Unit.KM ? 0 : 1}
             onPress={(value: Unit) => settingsStore.updateUnit(value)}
             buttonColor={Colors.primaryColor}

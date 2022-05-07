@@ -6,18 +6,25 @@ import * as Progress from 'react-native-progress';
 import { settingsStore } from '../../store/settings.store';
 import { Colors } from '../../values/colors';
 import { ImageButton } from '../interface/ImageButton/ImageButton';
+import {userStore} from '../../store/user.store';
 
 interface ProgressAvatarProps {
+  /** Container style */
   style?: StyleProp<ViewStyle>;
+  /** Avatar size */
   size: number;
+  /** Progress value between 0 and 1 */
   progress: number;
 }
 export const ProgressAvatar: React.FC<ProgressAvatarProps> = observer(({ style, size, progress }) => {
+  /**
+   * Avatar press handler, that will launch the gallery picker.
+   */
   const onAvatarPress = async () => {
     const result = await launchImageLibrary({ mediaType: 'photo', maxHeight: size * 2, maxWidth: size * 2 });
     if (result.assets && result.assets.length > 0) {
       const asset = result.assets[0];
-      settingsStore.updateUser({ avatar: asset.uri });
+      userStore.updateUser({ avatar: asset.uri });
     }
   };
 
@@ -34,7 +41,7 @@ export const ProgressAvatar: React.FC<ProgressAvatarProps> = observer(({ style, 
     >
       <ImageButton
         buttonStyle={styles.avatar}
-        img={settingsStore.user ? { uri: settingsStore.user.avatar } : require('../../assets/user.png')}
+        img={userStore.user ? { uri: userStore.user.avatar } : require('../../assets/user.png')}
         onPress={onAvatarPress}
       />
       <Progress.Circle color={Colors.primaryColor} fill={Colors.black} style={styles.progress} progress={progress} size={size} thickness={7} />

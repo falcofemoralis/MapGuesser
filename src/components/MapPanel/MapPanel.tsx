@@ -5,33 +5,33 @@ import { Colors } from '../../values/colors';
 import { ImageButton } from '../interface/ImageButton/ImageButton';
 import { SwipeablePanel } from '../libs/SwipeablePanel';
 import { SearchPanel } from '../SearchPanel/SearchPanel';
-import SelectableMap from '../SelectableMap/SelectableMap';
+import { SelectableMap } from '../SelectableMap/SelectableMap';
 
 interface MapPanelProps {
+  /** Triggered when user sets the marker on the map */
   onMarkerSet: (coordinates: LatLng) => void;
+  /** Triggered when user clicks on the complete button */
   onComplete: () => void;
   buttonStyle: StyleProp<ImageStyle>;
 }
 const MapPanel: React.FC<MapPanelProps> = ({ onMarkerSet, onComplete, buttonStyle }) => {
-  const [isMap, setMap] = React.useState(false); // is map panel activated
-  const [isSearch, setSearch] = React.useState(false);
+  const [isMap, setMap] = React.useState(false); // is map panel active
+  const [isSearch, setSearch] = React.useState(false); // is search panel active
+
   /**
-   * Trigger when user set market on the map
+   * User sets the marker handler
    * @param coordinates - marker coordinates
    */
   const handleMarkerSet = (coordinates: LatLng) => {
     onMarkerSet(coordinates);
   };
 
-  const toggleSearch = () => {
-   setSearch(!isSearch);
-  };
-
   /**
-   * Toggle map
+   * Panels togglers
    */
   const openMap = () => setMap(true);
   const closeMap = () => setMap(false);
+  const toggleSearch = () => setSearch(!isSearch);
 
   return (
     <>

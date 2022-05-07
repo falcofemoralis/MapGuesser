@@ -1,61 +1,24 @@
-import { makeAutoObservable, runInAction } from 'mobx';
-import { MutableRefObject } from 'react';
-import MapView from 'react-native-maps';
-import ProgressManager from '../managers/progress.manager';
-import StorageManager, { KeyEnum } from '../managers/storage.manager';
-import Progress from '../types/progress';
-import Round from '../types/round';
-import { SearchPlace } from './../services/map.service';
+import { makeAutoObservable } from 'mobx';
+import Round from '../types/round.type';
 
 class GameStore {
-  progress: Progress = {
-    playtime: 0,
-    accuracy: [100],
-    xp: 0,
-    lvl: 1,
-    totalXp: 0
-  };
-  rounds: Round[] = [];
+  rounds: Round[] = []; // list of played rounds
 
   constructor() {
     makeAutoObservable(this, {}, { deep: true });
-
-    StorageManager.read<Progress>(KeyEnum.PROGRESS).then(p => {
-      runInAction(() => {
-        if (p) {
-          this.progress = p;
-        }
-      });
-    });
   }
 
-  async updateProgress(newProgress: Progress) {
-    if (this.progress) {
-      newProgress.accuracy.push(...this.progress.accuracy);
-      newProgress.playtime += this.progress.playtime;
-      newProgress.xp += this.progress.xp;
-      newProgress.lvl = this.progress.lvl;
-      newProgress.totalXp += this.progress.totalXp;
-    }
-
-    while (newProgress.xp > ProgressManager.lvl(newProgress?.lvl + 1)) {
-      const xp_to_next_lvl = ProgressManager.lvl(newProgress?.lvl + 1);
-      if (newProgress.xp > xp_to_next_lvl) {
-        newProgress.xp -= xp_to_next_lvl;
-        newProgress.lvl++;
-      }
-    }
-    StorageManager.write<Progress>(KeyEnum.PROGRESS, newProgress);
-
-    runInAction(() => {
-      this.progress = newProgress;
-    });
-  }
-
+  /**
+   * Add round the list
+   * @param round
+   */
   addRound(round: Round) {
     this.rounds.push(round);
   }
 
+  /**
+   * Reset ronds list
+   */
   resetRounds() {
     this.rounds = [];
   }

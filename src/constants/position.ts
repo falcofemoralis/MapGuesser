@@ -1,4 +1,4 @@
 export enum Position {
-    TOP,
-    BOTTOM
+  TOP,
+  BOTTOM
 }

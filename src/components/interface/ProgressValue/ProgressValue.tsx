@@ -5,14 +5,18 @@ import { Dimens } from '../../../values/dimens';
 import { GlobalStyles } from '../../../values/styles';
 
 interface ProgressValueProps {
+  /** Value to display */
   value: string;
+  /** Unit of the value. Optional */
   unit?: string;
+  /** Title of the progress */
   text: string;
-  style?: StyleProp<ViewStyle>;
+  /** Container style */
+  containerStyle?: StyleProp<ViewStyle>;
 }
-export const ProgressValue: React.FC<ProgressValueProps> = ({ value, unit, text, style }) => {
+export const ProgressValue: React.FC<ProgressValueProps> = ({ value, unit, text, containerStyle }) => {
   return (
-    <View style={[GlobalStyles.ccc, style, styles.container]}>
+    <View style={[GlobalStyles.ccc, containerStyle]}>
       <Text style={styles.value}>
         {value}
         {unit}
@@ -23,7 +27,6 @@ export const ProgressValue: React.FC<ProgressValueProps> = ({ value, unit, text,
 };
 
 const styles = StyleSheet.create({
-  container: {},
   value: {
     color: Colors.white,
     fontSize: Dimens.headText,

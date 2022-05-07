@@ -12,12 +12,12 @@ import { ProgressValue } from '../components/interface/ProgressValue/ProgressVal
 import { ProgressAvatar } from '../components/ProgressAvatar/ProgressAvatar';
 import { Settings } from '../components/Settings/Settings';
 import { Continent } from '../constants/continent';
-import { Game } from '../constants/gametype';
-import { Mode } from '../constants/mode';
+import { GameMode } from '../constants/gamemode';
+import { PlayMode } from '../constants/playmode';
 import { Position } from '../constants/position';
 import ProgressManager from '../managers/progress.manager';
-import { gameStore } from '../store/game.store';
-import { GameType } from '../types/game.type';
+import { userStore } from '../store/user.store';
+import { GameCard } from '../types/gamecard.type';
 import Props from '../types/props.type';
 import { Colors } from '../values/colors';
 import { Dimens } from '../values/dimens';
@@ -26,103 +26,83 @@ import { GlobalStyles } from '../values/styles';
 import { GameData } from './index';
 
 const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
-  const [isSettings, setSetting] = React.useState(false);
-  const [isContinents, setContinents] = React.useState(false);
-  const [selectedGame, setGame] = React.useState<GameType | null>(null);
-  const [selectedData, setData] = React.useState<GameData | null>(null);
   const { t } = useTranslation();
 
-  const games: GameType[] = [
-    {
-      title: t('CLASSIC_NAME'),
-      preview: require('../assets/classic.jpg'),
-      description: t('CLASSIC_TITLE'),
-      mode: Mode.SINGLE,
-      game: Game.CLASSIC,
-      requiredLvl: 0
-    },
-    {
-      title: t('SETS_ROUND_NAME'),
-      preview: require('../assets/rounds.jpg'),
-      description: t('SETS_ROUND_TITLE'),
-      mode: Mode.ROUND,
-      game: Game.CLASSIC,
-      requiredLvl: 3
-    },
-    {
-      title: t('CONTINENTS_NAME'),
-      preview: require('../assets/earth.jpg'),
-      description: t('CONTINENTS_TITLE'),
-      mode: Mode.ROUND,
-      game: Game.CONTINENTS,
-      requiredLvl: 8
-    }
-  ];
+  const [isSettings, setSetting] = React.useState(false); // state of modal settings window
+  const [isContinents, setContinents] = React.useState(false); // state of modal continent window
+  const [selectedGameCard, setGameCard] = React.useState<GameCard | null>(null); // state of selected game
+  const [selectedGameData, setGameData] = React.useState<GameData | null>(null); // state
 
-  const onGameSelect = (game: GameType) => {
-    const data: GameData = {};
-    if (game.mode == Mode.ROUND) {
-      data.round = 0;
+  /**
+   * User select game handler
+   * @param gameInfo - selected game card
+   */
+  const onGameSelect = (gameInfo: GameCard) => {
+    const gameData: GameData = {};
+
+    // depending on the game mode init data of the game
+    if (gameInfo.gameMode == GameMode.ROUND) {
+      gameData.round = 0;
     }
 
-    setGame(game);
-    setData(data);
+    setGameCard(gameInfo);
+    setGameData(gameData);
 
-    if (game.game == Game.CLASSIC) {
-      startGame(game, data);
-    } else if (game.game == Game.CONTINENTS) {
+    // depending on play mode, perform required action
+    if (gameInfo.playMode == PlayMode.CLASSIC) {
+      // in classic we just start a game
+      startGame(gameInfo, gameData);
+    } else if (gameInfo.playMode == PlayMode.CONTINENTS) {
+      // in continents we toggle continent selection window
       toggleContinents();
     }
   };
 
+  /**
+   * User select continent handler
+   * @param continent - selected continent
+   */
   const onContinentSelect = (continent: Continent) => {
-    const data = { ...selectedData };
+    const data = { ...selectedGameData };
+
+    // updating data with required data
     data.continent = continent;
 
-    if (selectedGame) {
-      startGame(selectedGame, data);
+    if (selectedGameCard) {
+      startGame(selectedGameCard, data);
     }
   };
 
-  const startGame = (game: GameType, data: GameData) => {
+  /**
+   * Start game
+   * @param gameCard - selected game card
+   * @param gameData - data of the game
+   */
+  const startGame = (gameCard: GameCard, gameData: GameData) => {
+    // check if Internet exists
     NetInfo.fetch().then(state => {
       if (state.isConnected) {
-        navigation.replace('Game', { game: game.game, mode: game.mode, data });
+        navigation.replace('Game', { playMode: gameCard.playMode, gameMode: gameCard.gameMode, gameData: gameData });
       } else {
         ToastAndroid.showWithGravityAndOffset(t('NO_INTERNET'), ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
       }
     });
   };
 
-  const getProgress = () => {
-    return gameStore.progress.xp / ProgressManager.lvl(gameStore.progress.lvl + 1);
-  };
+  /**
+   * Set of functions that returns formatted user data
+   */
+  const getProgress = () => userStore.progress.xp / ProgressManager.lvl(userStore.progress.lvl + 1);
+  const getLvl = () => userStore.progress.lvl;
+  const getXP = () => userStore.progress.totalXp.toFixed(0);
+  const getAccuracy = () => ProgressManager.getTotalAccuracy(userStore.progress.accuracy).toFixed(2);
+  const getTime = () => date.format(new Date(userStore.progress.playtime), 'HH:mm:ss', true);
 
-  const getLvl = () => {
-    return gameStore.progress.lvl;
-  };
-
-  const getXP = () => {
-    return gameStore.progress.totalXp.toFixed(0)
-  };
-
-  const getTime = () => {
-    const time = gameStore.progress.playtime;
-    const now = new Date(time);
-    return date.format(now, 'HH:mm:ss', true);
-  };
-
-  const getAccuracy = () => {
-    return ProgressManager.getTotalAccuracy(gameStore.progress.accuracy).toFixed(2);
-  };
-
-  const toggleSettings = () => {
-    setSetting(!isSettings);
-  };
-
-  const toggleContinents = () => {
-    setContinents(!isContinents);
-  };
+  /**
+   * Window togglers
+   */
+  const toggleSettings = () => setSetting(!isSettings);
+  const toggleContinents = () => setContinents(!isContinents);
 
   return (
     <View style={styles.container}>
@@ -142,7 +122,7 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
         <ProgressValue value={getTime()} unit='' text={t('PLAYTIME')} />
         <ProgressValue value={getAccuracy()} unit='%' text={t('ACCURACY')} />
       </View>
-      <GamesCarousel games={games} onSelect={i => onGameSelect(games[i])} />
+      <GamesCarousel onSelect={onGameSelect} />
       <ContinentsSelector visible={isContinents} onClose={toggleContinents} onSelect={onContinentSelect} />
       <Banner position={Position.BOTTOM} id={Keys.bannersIds.MainScreen} />
     </View>

@@ -1,42 +1,34 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { FlatList, Modal, StyleSheet, View } from 'react-native';
+import { FlatList, Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Continent } from '../../constants/continent';
-import { ContinentType } from '../../types/continent.type';
+import { getContinentCards } from '../../data/continentCards';
+import { ContinentCard } from '../../types/continentcard.type';
 import { Colors } from '../../values/colors';
 import { ImageButton } from '../interface/ImageButton/ImageButton';
-import { ContinentShelf } from './ContinentShelf';
 
 interface ContinentsSelectorProps {
+  /** Windows visibility */
   visible: boolean;
+  /** Triggered on window close */
   onClose: () => void;
+  /** Triggered on continent select */
   onSelect: (continent: Continent) => void;
 }
 export const ContinentsSelector: React.FC<ContinentsSelectorProps> = ({ visible, onClose, onSelect }) => {
   const { t } = useTranslation();
 
-  const continents: ContinentType[] = [
-    { name: t('AS'), img: require('../../assets/asia.jpg'), continent: Continent.as },
-    { name: t('EU'), img: require('../../assets/europe.jpg'), continent: Continent.eu },
-    { name: t('NA'), img: require('../../assets/north_america.jpg'), continent: Continent.na },
-    { name: t('SA'), img: require('../../assets/south_america.jpg'), continent: Continent.sa },
-    { name: t('AF'), img: require('../../assets/africa.jpg'), continent: Continent.af },
-    { name: t('AU'), img: require('../../assets/australia.jpg'), continent: Continent.au }
-  ];
-
   return (
-    <View style={styles.centeredView}>
-      <Modal animationType='fade' transparent={true} visible={visible} onRequestClose={onClose}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <ImageButton img={require('../../assets/close.png')} buttonStyle={styles.closeBtn} onPress={onClose} />
-            <View style={styles.list}>
-              <FlatList data={continents} renderItem={({ item }) => <ContinentShelf key={item.name} data={item} onSelect={onSelect} />} />
-            </View>
+    <Modal animationType='fade' transparent={true} visible={visible} onRequestClose={onClose}>
+      <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+          <ImageButton img={require('../../assets/close.png')} buttonStyle={styles.closeBtn} onPress={onClose} />
+          <View style={styles.list}>
+            <FlatList data={getContinentCards(t)} renderItem={({ item }) => <ContinentShelf key={item.name} data={item} onPress={onSelect} />} />
           </View>
         </View>
-      </Modal>
-    </View>
+      </View>
+    </Modal>
   );
 };
 
@@ -64,7 +56,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    height: '70%',
+    height: '70%'
   },
   closeBtn: {
     position: 'absolute',
@@ -76,5 +68,47 @@ const styles = StyleSheet.create({
     borderRadius: 32,
     backgroundColor: Colors.backgroundTransparent,
     zIndex: 10
+  }
+});
+
+interface ContinentProps {
+  /** Continent Card data */
+  data: ContinentCard;
+  /** Triggered on continent press*/
+  onPress: (continent: Continent) => void;
+}
+const ContinentShelf: React.FC<ContinentProps> = ({ data, onPress }) => {
+  return (
+    <TouchableOpacity style={shelfStyles.cont} onPress={() => onPress(data.continent)}>
+      <Text style={shelfStyles.text}>{data.name}</Text>
+      <Image style={shelfStyles.img} source={data.img} />
+    </TouchableOpacity>
+  );
+};
+
+const shelfStyles = StyleSheet.create({
+  cont: {
+    flex: 1,
+    height: 150,
+    width: '100%',
+    padding: 0,
+    paddingTop: 5,
+    paddingStart: 3,
+    paddingEnd: 3,
+    paddingBottom: 5,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  img: {
+    borderRadius: 20,
+    height: '100%',
+    width: '100%'
+  },
+  text: {
+    position: 'absolute',
+    fontSize: 40,
+    color: Colors.white,
+    fontWeight: 'bold',
+    zIndex: 2
   }
 });

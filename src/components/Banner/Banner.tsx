@@ -4,14 +4,16 @@ import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads'
 import { Position } from '../../constants/position';
 
 interface BannerProps {
+  /** Banner Position of the screen */
   position: Position;
+  /** Banner id */
   id: string;
 }
 
 export const Banner: React.FC<BannerProps> = ({ position, id }) => {
   return (
     <View style={[styles.banner, position == Position.TOP ? { top: 0 } : { bottom: 0 }]}>
-      <BannerAd unitId={id ? id : TestIds.BANNER} size={BannerAdSize.BANNER} />
+      <BannerAd unitId={__DEV__ ? TestIds.BANNER : id} size={BannerAdSize.BANNER} />
     </View>
   );
 };

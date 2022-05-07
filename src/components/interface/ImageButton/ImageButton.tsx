@@ -2,9 +2,13 @@ import React from 'react';
 import { Image, ImageSourcePropType, ImageStyle, StyleProp, StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
 
 interface ImageButtonProps {
+  /** Triggered on button press */
   img: ImageSourcePropType;
-  buttonStyle: StyleProp<ViewStyle>;
+  /** Triggered on button press */
   onPress?: () => void;
+  /** Button style */
+  buttonStyle: StyleProp<ViewStyle>;
+  /** Icon style */
   iconStyle?: StyleProp<ImageStyle>;
 }
 export const ImageButton: React.FC<ImageButtonProps> = ({ buttonStyle, onPress, img, iconStyle }) => {

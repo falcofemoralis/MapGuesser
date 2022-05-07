@@ -2,35 +2,30 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
-import { Lang } from '../../types/lang';
+import { getLanguages } from '../../data/languages';
 import { Colors } from '../../values/colors';
 import { Dimens } from '../../values/dimens';
 
 interface LanguagePickerProps {}
 export const LanguagePicker: React.FC<LanguagePickerProps> = () => {
   const { i18n } = useTranslation();
+  const languages = getLanguages();
 
-  const languages: Lang[] = [
-    { name: 'en', label: 'English' },
-    { name: 'ua', label: 'Українська' },
-    { name: 'pl', label: 'Polskie' },
-    { name: 'es', label: 'Español' },
-    { name: 'ru', label: 'Русский' },
-    { name: 'fr', label: 'Français' },
-    { name: 'de', label: 'Deutsch' }
-  ];
-
-  const getLanguage = (name: string): number => {
-    return languages.findIndex(lang => lang.name == name);
+  /**
+   * Get default language index
+   * @returns index in languages array
+   */
+  const getDefaultLanguage = (): number => {
+    return languages.findIndex(lang => lang.code == i18n.language);
   };
 
   return (
     <View>
       <SelectDropdown
-        defaultValueByIndex={getLanguage(i18n.language)}
-        data={languages.map(lang => lang.label)}
+        defaultValueByIndex={getDefaultLanguage()}
+        data={languages.map(lang => lang.name)}
         onSelect={(selectedItem, index) => {
-          i18n.changeLanguage(languages[index].name);
+          i18n.changeLanguage(languages[index].code);
         }}
         buttonTextAfterSelection={(selectedItem, index) => {
           // text represented after item is selected

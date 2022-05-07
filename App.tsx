@@ -19,6 +19,8 @@ mobileAds()
 const Stack = createStackNavigator<RootStackParamList>();
 
 const App = () => {
+  //if (__DEV__) console.warn('Running in dev mode');
+
   LogBox.ignoreLogs(["exported from 'deprecated-react-native-prop-types'."]);
 
   return (

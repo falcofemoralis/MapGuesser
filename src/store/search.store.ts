@@ -5,10 +5,10 @@ import { SearchPlace } from './../services/map.service';
 
 class SearchStore {
   mapRef?: MutableRefObject<MapView | null>;
-  foundPlace: SearchPlace | null = null;
-  isSearching: boolean = false;
-  searchDelay: number = 0;
-  placeForSearch: string | null = null;
+  foundPlace: SearchPlace | null = null; // place that was selected from the list
+  searchDelay: number = 0; // delay until search start
+  isSearching: boolean = false; // is current search is active
+  placeForSearch: string | null = null; // saved text for search
 
   constructor() {
     makeAutoObservable(this, {}, { deep: true });

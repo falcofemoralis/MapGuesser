@@ -1,4 +1,4 @@
-export enum Game {
+export enum PlayMode {
   CLASSIC,
   CONTINENTS
 }
