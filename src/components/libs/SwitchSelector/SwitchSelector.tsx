@@ -154,7 +154,7 @@ export default class SwitchSelector extends Component {
                 {
                   height: 30,
                   width: 30,
-                  tintColor: isSelected ? selectedColor : textColor
+                  // tintColor: isSelected ? selectedColor : textColor
                 },
                 imageStyle
               ]}

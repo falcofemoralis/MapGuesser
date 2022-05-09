@@ -24,4 +24,5 @@ export type RootStackParamList = {
   Main: undefined;
   Game: GameProps;
   Result: ResultProps;
+  Select: undefined;
 };

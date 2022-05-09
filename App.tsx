@@ -8,6 +8,7 @@ import { RootStackParamList } from './src/screens';
 import GameScreen from './src/screens/game.screen';
 import MainScreen from './src/screens/main.screen';
 import ResultScreen from './src/screens/result.screen';
+import { SelectScreen } from './src/screens/select.screen';
 import { Colors } from './src/values/colors';
 
 mobileAds()
@@ -35,6 +36,7 @@ const App = () => {
         <Stack.Navigator>
           <Stack.Screen name='Main' component={MainScreen} options={{ headerShown: false }} />
           <Stack.Screen name='Game' component={GameScreen} options={{ headerShown: false }} />
+          <Stack.Screen name='Select' component={SelectScreen} options={{ headerShown: false }} />
           <Stack.Screen name='Result' component={ResultScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>

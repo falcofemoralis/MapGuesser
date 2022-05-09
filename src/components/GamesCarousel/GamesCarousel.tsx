@@ -3,15 +3,18 @@ import { useTranslation } from 'react-i18next';
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Carousel from 'react-native-snap-carousel'; // Version can be specified in package.json
 import { getGameCards } from '../../data/gameCards';
-import { gameStore } from '../../store/game.store';
+import { MAIN_CONTAINER_PADDING } from '../../screens/main.screen';
 import { userStore } from '../../store/user.store';
 import { GameCard } from '../../types/gamecard.type';
 import { Colors } from '../../values/colors';
 import { Dimens } from '../../values/dimens';
 
-const SLIDER_WIDTH = Dimensions.get('window').width;
-const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);
-const ITEM_HEIGHT = Math.round((ITEM_WIDTH * 5) / 4);
+const SLIDER_WIDTH = Dimensions.get('window').width - MAIN_CONTAINER_PADDING * 2;
+const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.95);
+const ITEM_HEIGHT = Math.round((ITEM_WIDTH * 5) / 9);
+
+const DECK_SIZE = '35%';
+const SMALL_DECK_SIZE = '23%';
 
 interface GamesCarouselProps {
   /** Triggered on game select */
@@ -34,15 +37,15 @@ export const GamesCarousel: React.FC<GamesCarouselProps> = ({ onSelect }) => {
     return (
       <TouchableOpacity style={styles.itemContainer} onPress={() => onSelect(item)} disabled={index != currentIndex || !isUnlocked(item.requiredLvl)}>
         <Image style={styles.preview} source={item.preview} />
-        <View style={styles.deck} />
-        <View style={styles.deckContainer}>
+        <View style={[styles.deck, { height: isUnlocked(item.requiredLvl) ? SMALL_DECK_SIZE : DECK_SIZE }]} />
+        <View style={[styles.deckContainer, { height: isUnlocked(item.requiredLvl) ? SMALL_DECK_SIZE : DECK_SIZE }]}>
+          <Text style={styles.title}>{item.title}</Text>
           {!isUnlocked(item.requiredLvl) && (
             <Text style={styles.level}>
               {t('UNLOCKED_AT_1')} {item.requiredLvl} {t('UNLOCKED_AT_2')}
             </Text>
           )}
-          <Text style={styles.title}>{item.title}</Text>
-          <Text style={styles.description}>{item.description}</Text>
+          {/* <Text style={styles.description}>{item.description}</Text> */}
         </View>
       </TouchableOpacity>
     );
@@ -59,6 +62,7 @@ export const GamesCarousel: React.FC<GamesCarouselProps> = ({ onSelect }) => {
       renderItem={_renderItem}
       sliderWidth={SLIDER_WIDTH}
       itemWidth={ITEM_WIDTH}
+      itemHeight={ITEM_HEIGHT}
       onSnapToItem={index => setIndex(index)}
     />
   );
@@ -66,7 +70,8 @@ export const GamesCarousel: React.FC<GamesCarouselProps> = ({ onSelect }) => {
 
 const styles = StyleSheet.create({
   carouselContainer: {
-    marginTop: 15
+    marginTop: 15,
+    marginBottom: 15 //60
   },
   itemContainer: {
     width: ITEM_WIDTH,
@@ -86,22 +91,20 @@ const styles = StyleSheet.create({
     position: 'absolute',
     opacity: 0.6,
     backgroundColor: '#000',
-    height: '35%',
     width: '100%',
     bottom: 0,
     zIndex: 5
   },
   deckContainer: {
     position: 'absolute',
-    height: '35%',
     width: '100%',
     bottom: 0,
     zIndex: 6,
-    padding: 16
+    padding: 12
   },
   title: {
     color: Colors.white,
-    fontSize: Dimens.headText,
+    fontSize: Dimens.normalText,
     fontWeight: 'bold'
   },
   description: {
