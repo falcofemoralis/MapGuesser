@@ -135,13 +135,13 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
         {/** Main */}
         <View style={[styles.mainContainer]}>
           <View style={[styles.firstRow]}>
-            <GameButton style={[styles.leftGameButton]} img={require('../assets/mp.png')} text='Multiplayer' onPress={() => navigation.navigate('Select')} />
-            <GameButton style={[styles.leftGameButton]} img={require('../assets/challenges.png')} text='Challenges' />
+            <GameButton style={[styles.leftGameButton]} img={require('../assets/mp.png')} title='Multiplayer' onPress={() => navigation.navigate('Select')} />
+            <GameButton style={[styles.leftGameButton]} img={require('../assets/challenges.png')} title='Challenges' />
           </View>
           <View style={[styles.secondRow]}>
-            <GameButton style={styles.rightSmallGameButton} img={require('../assets/achievements.png')} text='Achievements' iconStyle={styles.gameButtonIcon} />
-            <GameButton style={styles.rightGameButton} img={require('../assets/shop.png')} text='Shop' />
-            <GameButton style={styles.rightSmallGameButton} img={require('../assets/leaderboard.png')} text='Leaderboard' iconStyle={styles.gameButtonIcon} />
+            <GameButton style={styles.rightSmallGameButton} img={require('../assets/achievements.png')} title='Achievements' iconStyle={styles.gameButtonIcon} />
+            <GameButton style={styles.rightGameButton} img={require('../assets/shop.png')} title='Shop' />
+            <GameButton style={styles.rightSmallGameButton} img={require('../assets/leaderboard.png')} title='Leaderboard' iconStyle={styles.gameButtonIcon} />
           </View>
         </View>
         {/* <Text style={styles.headerText}>Game modes</Text> */}

@@ -163,8 +163,8 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
             Playtime <Text style={styles.resultTextBold}>{ProgressManager.getTotalPlaytime(playtime)}</Text> TODOminutes.
           </Text> */}
           <View style={GlobalStyles.rcc}>
-            <GameButton img={require('../assets/menu.png')} text={t('MAIN_MENU')} onPress={toMenu} />
-            {isMoreRounds() && <GameButton img={require('../assets/next.png')} text={t('NEXT_ROUND')} onPress={onNextRound} />}
+            <GameButton img={require('../assets/menu.png')} title={t('MAIN_MENU')} onPress={toMenu} />
+            {isMoreRounds() && <GameButton img={require('../assets/next.png')} title={t('NEXT_ROUND')} onPress={onNextRound} />}
           </View>
         </View>
       </View>

@@ -2,6 +2,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Image, StyleSheet, Text, View, Dimensions } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import { ContinentsCarousel } from '../components/ContinentsCarousel/ContinentsCarousel';
+import { ContinentsSelector } from '../components/ContinentsSelector/ContinentsSelector';
 import { GameButton } from '../components/interface/GameButton/GameButton';
 import SwitchSelector from '../components/libs/SwitchSelector/SwitchSelector';
 import Props from '../types/props.type';
@@ -16,15 +18,15 @@ export const SelectScreen: React.FC<Props<'Select'>> = ({ navigation, route }) =
   return (
     <View style={styles.container}>
       <View style={styles.previewContainer}>
-        <Image source={require('../assets/europe.jpg')} style={styles.preview} />
-        <Text style={styles.previewText}>NORMAL</Text>
-      </View>
-      <ScrollView style={styles.scroll}>
-        <View style={styles.descriptionContainer}>
-          <Text style={styles.descriptionTitle}>Description</Text>
+        <Image source={require('../assets/europe.jpg')} style={styles.previewImg} />
+        <View style={styles.previewTitle}>
+          <Text style={styles.previewText}>NORMAL</Text>
           <Text style={styles.descriptionText}>{t('CLASSIC_TITLE')}</Text>
         </View>
-        <View style={[GlobalStyles.ccc]}>
+      </View>
+      <ScrollView style={styles.scroll}>
+        <View style={[GlobalStyles.ccc, styles.mainContainer]}>
+          {true && <ContinentsCarousel onSelect={() => {}} />}
           <SwitchSelector
             initial={0}
             style={styles.selector}
@@ -53,14 +55,39 @@ export const SelectScreen: React.FC<Props<'Select'>> = ({ navigation, route }) =
               { label: 'Time', value: 'm' } //images.masculino = require('./path_to/assets/img/masculino.png')
             ]}
           />
+          <SwitchSelector
+            initial={0}
+            style={styles.selector}
+            onPress={(value: any) => console.log(value)}
+            textColor={Colors.white}
+            selectedColor={Colors.white}
+            buttonColor={Colors.primaryColor}
+            backgroundColor={Colors.backgroundOpposite}
+            options={[
+              { label: 'Free', value: 'f' }, //images.feminino = require('./path_to/assets/img/feminino.png')
+              { label: 'Paid', value: 'm' } //images.masculino = require('./path_to/assets/img/masculino.png')
+            ]}
+          />
+          <Text style={styles.hintText}>
+            Paid game requires 10 coins to run. You will earn 0.3 coin in free game. You can watch ad or buy coins in the shop
+          </Text>
+        </View>
+        {/* <Text style={styles.hintText}>Paid games has better panorama images and they're the best for better gaming experience.</Text> */}
+        <View style={[GlobalStyles.rcc, styles.buttons]}>
+          <GameButton style={styles.smallButton} title='+5' img={require('../assets/advertisement.png')} titleIcon={require('../assets/coin.png')} />
+          <GameButton
+            style={styles.playButton}
+            iconStyle={styles.playButtonIcon}
+            title='Play game'
+            subTitle='-10'
+            subTitleIcon={require('../assets/coin.png')}
+            textStyle={{ fontWeight: 'bold' }}
+            textIconStyle={{ width: '15%' }}
+          />
+          {/* <GameButton style={styles.playButton} iconStyle={styles.playButtonIcon} img={require('../assets/paid.jpg')} title='Paid' />  */}
+          <GameButton style={styles.smallButton} title='shop' img={require('../assets/shop.png')} />
         </View>
       </ScrollView>
-      <View style={[GlobalStyles.rcc, styles.buttons]}>
-        <GameButton style={styles.smallButton} text='+5' img={require('../assets/coin.png')} />
-        <GameButton style={styles.playButton} img={require('../assets/menu.png')} text='SD' />
-        <GameButton style={styles.playButton} img={require('../assets/menu.png')} text='HD (-10 coins)' />
-        <GameButton style={styles.smallButton} text='shop' img={require('../assets/shop.png')} />
-      </View>
     </View>
   );
 };
@@ -78,24 +105,28 @@ const styles = StyleSheet.create({
     padding: MAIN_CONTAINER_PADDING
   },
   previewContainer: {
-    height: '35%',
+    height: '30%',
     width: '100%'
   },
-  preview: {
+  previewImg: {
     height: '100%',
     width: '100%'
   },
-  previewText: {
+  previewTitle: {
     position: 'absolute',
     bottom: 0,
     left: 0,
+    width: '100%',
     padding: 10,
+    backgroundColor: Colors.backgroundTransparent
+  },
+  previewText: {
     color: Colors.white,
     fontWeight: 'bold',
     fontSize: 40
   },
   descriptionContainer: {
-    marginTop: 10,
+    marginTop: 5,
     marginBottom: 10
   },
   descriptionTitle: {
@@ -104,27 +135,35 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   descriptionText: {
-    color: Colors.gray,
+    color: Colors.white,
     fontSize: Dimens.normalText
+  },
+  mainContainer: {
+    padding: 5
   },
   selector: {
     marginTop: 10,
     marginBottom: 10
   },
   buttons: {
-    position: 'absolute',
-    bottom: 0,
-    marginTop: 10,
     width: '100%',
-    padding: 15
+    padding: 5
   },
   playButton: {
-    margin: 0,
-    width: SCREEN_WIDTH / 4
+    aspectRatio: 3,
+    width: SCREEN_WIDTH / 2,
+    backgroundColor: Colors.secondaryColor
+  },
+  playButtonIcon: {
+    position: 'absolute',
+    height: '120%',
+    width: '120%'
   },
   smallButton: {
-    margin: 0,
-    width: SCREEN_WIDTH / 4 / 2,
-    borderRadius: 5
+    width: SCREEN_WIDTH / 4 / 1.5
+  },
+  hintText: {
+    color: Colors.white,
+    fontSize: Dimens.normalText
   }
 });
