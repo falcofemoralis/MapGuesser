@@ -1,18 +1,18 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { Continent } from '../constants/continent';
-import { PlayMode } from '../constants/playmode';
-import { BeginnerPlaces } from '../data/beginnerPlaces';
-import { ContinentPlaces } from '../data/continentPlaces';
-import ImagesService from '../services/images.service';
-import { generateCoordinate } from '../utils/coordinates.util';
-import { Misc } from '../values/misc';
-import { GameData } from './../screens/index';
-import { Image } from './../services/images.service';
-import { userStore } from './user.store';
+import { Continent } from '../../constants/continent';
+import { PlayMode } from '../../constants/playmode';
+import { BeginnerPlaces } from '../../data/beginnerPlaces';
+import { ContinentPlaces } from '../../data/continentPlaces';
+import MapillaryImagesService from './MapillaryImages.service';
+import { generateCoordinate } from '../../utils/coordinates.util';
+import { Misc } from '../../values/misc';
+import { GameData } from '../../screens/index';
+import { Image } from './MapillaryImages.service';
+import { userStore } from '../../store/user.store';
 
 const DELAY = 350;
 
-class Core {
+class MapillaryСore {
   images: Image[] | null = null; // available street view images
   currentImage: Image | null = null; // current street view image
 
@@ -33,7 +33,7 @@ class Core {
      * GETTING REGION DEPENDING ON GAME OPTIONS
      */
     let region;
-    if (playMode == PlayMode.CLASSIC) {
+    if (playMode == PlayMode.NORMAL) {
       if (userStore.progress.lvl <= Misc.UNLOCK_ALL_LVL) {
         region = BeginnerPlaces;
       } else {
@@ -68,7 +68,7 @@ class Core {
     /**
      * GETTING IMAGES, FILTER DEPENDING ON OPTIONS
      */
-    ImagesService.searchFromMapillary(startPoint)
+    MapillaryImagesService.searchForImages(startPoint)
       .then(images => {
         images = images.filter(img => img.quality_score > Misc.REQUIRED_QUALITY);
 
@@ -141,4 +141,4 @@ class Core {
   }
 }
 
-export const core = new Core();
+export const mapillaryСore = new MapillaryСore();

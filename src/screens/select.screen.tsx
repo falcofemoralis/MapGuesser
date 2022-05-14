@@ -6,6 +6,9 @@ import { ContinentsCarousel } from '../components/ContinentsCarousel/ContinentsC
 import { ContinentsSelector } from '../components/ContinentsSelector/ContinentsSelector';
 import { GameButton } from '../components/interface/GameButton/GameButton';
 import SwitchSelector from '../components/libs/SwitchSelector/SwitchSelector';
+import { GameMode } from '../constants/gamemode';
+import { PlayMode } from '../constants/playmode';
+import { StreetViewMode } from '../constants/streetviewmode';
 import Props from '../types/props.type';
 import { Colors } from '../values/colors';
 import { Dimens } from '../values/dimens';
@@ -14,6 +17,11 @@ import { MAIN_CONTAINER_PADDING } from './main.screen';
 
 export const SelectScreen: React.FC<Props<'Select'>> = ({ navigation, route }) => {
   const { t } = useTranslation();
+  let streetViewMode: StreetViewMode = StreetViewMode.FREE;
+
+  const playGame = () => {
+    navigation.replace('Game', { gameMode: GameMode.SINGLE, playMode: PlayMode.NORMAL, streetViewMode });
+  };
 
   return (
     <View style={styles.container}>
@@ -27,7 +35,7 @@ export const SelectScreen: React.FC<Props<'Select'>> = ({ navigation, route }) =
       <ScrollView style={styles.scroll}>
         <View style={[GlobalStyles.ccc, styles.mainContainer]}>
           {true && <ContinentsCarousel onSelect={() => {}} />}
-          <SwitchSelector
+          {/* <SwitchSelector
             initial={0}
             style={styles.selector}
             onPress={(value: any) => console.log(value)}
@@ -40,7 +48,7 @@ export const SelectScreen: React.FC<Props<'Select'>> = ({ navigation, route }) =
               { label: 'Normal', value: 'm' }, //images.masculino = require('./path_to/assets/img/masculino.png')
               { label: 'Hard', value: 'm' } //images.masculino = require('./path_to/assets/img/masculino.png')
             ]}
-          />
+          /> */}
           <SwitchSelector
             initial={0}
             style={styles.selector}
@@ -58,14 +66,14 @@ export const SelectScreen: React.FC<Props<'Select'>> = ({ navigation, route }) =
           <SwitchSelector
             initial={0}
             style={styles.selector}
-            onPress={(value: any) => console.log(value)}
+            onPress={(value: StreetViewMode) => (streetViewMode = value)}
             textColor={Colors.white}
             selectedColor={Colors.white}
             buttonColor={Colors.primaryColor}
             backgroundColor={Colors.backgroundOpposite}
             options={[
-              { label: 'Free', value: 'f' }, //images.feminino = require('./path_to/assets/img/feminino.png')
-              { label: 'Paid', value: 'm' } //images.masculino = require('./path_to/assets/img/masculino.png')
+              { label: 'Free', value: StreetViewMode.FREE },
+              { label: 'Paid', value: StreetViewMode.PAID }
             ]}
           />
           <Text style={styles.hintText}>
@@ -83,6 +91,7 @@ export const SelectScreen: React.FC<Props<'Select'>> = ({ navigation, route }) =
             subTitleIcon={require('../assets/coin.png')}
             textStyle={{ fontWeight: 'bold' }}
             textIconStyle={{ width: '15%' }}
+            onPress={playGame}
           />
           {/* <GameButton style={styles.playButton} iconStyle={styles.playButtonIcon} img={require('../assets/paid.jpg')} title='Paid' />  */}
           <GameButton style={styles.smallButton} title='shop' img={require('../assets/shop.png')} />

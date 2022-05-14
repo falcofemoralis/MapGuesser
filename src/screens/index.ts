@@ -1,3 +1,4 @@
+import { StreetViewMode } from './../constants/streetviewmode';
 import { Continent } from './../constants/continent';
 import { LatLng } from 'react-native-maps';
 import { PlayMode } from '../constants/playmode';
@@ -11,6 +12,7 @@ export interface GameData {
 interface GameProps {
   playMode: PlayMode;
   gameMode: GameMode; 
+  streetViewMode: StreetViewMode;
   gameData?: GameData; 
 }
 

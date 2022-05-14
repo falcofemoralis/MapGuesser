@@ -4,8 +4,8 @@ import { LatLng } from 'react-native-maps';
 import { GameMode } from '../../constants/gamemode';
 import { PlayMode } from '../../constants/playmode';
 import { GameData } from '../../screens';
-import { Image } from '../../services/images.service';
-import { core } from '../../store/core.store';
+import { Image } from './MapillaryImages.service';
+import { mapillaryСore } from './MapillaryСore.store';
 import { Misc } from '../../values/misc';
 import { LoadingPreview } from '../interface/LoadingPreview/LoadingPreview';
 import MapillaryWeb from './MapillaryWeb';
@@ -37,17 +37,17 @@ const Mapillary: React.FC<MapillaryProps> = observer(({ onMove, onInit, gameMode
   };
 
   // if image is not exists and attempts is not 999, then try to init mapillary
-  if (!core.currentImage && attempts != 999) {
-    core.init(playMode, gameData, onSuccess, onFail);
+  if (!mapillaryСore.currentImage && attempts != 999) {
+    mapillaryСore.init(playMode, gameData, onSuccess, onFail);
   }
 
   // if image is exist then emit coordinates update
-  if (core.currentImage && core.currentImage.computed_geometry.coordinates) {
-    onMove({ latitude: core.currentImage.computed_geometry.coordinates[1], longitude: core.currentImage.computed_geometry.coordinates[0] });
+  if (mapillaryСore.currentImage && mapillaryСore.currentImage.computed_geometry.coordinates) {
+    onMove({ latitude: mapillaryСore.currentImage.computed_geometry.coordinates[1], longitude: mapillaryСore.currentImage.computed_geometry.coordinates[0] });
   }
 
-  return core.currentImage ? (
-    <MapillaryWeb imageId={core.currentImage.id} gameMode={gameMode} onMove={onMove} />
+  return mapillaryСore.currentImage ? (
+    <MapillaryWeb imageId={mapillaryСore.currentImage.id} gameMode={gameMode} onMove={onMove} />
   ) : (
     <LoadingPreview progress={(attempts ?? 0) / Misc.MAX_SEARCH_ATTEMPTS} />
   );

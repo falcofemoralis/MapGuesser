@@ -48,7 +48,7 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
     setGameData(gameData);
 
     // depending on play mode, perform required action
-    if (gameInfo.playMode == PlayMode.CLASSIC) {
+    if (gameInfo.playMode == PlayMode.NORMAL) {
       // in classic we just start a game
       startGame(gameInfo, gameData);
     } else if (gameInfo.playMode == PlayMode.CONTINENTS) {

@@ -2,15 +2,17 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, BackHandler, StyleSheet, ToastAndroid } from 'react-native';
 import { LatLng } from 'react-native-maps';
+import { GoogleStreetView } from '../components/GoogleStreetView/GoogleStreetView';
 import { ImageButton } from '../components/interface/ImageButton/ImageButton';
 import Mapillary from '../components/Mapillary/Mapillary';
 import MapPanel from '../components/MapPanel/MapPanel';
 import { TopProgressBar, TOP_PROGRESS_BAR_HEIGHT } from '../components/TopProgressBar/TopProgressBar';
 import { GameMode } from '../constants/gamemode';
-import { core } from '../store/core.store';
+import { mapillaryСore } from '../components/Mapillary/MapillaryСore.store';
 import Props from '../types/props.type';
 import { Colors } from '../values/colors';
 import { Misc } from '../values/misc';
+import { StreetViewMode } from '../constants/streetviewmode';
 
 const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
   const { t } = useTranslation();
@@ -38,7 +40,7 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
         style: 'destructive',
         onPress: () => {
           BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-          core.reset();
+          mapillaryСore.reset();
           navigation.replace('Main');
         }
       }
@@ -46,10 +48,9 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
   };
 
   /**
-   * Listener for mapillary init
+   * Listener for streetview init
    */
-  const onMapillaryInit = () => {
-    // When screen of Mapillary was init, save current time
+  const onStreetViewInit = () => {
     startTime = Date.now();
   };
 
@@ -76,7 +77,7 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
     if (toCoordinates && fromCoordinates) {
       const playtime = Date.now() - startTime;
       BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-      core.reset();
+      mapillaryСore.reset();
       navigation.navigate('Result', { from: fromCoordinates, to: toCoordinates, playtime, ...route.params });
     }
   };
@@ -91,9 +92,11 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
         text: t('REFRESH'),
         style: 'destructive',
         onPress: () => {
-          core.refresh(() => {
-            ToastAndroid.showWithGravityAndOffset(t('NO_REFRESH'), ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
-          });
+          if (route.params.streetViewMode == StreetViewMode.FREE) {
+            mapillaryСore.refresh(() => {
+              ToastAndroid.showWithGravityAndOffset(t('NO_REFRESH'), ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
+            });
+          }
         }
       }
     ]);
@@ -111,12 +114,30 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
         <TopProgressBar style={styles.progress} round={(route.params.gameData.round ?? 0) + 1} max={Misc.MAX_ROUNDS} />
       )}
       <ImageButton img={require('../assets/logout.png')} buttonStyle={[styles.leaveBtn, styles.button, { top: getButtonHeight() }]} onPress={leaveGame} />
-      <ImageButton
-        img={require('../assets/refresh.png')}
-        buttonStyle={[styles.refreshBtn, styles.button, { top: getButtonHeight() }]}
-        onPress={refreshLocation}
-      />
-      <Mapillary onMove={onMove} onInit={onMapillaryInit} playMode={route.params.playMode} gameMode={route.params.gameMode} gameData={route.params.gameData} />
+      {route.params.streetViewMode == StreetViewMode.FREE && (
+        <ImageButton
+          img={require('../assets/refresh.png')}
+          buttonStyle={[styles.refreshBtn, styles.button, { top: getButtonHeight() }]}
+          onPress={refreshLocation}
+        />
+      )}
+      {route.params.streetViewMode == StreetViewMode.FREE ? (
+        <Mapillary
+          onMove={onMove}
+          onInit={onStreetViewInit}
+          playMode={route.params.playMode}
+          gameMode={route.params.gameMode}
+          gameData={route.params.gameData}
+        />
+      ) : (
+        <GoogleStreetView
+          onMove={onMove}
+          onInit={onStreetViewInit}
+          playMode={route.params.playMode}
+          gameMode={route.params.gameMode}
+          gameData={route.params.gameData}
+        />
+      )}
       <MapPanel onMarkerSet={onMarkerSet} onComplete={handleComplete} buttonStyle={[styles.mapBtn, styles.button]} />
     </>
   );

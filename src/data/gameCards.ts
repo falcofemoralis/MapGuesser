@@ -9,7 +9,7 @@ export const getGameCards = (t: any): GameCard[] => {
       preview: require('../assets/classic.jpg'),
       description: t('CLASSIC_TITLE'),
       gameMode: GameMode.SINGLE,
-      playMode: PlayMode.CLASSIC,
+      playMode: PlayMode.NORMAL,
       requiredLvl: 0
     },
     {
@@ -17,7 +17,7 @@ export const getGameCards = (t: any): GameCard[] => {
       preview: require('../assets/rounds.jpg'),
       description: t('SETS_ROUND_TITLE'),
       gameMode: GameMode.ROUND,
-      playMode: PlayMode.CLASSIC,
+      playMode: PlayMode.NORMAL,
       requiredLvl: 3
     },
     {
