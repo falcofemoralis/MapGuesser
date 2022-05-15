@@ -4,5 +4,5 @@ export enum Continent {
   eu = 'eu',
   as = 'as',
   af = 'af',
-  au = 'af'
+  au = 'au'
 }

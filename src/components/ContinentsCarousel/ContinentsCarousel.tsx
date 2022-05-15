@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Dimensions, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Carousel from 'react-native-snap-carousel'; // Version can be specified in package.json
 import { MAIN_CONTAINER_PADDING } from '../../screens/main.screen';
 import { ContinentCard } from '../../types/continentcard.type';
@@ -17,7 +17,7 @@ const SMALL_DECK_SIZE = '23%';
 
 interface ContinentsCarouselProps {
   /** Triggered on game select */
-  onSelect: (gameCard: ContinentCard) => void;
+  onSelect: (continentCard: ContinentCard) => void;
 }
 export const ContinentsCarousel: React.FC<ContinentsCarouselProps> = ({ onSelect }) => {
   const { t } = useTranslation();
@@ -26,12 +26,20 @@ export const ContinentsCarousel: React.FC<ContinentsCarouselProps> = ({ onSelect
 
   const _renderItem = ({ item, index }: { item: ContinentCard; index: number }) => {
     return (
-      <TouchableOpacity style={styles.itemContainer} onPress={() => onSelect(item)} disabled={index != currentIndex}>
+      <View style={styles.itemContainer}>
         <Image style={styles.preview} source={item.img} />
         <Text style={styles.title}>{item.name}</Text>
-      </TouchableOpacity>
+      </View>
     );
   };
+
+  const onSnap = (i: number) => {
+    setIndex(i);
+  };
+
+  console.log(`onSelect: ${cards[currentIndex].continent}`);
+
+  onSelect(cards[currentIndex]);
 
   return (
     <Carousel
@@ -45,7 +53,7 @@ export const ContinentsCarousel: React.FC<ContinentsCarouselProps> = ({ onSelect
       sliderWidth={SLIDER_WIDTH}
       itemWidth={ITEM_WIDTH}
       itemHeight={ITEM_HEIGHT}
-      onSnapToItem={index => setIndex(index)}
+      onSnapToItem={index => onSnap(index)}
     />
   );
 };
@@ -56,6 +64,8 @@ const styles = StyleSheet.create({
     marginBottom: 15 //60
   },
   itemContainer: {
+    marginTop: 12,
+    marginBottom: 12,
     width: ITEM_WIDTH,
     height: ITEM_HEIGHT + 20,
     alignItems: 'center',

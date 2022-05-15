@@ -129,7 +129,7 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
           })
         }
       >
-        <UserMarker to={currentCoordinates} from={selectedCoordinates} />
+        <UserMarker from={currentCoordinates} to={selectedCoordinates} />
         {isLastRound() && toJS(gameStore.rounds).map((round, i) => <UserMarker key={i} from={round.from} to={round.to} />)}
       </MapView>
       <View style={styles.container}>

@@ -5,10 +5,12 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { ContinentsCarousel } from '../components/ContinentsCarousel/ContinentsCarousel';
 import { GameButton } from '../components/interface/GameButton/GameButton';
 import SwitchSelector from '../components/libs/SwitchSelector/SwitchSelector';
+import { Continent } from '../constants/continent';
 import { GameMode } from '../constants/gamemode';
 import { PlayMode } from '../constants/playmode';
 import { StreetViewMode } from '../constants/streetviewmode';
 import { formatText } from '../translations/formatText';
+import { ContinentCard } from '../types/continentcard.type';
 import Props from '../types/props.type';
 import { Colors } from '../values/colors';
 import { Dimens } from '../values/dimens';
@@ -21,9 +23,10 @@ export const SelectScreen: React.FC<Props<'Select'>> = ({ navigation, route }) =
   const gameCard = route.params.gameCard;
   const [streetViewMode, setStreetViewMode] = React.useState(StreetViewMode.FREE);
   const [gameMode, setGameMode] = React.useState(GameMode.SINGLE);
+  let selectedContinent: Continent;
 
   const playGame = () => {
-    navigation.replace('Game', { gameSettings: { gameMode, playMode: gameCard.playMode, streetViewMode } });
+    navigation.replace('Game', { gameSettings: { gameMode, playMode: gameCard.playMode, streetViewMode }, playModeData: { continent: selectedContinent } });
   };
 
   return (
@@ -37,7 +40,7 @@ export const SelectScreen: React.FC<Props<'Select'>> = ({ navigation, route }) =
       </View>
       <ScrollView style={styles.scroll}>
         <View style={[GlobalStyles.ccc, styles.mainContainer]}>
-          {gameCard.playMode == PlayMode.CONTINENTS && <ContinentsCarousel onSelect={() => {}} />}
+          {gameCard.playMode == PlayMode.CONTINENTS && <ContinentsCarousel onSelect={continentCard => (selectedContinent = continentCard.continent)} />}
           <SwitchSelector
             initial={gameMode}
             style={styles.selector}

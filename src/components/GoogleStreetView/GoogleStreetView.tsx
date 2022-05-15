@@ -21,16 +21,8 @@ export const GoogleStreetView: React.FC<StreetViewSettings> = ({ onMove, onInit,
 
   const getCountry = () => {
     if (gameSettings.playMode == PlayMode.CONTINENTS) {
-      const keys = Object.keys(GoogleCountriesList);
-      let selectedKey = Continent.na.toString();
-      for (const key of keys) {
-        if (playModeData?.continent && key == playModeData.continent.toString()) {
-          selectedKey = key;
-          break;
-        }
-      }
-
-      const continent = GoogleCountriesList[selectedKey as Continent]; // get random continent
+      if(!playModeData?.continent) throw new Error('Continent mode must have selected continent')
+      const continent = GoogleCountriesList[playModeData.continent]; // get random continent
       return continent[Math.floor(Math.random() * continent.length)];
     } else {
       const values = Object.values(GoogleCountriesList);

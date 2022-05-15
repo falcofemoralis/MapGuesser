@@ -40,16 +40,8 @@ class MapillaryСore {
         region = values[Math.floor(Math.random() * values.length)];
       }
     } else if (playMode == PlayMode.CONTINENTS) {
-      const keys = Object.keys(ContinentPlaces);
-      let selectedKey = Continent.na.toString();
-      for (const key of keys) {
-        if (playModeData?.continent && key == playModeData.continent.toString()) {
-          selectedKey = key;
-          break;
-        }
-      }
-
-      region = ContinentPlaces[selectedKey as Continent]; // get random continent
+      if(!playModeData?.continent) throw new Error('Continent mode must have selected continent')
+      region = ContinentPlaces[playModeData?.continent]; // get random continent
     }
 
     if (!region) {
