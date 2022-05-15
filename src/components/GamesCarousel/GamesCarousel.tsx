@@ -2,10 +2,10 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Carousel from 'react-native-snap-carousel'; // Version can be specified in package.json
-import { getGameCards } from '../../data/gameCards';
 import { MAIN_CONTAINER_PADDING } from '../../screens/main.screen';
 import { userStore } from '../../store/user.store';
 import { GameCard } from '../../types/gamecard.type';
+import { Arrays } from '../../values/arrays';
 import { Colors } from '../../values/colors';
 import { Dimens } from '../../values/dimens';
 
@@ -22,6 +22,7 @@ interface GamesCarouselProps {
 }
 export const GamesCarousel: React.FC<GamesCarouselProps> = ({ onSelect }) => {
   const { t } = useTranslation();
+  const cards = Arrays.getGameCards(t);
   const [currentIndex, setIndex] = React.useState(0); // index of current item
 
   /**
@@ -56,7 +57,7 @@ export const GamesCarousel: React.FC<GamesCarouselProps> = ({ onSelect }) => {
       containerCustomStyle={styles.carouselContainer}
       firstItem={currentIndex}
       layout={'default'}
-      data={getGameCards(t)}
+      data={cards}
       enableMomentum={true}
       decelerationRate={'normal'}
       renderItem={_renderItem}

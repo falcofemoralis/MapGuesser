@@ -1,4 +1,5 @@
 export enum GameMode {
   SINGLE,
-  ROUND
+  ROUND,
+  TIME
 }

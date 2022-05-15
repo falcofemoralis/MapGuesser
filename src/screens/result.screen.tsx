@@ -5,7 +5,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BackHandler, Dimensions, Image, StyleSheet, Text, View } from 'react-native';
 import { AdEventType, InterstitialAd, TestIds } from 'react-native-google-mobile-ads';
-import MapView, { Marker, Polyline } from 'react-native-maps';
+import MapView, { LatLng, Marker, Polyline } from 'react-native-maps';
 import * as Progress from 'react-native-progress';
 import { Banner } from '../components/Banner/Banner';
 import { GameButton } from '../components/interface/GameButton/GameButton';
@@ -15,18 +15,19 @@ import { Unit } from '../constants/unit';
 import ProgressManager from '../managers/progress.manager';
 import { gameStore } from '../store/game.store';
 import { settingsStore } from '../store/settings.store';
+import { userStore } from '../store/user.store';
 import Props from '../types/props.type';
 import { Colors } from '../values/colors';
 import { Dimens } from '../values/dimens';
 import { Keys } from '../values/keys';
 import { Misc } from '../values/misc';
 import { GlobalStyles } from '../values/styles';
-import { userStore } from '../store/user.store';
 
 const interstitial = InterstitialAd.createForAdRequest(__DEV__ ? TestIds.INTERSTITIAL : Keys.interstellarIds.ResultScreenNext);
 
 const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
   const { t } = useTranslation();
+  const gameSettings = route.params.gameSettings;
   const mapRef = React.useRef<MapView | null>(null); // ref to map
   const currentCoordinates = { ...route.params.from }; // spread fix error
   const selectedCoordinates = { ...route.params.to };
@@ -37,22 +38,20 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
   const xp = ProgressManager.xp(distance); // calculate xp
   const accuracy = ProgressManager.accuracy(distance); // calculate accuracy
   const playtime = route.params.playtime; // user playtime
+  const [interstitialLoaded, setInterstitialLoaded] = React.useState(false);
 
   /**
    * Check round functions
    */
-  const isRounds = () => route.params.gameMode === GameMode.ROUND && route.params.gameData;
-  const isMoreRounds = () => isRounds() && (route.params.gameData?.round ?? 0) + 1 !== Misc.MAX_ROUNDS;
-  const isLastRound = () => isRounds() && (route.params.gameData?.round ?? 0) + 1 == Misc.MAX_ROUNDS;
-
-  const [loaded, setLoaded] = React.useState(false);
+  const isMoreRounds = () => gameStore.rounds.length + 1 !== Misc.MAX_ROUNDS;
+  const isLastRound = () => gameStore.rounds.length + 1 == Misc.MAX_ROUNDS;
 
   /**
    * Load interstitial ad
    */
   React.useEffect(() => {
     const unsubscribe = interstitial.addAdEventListener(AdEventType.LOADED, () => {
-      setLoaded(true);
+      setInterstitialLoaded(true);
     });
 
     console.log(`ads counter: ${settingsStore.adsCounter % Misc.ADS_PER_COUNTER}`);
@@ -60,6 +59,8 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
       // Start loading the interstitial straight away
       interstitial.load();
     }
+    settingsStore.updateAdsCounter();
+
     // Unsubscribe from events on unmount
     return unsubscribe;
   }, []);
@@ -72,33 +73,26 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
   /**
    * Navigate to next round
    */
-  const onNextRound = async () => {
-    const data = route.params.gameData;
-    if (loaded) {
+  const toNextRound = async () => {
+    if (interstitialLoaded) {
       interstitial.show();
     }
-
-    settingsStore.updateAdsCounter();
     gameStore.addRound({ from: currentCoordinates, to: selectedCoordinates });
-
-    if (data) {
-      navigation.replace('Game', { gameMode: route.params.gameMode, playMode: route.params.playMode, gameData: { ...data, round: (data.round ?? 0) + 1 } });
-    }
+    navigation.replace('Game', { gameSettings, playModeData: route.params.playModeData });
   };
 
   /**
-   * Navigate to main menu
+   * Navigate to main screen
    */
-  const toMenu = () => {
-    if (isRounds()) {
+  const toMainScreen = () => {
+    if (gameSettings.gameMode == GameMode.ROUND) {
       gameStore.resetRounds();
     }
 
-    if (loaded) {
+    if (interstitialLoaded) {
       interstitial.show();
     }
 
-    settingsStore.updateAdsCounter();
     navigation.replace('Main');
   };
 
@@ -134,21 +128,8 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
           })
         }
       >
-        <Marker coordinate={currentCoordinates}>
-          <Image source={require('../assets/user.png')} style={styles.userMarker} resizeMode='contain' />
-        </Marker>
-        <Marker coordinate={selectedCoordinates} />
-        <Polyline coordinates={[currentCoordinates, selectedCoordinates]} />
-        {isLastRound() &&
-          toJS(gameStore.rounds).map(round => (
-            <>
-              <Marker coordinate={round.from}>
-                <Image source={require('../assets/user.png')} style={styles.userMarker} resizeMode='contain' />
-              </Marker>
-              <Marker coordinate={round.to} />
-              <Polyline coordinates={[round.from, round.to]} />
-            </>
-          ))}
+        <UserMarker to={currentCoordinates} from={selectedCoordinates} />
+        {isLastRound() && toJS(gameStore.rounds).map((round, i) => <UserMarker key={i} from={round.from} to={round.to} />)}
       </MapView>
       <View style={styles.container}>
         <View style={styles.resultContainer}>
@@ -163,14 +144,33 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
             Playtime <Text style={styles.resultTextBold}>{ProgressManager.getTotalPlaytime(playtime)}</Text> TODOminutes.
           </Text> */}
           <View style={GlobalStyles.rcc}>
-            <GameButton img={require('../assets/menu.png')} title={t('MAIN_MENU')} onPress={toMenu} />
-            {isMoreRounds() && <GameButton img={require('../assets/next.png')} title={t('NEXT_ROUND')} onPress={onNextRound} />}
+            <GameButton style={styles.gameButton} img={require('../assets/menu.png')} title={t('MAIN_MENU')} onPress={toMainScreen} />
+            {gameSettings.gameMode == GameMode.ROUND && isMoreRounds() && (
+              <GameButton style={styles.gameButton} img={require('../assets/next.png')} title={t('NEXT_ROUND')} onPress={toNextRound} />
+            )}
           </View>
         </View>
       </View>
     </>
   );
 };
+
+interface UserMarkerProps {
+  from: LatLng;
+  to: LatLng;
+}
+const UserMarker: React.FC<UserMarkerProps> = ({ from, to }) => {
+  return (
+    <>
+      <Marker coordinate={from}>
+        <Image source={require('../assets/user.png')} style={styles.userMarker} resizeMode='contain' />
+      </Marker>
+      <Marker coordinate={to} />
+      <Polyline coordinates={[from, to]} />
+    </>
+  );
+};
+
 
 const styles = StyleSheet.create({
   map: {
@@ -214,7 +214,11 @@ const styles = StyleSheet.create({
   bar: {
     marginTop: 5,
     marginBottom: 5
+  },
+  gameButton: {
+    margin: 10
   }
 });
 
 export default ResultScreen;
+

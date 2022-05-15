@@ -1,13 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import Carousel from 'react-native-snap-carousel'; // Version can be specified in package.json
-import { getContinentCards } from '../../data/continentCards';
-import { getGameCards } from '../../data/gameCards';
 import { MAIN_CONTAINER_PADDING } from '../../screens/main.screen';
-import { userStore } from '../../store/user.store';
 import { ContinentCard } from '../../types/continentcard.type';
-import { GameCard } from '../../types/gamecard.type';
+import { Arrays } from '../../values/arrays';
 import { Colors } from '../../values/colors';
 import { Dimens } from '../../values/dimens';
 
@@ -24,7 +21,8 @@ interface ContinentsCarouselProps {
 }
 export const ContinentsCarousel: React.FC<ContinentsCarouselProps> = ({ onSelect }) => {
   const { t } = useTranslation();
-  const [currentIndex, setIndex] = React.useState(0); // index of current item
+  const cards = Arrays.getContinentCards(t);
+  const [currentIndex, setIndex] = React.useState(cards.length / 2); // index of current item
 
   const _renderItem = ({ item, index }: { item: ContinentCard; index: number }) => {
     return (
@@ -40,7 +38,7 @@ export const ContinentsCarousel: React.FC<ContinentsCarouselProps> = ({ onSelect
       containerCustomStyle={styles.carouselContainer}
       firstItem={currentIndex}
       layout={'default'}
-      data={getContinentCards(t)}
+      data={cards}
       enableMomentum={true}
       decelerationRate={'normal'}
       renderItem={_renderItem}

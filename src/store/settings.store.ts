@@ -39,10 +39,17 @@ class SettingsStore {
    * Update ads counter
    */
   async updateAdsCounter() {
-    StorageManager.write<number>(StorageItem.ADS, this.adsCounter);
+    console.log(`counter 1: ${this.adsCounter}`);
+    const newCounter = this.adsCounter + 1;
+    console.log(`counter 2: ${newCounter}`);
+
+    StorageManager.write<number>(StorageItem.ADS, newCounter);
 
     runInAction(() => {
-      this.adsCounter++;
+      this.adsCounter = newCounter;
+      console.log(`counter 3 ${this.adsCounter}`);
+      console.log("-----");
+      
     });
   }
 }

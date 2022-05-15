@@ -1,4 +1,5 @@
 export enum PlayMode {
   NORMAL,
-  CONTINENTS
+  CONTINENTS,
+  COUNTRIES
 }

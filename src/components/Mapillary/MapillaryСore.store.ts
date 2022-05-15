@@ -1,14 +1,13 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { Continent } from '../../constants/continent';
 import { PlayMode } from '../../constants/playmode';
-import { BeginnerPlaces } from '../../data/beginnerPlaces';
-import { ContinentPlaces } from '../../data/continentPlaces';
-import MapillaryImagesService from './MapillaryImages.service';
+import { BeginnerPlaces } from './data/beginnerPlaces';
+import { ContinentPlaces } from './data/continentPlaces';
+import { PlayModeData } from '../../screens';
+import { userStore } from '../../store/user.store';
 import { generateCoordinate } from '../../utils/coordinates.util';
 import { Misc } from '../../values/misc';
-import { GameData } from '../../screens/index';
-import { Image } from './MapillaryImages.service';
-import { userStore } from '../../store/user.store';
+import MapillaryImagesService, { Image } from './MapillaryImages.service';
 
 const DELAY = 350;
 
@@ -28,7 +27,7 @@ class MapillaryСore {
    * @param onFail - receiving image was failed
    * @returns
    */
-  async init(playMode: PlayMode, gameData: GameData | undefined, onSuccess: (image: Image) => void, onFail: () => void) {
+  async init(playMode: PlayMode, playModeData: PlayModeData | undefined, onSuccess: (image: Image) => void, onFail: () => void) {
     /**
      * GETTING REGION DEPENDING ON GAME OPTIONS
      */
@@ -44,7 +43,7 @@ class MapillaryСore {
       const keys = Object.keys(ContinentPlaces);
       let selectedKey = Continent.na.toString();
       for (const key of keys) {
-        if (gameData?.continent && key == gameData?.continent.toString()) {
+        if (playModeData?.continent && key == playModeData.continent.toString()) {
           selectedKey = key;
           break;
         }

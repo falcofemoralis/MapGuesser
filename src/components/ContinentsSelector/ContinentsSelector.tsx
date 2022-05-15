@@ -2,8 +2,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { FlatList, Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Continent } from '../../constants/continent';
-import { getContinentCards } from '../../data/continentCards';
 import { ContinentCard } from '../../types/continentcard.type';
+import { Arrays } from '../../values/arrays';
 import { Colors } from '../../values/colors';
 import { ImageButton } from '../interface/ImageButton/ImageButton';
 
@@ -24,7 +24,7 @@ export const ContinentsSelector: React.FC<ContinentsSelectorProps> = ({ visible,
         <View style={styles.modalView}>
           <ImageButton img={require('../../assets/close.png')} buttonStyle={styles.closeBtn} onPress={onClose} />
           <View style={styles.list}>
-            <FlatList data={getContinentCards(t)} renderItem={({ item }) => <ContinentShelf key={item.name} data={item} onPress={onSelect} />} />
+            <FlatList data={Arrays.getContinentCards(t)} renderItem={({ item }) => <ContinentShelf key={item.name} data={item} onPress={onSelect} />} />
           </View>
         </View>
       </View>

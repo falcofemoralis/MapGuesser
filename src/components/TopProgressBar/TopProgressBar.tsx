@@ -9,7 +9,7 @@ export const TOP_PROGRESS_BAR_HEIGHT = 56;
 interface TopProgressBarProps {
   /** Container style */
   style: StyleProp<ViewStyle>;
-  /** Current round in range 1...n */
+  /** Current round in range 0...n */
   round: number;
   /** Max rounds */
   max: number;
@@ -18,7 +18,7 @@ export const TopProgressBar: React.FC<TopProgressBarProps> = ({ style, round, ma
   return (
     <View style={[styles.container, style]}>
       <ProgressSteps
-        activeStep={round - 1}
+        activeStep={round}
         activeStepNumColor={Colors.primaryColor}
         completedProgressBarColor={Colors.primaryColor}
         completedStepIconColor={Colors.primaryColor}

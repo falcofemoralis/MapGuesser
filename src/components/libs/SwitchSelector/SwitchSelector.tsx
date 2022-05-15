@@ -24,9 +24,18 @@ export default class SwitchSelector extends Component {
   constructor(props: any) {
     super(props);
     const { initial, options } = props;
-    this.state = {
-      selected: initial
-    };
+
+    for (let i = 0; i < options.length; i++) {
+      const option = options[i];
+
+      if (initial === option.value) {
+        this.state = {
+          selected: i
+        };
+
+        break;
+      }
+    }
 
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: this.shouldSetResponder,
@@ -153,7 +162,7 @@ export default class SwitchSelector extends Component {
               style={[
                 {
                   height: 30,
-                  width: 30,
+                  width: 30
                   // tintColor: isSelected ? selectedColor : textColor
                 },
                 imageStyle

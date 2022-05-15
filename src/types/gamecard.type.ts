@@ -7,6 +7,5 @@ export interface GameCard {
   preview: ImageSourcePropType;
   description: string;
   playMode: PlayMode;
-  gameMode: GameMode;
   requiredLvl: number;
 }

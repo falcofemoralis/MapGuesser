@@ -11,7 +11,7 @@ export const LoadingPreview: React.FC<LoadingPreviewProps> = ({ progress }) => {
   return (
     <View style={styles.container}>
       <Progress.CircleSnail color={[Colors.primaryColor, 'red', 'green', 'blue']} />
-      {progress && <Progress.Bar style={styles.bar} color={Colors.primaryColor} progress={progress} width={Dimensions.get('window').width - 50} />}
+      {progress != undefined && <Progress.Bar style={styles.bar} color={Colors.primaryColor} progress={progress} width={Dimensions.get('window').width - 50} />}
     </View>
   );
 };

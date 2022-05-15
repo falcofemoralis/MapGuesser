@@ -9,6 +9,7 @@
         "netinfo",
         "playmode",
         "streetview",
+        "streetviewsettings",
         "Swipeable"
     ]
 }

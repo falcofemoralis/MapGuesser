@@ -2,14 +2,14 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
-import { getLanguages } from '../../data/languages';
+import { Arrays } from '../../values/arrays';
 import { Colors } from '../../values/colors';
 import { Dimens } from '../../values/dimens';
 
 interface LanguagePickerProps {}
 export const LanguagePicker: React.FC<LanguagePickerProps> = () => {
   const { i18n } = useTranslation();
-  const languages = getLanguages();
+  const languages = Arrays.getLanguages();
 
   /**
    * Get default language index

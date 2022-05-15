@@ -1,10 +1,11 @@
 import React from 'react';
 import { LatLng } from 'react-native-maps';
 import { WebView, WebViewMessageEvent } from 'react-native-webview';
-import { GameData } from '../../screens';
+import { Country } from '../../constants/country';
+import { PlayModeData } from '../../screens';
 
 interface GoogleStreetViewWebProps {
-  gameData?: GameData;
+  country: Country;
   /** Triggered on user moves to the next street view image */
   onMove: (coordinates: LatLng) => void;
 }
@@ -22,12 +23,40 @@ class GoogleStreetViewWeb extends React.Component<GoogleStreetViewWebProps> {
   };
 
   onInit = () => {
-    this.props.gameData;
-    const country = 'br';
-
     if (!this.isReady) {
+      console.log(`
+      $("#countries").val("${this.props.country}").change();
+      setTimeout(() => {
+          document.getElementsByClassName("handle")[0].style.display = "none";
+          document.getElementById("ctlSplitter").style.zIndex = "-1"
+
+          const toDelete = ["ad", "ctlUpper", "overlay_splitter", "zoomout", "behindzoomout", "zoomin", "behindzoomin", "menubutton", "behindmenubutton", "small", "big", "searchcontainer", "addressmobile"];
+
+          for (const to of toDelete) {
+            $("#" + to).css("cssText", "display: none !important;");
+          }
+
+          $("#ctlOuter").css("bottom", 0 + "px")
+          $("#ctlLower").css("top", 0 + "px")
+          google.maps.event.trigger(panorama, "resize")
+
+          const postPosition = () => {
+              var pos = panorama.getPosition();
+              window.ReactNativeWebView.postMessage(JSON.stringify({ lat: pos.lat(), lng: pos.lng() }));
+          }
+          postPosition();
+
+          panorama.addListener("position_changed", () => {
+              postPosition();
+          })
+
+          const ccb = document.getElementsByClassName("cc_button")[0];
+          if(ccb) ccb.click();
+      }, 1000)
+      `);
+
       this.webview?.injectJavaScript(`
-      $("#countries").val("${country}").change();
+      $("#countries").val("${this.props.country}").change();
       setTimeout(() => {
           document.getElementsByClassName("handle")[0].style.display = "none";
           document.getElementById("ctlSplitter").style.zIndex = "-1"

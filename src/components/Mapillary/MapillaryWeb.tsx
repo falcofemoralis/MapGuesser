@@ -6,11 +6,15 @@ import { Keys } from '../../values/keys';
 import { LatLng } from 'react-native-maps';
 import { TOP_PROGRESS_BAR_HEIGHT } from '../TopProgressBar/TopProgressBar';
 
+export enum SequenceButtonPosition {
+  TOP,
+  MARGIN_TOP
+}
 interface MapillaryWebProps {
   /** Street View image id*/
   imageId: string;
-  /** Game mode. Required for the correct buttons position */
-  gameMode: GameMode;
+  /** Required for the correct button position */
+  position: SequenceButtonPosition;
   /** Triggered on user moves to the next street view image */
   onMove: (coordinates: LatLng) => void;
 }
@@ -24,7 +28,7 @@ class MapillaryWeb extends React.Component<MapillaryWebProps> {
     const html = (MapillaryViewer as string)
       .replace('<ID>', imageId)
       .replace('<TOKEN>', Keys.mapillaryToken)
-      .replace(`'TOP'`, this.props.gameMode == GameMode.ROUND ? `${14 + TOP_PROGRESS_BAR_HEIGHT}px` : '14px');
+      .replace(`'TOP'`, this.props.position == SequenceButtonPosition.MARGIN_TOP ? `${14 + TOP_PROGRESS_BAR_HEIGHT}px` : '14px');
     return html;
   };
 
