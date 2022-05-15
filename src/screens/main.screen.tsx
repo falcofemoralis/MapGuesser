@@ -40,7 +40,7 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
   const getXP = () => userStore.progress.totalXp.toFixed(0);
   const getAccuracy = () => ProgressManager.getTotalAccuracy(userStore.progress.accuracy).toFixed(2);
   const getTime = () => date.format(new Date(userStore.progress.playtime), 'HH:mm:ss', true);
-
+  const getCoins = () => 10;
   /**
    * Window togglers
    */
@@ -62,11 +62,11 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
             </Text>
             <View style={[GlobalStyles.rcc, styles.moneyRow]}>
               <View style={[GlobalStyles.rcc, styles.itemContainer]}>
-                <Text style={styles.itemText}>50</Text>
+                <Text style={styles.itemText}>{getXP()}</Text>
                 <Image source={require('../assets/star.png')} style={styles.itemIcon} />
               </View>
               <View style={[GlobalStyles.rcc, styles.itemContainer]}>
-                <Text style={styles.itemText}>100</Text>
+                <Text style={styles.itemText}>{getCoins()}</Text>
                 <Image source={require('../assets/coin.png')} style={styles.itemIcon} />
               </View>
             </View>
@@ -78,18 +78,23 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
         {/** Main */}
         <View style={[styles.mainContainer]}>
           <View style={[styles.firstRow]}>
-            <GameButton style={[styles.leftGameButton]} img={require('../assets/mp.png')} title='Multiplayer' />
-            <GameButton style={[styles.leftGameButton]} img={require('../assets/challenges.png')} title='Challenges' />
+            <GameButton style={[styles.leftGameButton]} img={require('../assets/mp.png')} title={t('MULTIPLAYER')} />
+            <GameButton style={[styles.leftGameButton]} img={require('../assets/challenges.png')} title={t('CHALLENGES')} />
           </View>
           <View style={[styles.secondRow]}>
             <GameButton
               style={styles.rightSmallGameButton}
               img={require('../assets/achievements.png')}
-              title='Achievements'
+              title={t('ACHIEVEMENTS')}
               iconStyle={styles.gameButtonIcon}
             />
-            <GameButton style={styles.rightGameButton} img={require('../assets/shop.png')} title='Shop' />
-            <GameButton style={styles.rightSmallGameButton} img={require('../assets/leaderboard.png')} title='Leaderboard' iconStyle={styles.gameButtonIcon} />
+            <GameButton style={styles.rightGameButton} img={require('../assets/shop.png')} title={t('SHOP')} />
+            <GameButton
+              style={styles.rightSmallGameButton}
+              img={require('../assets/leaderboard.png')}
+              title={t('LEADERBOARD')}
+              iconStyle={styles.gameButtonIcon}
+            />
           </View>
         </View>
         {/* <Text style={styles.headerText}>Game modes</Text> */}

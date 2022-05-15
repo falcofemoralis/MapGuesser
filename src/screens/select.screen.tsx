@@ -8,9 +8,11 @@ import SwitchSelector from '../components/libs/SwitchSelector/SwitchSelector';
 import { GameMode } from '../constants/gamemode';
 import { PlayMode } from '../constants/playmode';
 import { StreetViewMode } from '../constants/streetviewmode';
+import { formatText } from '../translations/formatText';
 import Props from '../types/props.type';
 import { Colors } from '../values/colors';
 import { Dimens } from '../values/dimens';
+import { Misc } from '../values/misc';
 import { GlobalStyles } from '../values/styles';
 import { MAIN_CONTAINER_PADDING } from './main.screen';
 
@@ -45,9 +47,9 @@ export const SelectScreen: React.FC<Props<'Select'>> = ({ navigation, route }) =
             buttonColor={Colors.primaryColor}
             backgroundColor={Colors.backgroundOpposite}
             options={[
-              { label: 'Normal', value: GameMode.SINGLE },
-              { label: 'Rounds', value: GameMode.ROUND },
-              { label: 'Time', value: GameMode.TIME }
+              { label: t('SINGLE'), value: GameMode.SINGLE },
+              { label: t('ROUNDS'), value: GameMode.ROUND },
+              { label: t('TIME'), value: GameMode.TIME }
             ]}
           />
           <SwitchSelector
@@ -59,30 +61,28 @@ export const SelectScreen: React.FC<Props<'Select'>> = ({ navigation, route }) =
             buttonColor={Colors.primaryColor}
             backgroundColor={Colors.backgroundOpposite}
             options={[
-              { label: 'Free', value: StreetViewMode.FREE },
-              { label: 'Paid', value: StreetViewMode.PAID }
+              { label: t('FREE'), value: StreetViewMode.FREE },
+              { label: t('PAID'), value: StreetViewMode.PAID }
             ]}
           />
-          <Text style={styles.hintText}>
-            {streetViewMode == StreetViewMode.FREE
-              ? "Paid games has better panorama images and they're the best for better gaming experience"
-              : '   Paid game requires 10 coins to run. You will earn 0.3 coin in free game. You can watch ad or buy coins in the shop'}
-          </Text>
+          {formatText(streetViewMode == StreetViewMode.FREE ? t('FREE_MODE_DESC') : t('PAID_MODE_DESC'), styles.hintText, {
+            style: styles.hintBold,
+            text: Misc.COINS_PER_PAID_GAME
+          })}
         </View>
         <View style={[GlobalStyles.rcc, styles.buttons]}>
           <GameButton style={styles.smallButton} title='+5' img={require('../assets/advertisement.png')} titleIcon={require('../assets/coin.png')} />
           <GameButton
             style={styles.playButton}
             iconStyle={styles.playButtonIcon}
-            title='Play a game'
-            subTitle='-10'
-            subTitleIcon={require('../assets/coin.png')}
+            title='Play'
+            subTitle={streetViewMode == StreetViewMode.PAID ? '-10' : undefined}
+            subTitleIcon={streetViewMode == StreetViewMode.PAID ? require('../assets/coin.png') : undefined}
             textStyle={{ fontWeight: 'bold' }}
             textIconStyle={{ width: '15%' }}
             onPress={playGame}
           />
-          {/* <GameButton style={styles.playButton} iconStyle={styles.playButtonIcon} img={require('../assets/paid.jpg')} title='Paid' />  */}
-          <GameButton style={styles.smallButton} title='shop' img={require('../assets/shop.png')} />
+          <GameButton style={styles.smallButton} title={t('SHOP')} img={require('../assets/shop.png')} />
         </View>
       </ScrollView>
     </View>
@@ -162,5 +162,9 @@ const styles = StyleSheet.create({
   hintText: {
     color: Colors.white,
     fontSize: Dimens.normalText
+  },
+  hintBold: {
+    color: Colors.secondaryColor,
+    fontWeight: 'bold'
   }
 });

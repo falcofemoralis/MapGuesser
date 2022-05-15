@@ -1,3 +1,4 @@
+import { TFunction } from 'react-i18next';
 import { Continent } from '../constants/continent';
 import { PlayMode } from '../constants/playmode';
 import { ContinentCard } from '../types/continentcard.type';
@@ -5,30 +6,30 @@ import { GameCard } from '../types/gamecard.type';
 import { Lang } from '../types/lang.type';
 
 export class Arrays {
-  static getGameCards = (t: any): GameCard[] => [
+  static getGameCards = (t: TFunction<"ns1", undefined>): GameCard[] => [
     {
-      title: t('CLASSIC_NAME'),
+      title: t('NORMAL_MODE'),
       preview: require('../assets/classic.jpg'),
-      description: t('CLASSIC_TITLE'),
+      description: t('NORMAL_TITLE'),
       playMode: PlayMode.NORMAL,
       requiredLvl: 0
     },
     {
-      title: t('CONTINENTS_NAME'),
+      title: t('CONTINENTS_MODE'),
       preview: require('../assets/earth.jpg'),
       description: t('CONTINENTS_TITLE'),
       playMode: PlayMode.CONTINENTS,
       requiredLvl: 0
     },
     {
-      title: t('SETS_ROUND_NAME'),
+      title: t('COUNTRY_MODE'),
       preview: require('../assets/rounds.jpg'),
-      description: t('SETS_ROUND_TITLE'),
+      description: t('COUNTRY_TITLE'),
       playMode: PlayMode.COUNTRIES,
-      requiredLvl: 0
+      requiredLvl: 5
     }
   ];
-  static getContinentCards = (t: any): ContinentCard[] => [
+  static getContinentCards = (t: TFunction<"ns1", undefined>): ContinentCard[] => [
     { name: t('AS'), img: require('../assets/asia.jpg'), continent: Continent.as },
     { name: t('EU'), img: require('../assets/europe.jpg'), continent: Continent.eu },
     { name: t('NA'), img: require('../assets/north_america.jpg'), continent: Continent.na },

@@ -25,6 +25,10 @@ export default class SwitchSelector extends Component {
     super(props);
     const { initial, options } = props;
 
+    this.state = {
+      selected: initial
+    };
+
     for (let i = 0; i < options.length; i++) {
       const option = options[i];
 

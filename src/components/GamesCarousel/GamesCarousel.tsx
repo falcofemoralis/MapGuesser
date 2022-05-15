@@ -4,6 +4,7 @@ import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'rea
 import Carousel from 'react-native-snap-carousel'; // Version can be specified in package.json
 import { MAIN_CONTAINER_PADDING } from '../../screens/main.screen';
 import { userStore } from '../../store/user.store';
+import { formatText } from '../../translations/formatText';
 import { GameCard } from '../../types/gamecard.type';
 import { Arrays } from '../../values/arrays';
 import { Colors } from '../../values/colors';
@@ -41,11 +42,7 @@ export const GamesCarousel: React.FC<GamesCarouselProps> = ({ onSelect }) => {
         <View style={[styles.deck, { height: isUnlocked(item.requiredLvl) ? SMALL_DECK_SIZE : DECK_SIZE }]} />
         <View style={[styles.deckContainer, { height: isUnlocked(item.requiredLvl) ? SMALL_DECK_SIZE : DECK_SIZE }]}>
           <Text style={styles.title}>{item.title}</Text>
-          {!isUnlocked(item.requiredLvl) && (
-            <Text style={styles.level}>
-              {t('UNLOCKED_AT_1')} {item.requiredLvl} {t('UNLOCKED_AT_2')}
-            </Text>
-          )}
+          {!isUnlocked(item.requiredLvl) && formatText(t('UNLOCKED_AT'), styles.level, { text: item.requiredLvl })}
           {/* <Text style={styles.description}>{item.description}</Text> */}
         </View>
       </TouchableOpacity>

@@ -22,6 +22,7 @@ import { Dimens } from '../values/dimens';
 import { Keys } from '../values/keys';
 import { Misc } from '../values/misc';
 import { GlobalStyles } from '../values/styles';
+import { formatText } from '../translations/formatText';
 
 const interstitial = InterstitialAd.createForAdRequest(__DEV__ ? TestIds.INTERSTITIAL : Keys.interstellarIds.ResultScreenNext);
 
@@ -133,16 +134,9 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
       </MapView>
       <View style={styles.container}>
         <View style={styles.resultContainer}>
-          <Text style={styles.resultTextXP}>
-            {getXP()} {t('RECEIVED_POINTS_2')}
-          </Text>
+          {formatText(t('RECEIVED_POINTS'), styles.resultTextXP, {style: styles.resultTextBold, text: getXP()})}
           <Progress.Bar style={styles.bar} color={Colors.primaryColor} progress={getXProgress()} width={Dimensions.get('window').width - 50} />
-          <Text style={styles.resultText}>
-            {t('RESULT_DISTANCE_1')} <Text style={styles.resultTextBold}>{getDistance()}</Text> {t('RESULT_DISTANCE_2')}
-          </Text>
-          {/* <Text style={[styles.resultText, { marginTop: 5 }]}>
-            Playtime <Text style={styles.resultTextBold}>{ProgressManager.getTotalPlaytime(playtime)}</Text> TODOminutes.
-          </Text> */}
+          {formatText(t('RESULT_DISTANCE'), styles.resultText, {style: styles.resultTextBold, text: getDistance()})}
           <View style={GlobalStyles.rcc}>
             <GameButton style={styles.gameButton} img={require('../assets/menu.png')} title={t('MAIN_MENU')} onPress={toMainScreen} />
             {gameSettings.gameMode == GameMode.ROUND && isMoreRounds() && (
@@ -170,7 +164,6 @@ const UserMarker: React.FC<UserMarkerProps> = ({ from, to }) => {
     </>
   );
 };
-
 
 const styles = StyleSheet.create({
   map: {
@@ -221,4 +214,3 @@ const styles = StyleSheet.create({
 });
 
 export default ResultScreen;
-
