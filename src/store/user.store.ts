@@ -13,23 +13,26 @@ class UserStore {
     lvl: 1,
     totalXp: 0
   }; // user progress
+  coins: number = 0;
 
   constructor() {
     makeAutoObservable(this, {}, { deep: true });
 
     StorageManager.read<Progress>(StorageItem.PROGRESS).then(p => {
-      runInAction(() => {
-        if (p) {
-          this.progress = p;
-        }
-      });
+      if (p) {
+        runInAction(() => (this.progress = p));
+      }
     });
 
     StorageManager.read<User>(StorageItem.USER).then(u => {
       if (u) {
-        runInAction(() => {
-          this.user = u;
-        });
+        runInAction(() => (this.user = u));
+      }
+    });
+
+    StorageManager.read<number>(StorageItem.COINS).then(c => {
+      if (c) {
+        runInAction(() => (this.coins = c));
       }
     });
   }
@@ -56,9 +59,7 @@ class UserStore {
     }
     StorageManager.write<Progress>(StorageItem.PROGRESS, newProgress);
 
-    runInAction(() => {
-      this.progress = newProgress;
-    });
+    runInAction(() => (this.progress = newProgress));
   }
 
   /**
@@ -68,9 +69,24 @@ class UserStore {
   async updateUser(user: User) {
     StorageManager.write<User>(StorageItem.USER, user);
 
-    runInAction(() => {
-      this.user = user;
-    });
+    runInAction(() => (this.user = user));
+  }
+
+  /**
+   * Add\remove coins
+   * @param n - amount of coins
+   * @param action - increase\decrease coins
+   */
+  async updateCoins(n: number, action: '+' | '-') {
+    let c = this.coins;
+    if (action == '+') {
+      c += n;
+    } else {
+      c -= n;
+    }
+    StorageManager.write<number>(StorageItem.COINS, c);
+
+    runInAction(() => (this.coins = c));
   }
 }
 

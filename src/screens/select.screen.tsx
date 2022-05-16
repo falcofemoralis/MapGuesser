@@ -1,7 +1,9 @@
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, Image, StyleSheet, Text, ToastAndroid, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import { RewardedAd, RewardedAdEventType, TestIds } from 'react-native-google-mobile-ads';
 import { ContinentsCarousel } from '../components/ContinentsCarousel/ContinentsCarousel';
 import { GameButton } from '../components/interface/GameButton/GameButton';
 import SwitchSelector from '../components/libs/SwitchSelector/SwitchSelector';
@@ -9,22 +11,69 @@ import { Continent } from '../constants/continent';
 import { GameMode } from '../constants/gamemode';
 import { PlayMode } from '../constants/playmode';
 import { StreetViewMode } from '../constants/streetviewmode';
+import { userStore } from '../store/user.store';
 import { formatText } from '../translations/formatText';
 import Props from '../types/props.type';
 import { Colors } from '../values/colors';
 import { Dimens } from '../values/dimens';
+import { Keys } from '../values/keys';
 import { Misc } from '../values/misc';
 import { GlobalStyles } from '../values/styles';
 import { MAIN_CONTAINER_PADDING } from './main.screen';
 
-export const SelectScreen: React.FC<Props<'Select'>> = ({ navigation, route }) => {
+const rewarded = RewardedAd.createForAdRequest(__DEV__ ? TestIds.REWARDED : Keys.rewardIds.SelectScreen);
+
+export const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, route }) => {
   const { t } = useTranslation();
   const gameCard = route.params.gameCard;
   const [streetViewMode, setStreetViewMode] = React.useState(StreetViewMode.FREE);
   const [gameMode, setGameMode] = React.useState(GameMode.SINGLE);
   let selectedContinent: Continent;
 
+  const [adLoaded, setAdLoaded] = React.useState(false);
+
+  React.useEffect(() => {
+    const unsubscribeLoaded = rewarded.addAdEventListener(RewardedAdEventType.LOADED, () => {
+      setAdLoaded(true);
+    });
+
+    const unsubscribeEarned = rewarded.addAdEventListener(RewardedAdEventType.EARNED_REWARD, reward => {
+      userStore.updateCoins(Misc.COINS_PER_AD, '+');
+      setAdLoaded(false);
+    });
+
+    // Start loading the rewarded ad straight away
+    rewarded.load();
+
+    // Unsubscribe from events on unmount
+    return () => {
+      unsubscribeLoaded();
+      unsubscribeEarned();
+    };
+  }, []);
+
+  const showAd = () => {
+    if (adLoaded) {
+      rewarded.show();
+    }
+  };
+
+  const isPaidPlayable = () => {
+    if (streetViewMode == StreetViewMode.PAID && userStore.coins >= 10) {
+      return true;
+    } else if (streetViewMode == StreetViewMode.FREE) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const playGame = () => {
+    if (!isPaidPlayable()) {
+      ToastAndroid.showWithGravityAndOffset('Not allowed', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
+      return;
+    }
+
     navigation.replace('Game', { gameSettings: { gameMode, playMode: gameCard.playMode, streetViewMode }, playModeData: { continent: selectedContinent } });
   };
 
@@ -67,18 +116,35 @@ export const SelectScreen: React.FC<Props<'Select'>> = ({ navigation, route }) =
               { label: t('PAID'), value: StreetViewMode.PAID }
             ]}
           />
-          {formatText(streetViewMode == StreetViewMode.FREE ? t('FREE_MODE_DESC') : t('PAID_MODE_DESC'), styles.hintText, {
-            style: styles.hintBold,
-            text: Misc.COINS_PER_PAID_GAME
-          })}
+          {streetViewMode == StreetViewMode.FREE
+            ? formatText(t('FREE_MODE_DESC'), styles.hintText)
+            : formatText(
+                t('PAID_MODE_DESC'),
+                styles.hintText,
+                {
+                  style: styles.hintBold,
+                  text: Misc.COINS_FOR_PAID_GAME
+                },
+                { style: styles.hintBold, text: userStore.coins }
+              )}
         </View>
         <View style={[GlobalStyles.rcc, styles.buttons]}>
-          <GameButton style={styles.smallButton} title='+5' img={require('../assets/advertisement.png')} titleIcon={require('../assets/coin.png')} />
           <GameButton
-            style={styles.playButton}
+            disabled={!adLoaded}
+            style={[styles.smallButton]}
+            disabledStyle={styles.buttonDisabled}
+            title={`+ ${Misc.COINS_PER_AD}`}
+            img={require('../assets/advertisement.png')}
+            titleIcon={require('../assets/coin.png')}
+            onPress={showAd}
+          />
+          <GameButton
+            disabled={!isPaidPlayable()}
+            style={[styles.playButton]}
+            disabledStyle={styles.buttonDisabled}
             iconStyle={styles.playButtonIcon}
-            title='Play'
-            subTitle={streetViewMode == StreetViewMode.PAID ? '-10' : undefined}
+            title={t('PLAY')}
+            subTitle={streetViewMode == StreetViewMode.PAID ? `- ${Misc.COINS_FOR_PAID_GAME}` : undefined}
             subTitleIcon={streetViewMode == StreetViewMode.PAID ? require('../assets/coin.png') : undefined}
             textStyle={{ fontWeight: 'bold' }}
             textIconStyle={{ width: '15%' }}
@@ -89,7 +155,7 @@ export const SelectScreen: React.FC<Props<'Select'>> = ({ navigation, route }) =
       </ScrollView>
     </View>
   );
-};
+});
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -160,6 +226,9 @@ const styles = StyleSheet.create({
   },
   smallButton: {
     width: SCREEN_WIDTH / 4 / 1.5
+  },
+  buttonDisabled: {
+    opacity: 0.5
   },
   hintText: {
     color: Colors.white,

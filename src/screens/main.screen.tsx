@@ -40,7 +40,7 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
   const getXP = () => userStore.progress.totalXp.toFixed(0);
   const getAccuracy = () => ProgressManager.getTotalAccuracy(userStore.progress.accuracy).toFixed(2);
   const getTime = () => date.format(new Date(userStore.progress.playtime), 'HH:mm:ss', true);
-  const getCoins = () => 10;
+  const getCoins = () => userStore.coins;
   /**
    * Window togglers
    */

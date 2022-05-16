@@ -60,13 +60,13 @@ class MapillaryСore {
      */
     MapillaryImagesService.searchForImages(startPoint)
       .then(images => {
-        images = images.filter(img => img.quality_score > Misc.REQUIRED_QUALITY);
+        images = images.filter(img => img.quality_score > Misc.REQUIRED_MAPILLARY_QUALITY);
 
         if (userStore.progress.lvl <= Misc.UNLOCK_ALL_LVL) {
           images = images.filter(img => img.camera_type == 'equirectangular' || img.camera_type == 'spherical');
         }
 
-        if (images.length > Misc.REQUIRED_IMAGES) {
+        if (images.length > 0) {
           const image = this.getRandomImage(images);
           this.images = images;
           this.setImage(image);

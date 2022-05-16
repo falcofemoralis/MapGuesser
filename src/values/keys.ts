@@ -6,5 +6,8 @@ export const Keys = {
   },
   interstellarIds: {
     ResultScreenNext: 'ca-app-pub-1658419030103391/5778669585'
+  },
+  rewardIds: {
+      SelectScreen: 'ca-app-pub-1658419030103391/7023532134'
   }
 };

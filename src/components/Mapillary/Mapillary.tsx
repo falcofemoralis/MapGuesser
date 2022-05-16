@@ -8,6 +8,8 @@ import { Image } from './MapillaryImages.service';
 import MapillaryWeb, { SequenceButtonPosition } from './MapillaryWeb';
 import { mapillaryСore } from './MapillaryСore';
 
+const MAX_SEARCH_ATTEMPTS = 10
+
 const Mapillary: React.FC<StreetViewSettings> = observer(({ onMove, onInit, gameSettings, playModeData }) => {
   const [attempts, setAttempts] = React.useState(0); // count of fails to get a mapillary location
 
@@ -46,7 +48,7 @@ const Mapillary: React.FC<StreetViewSettings> = observer(({ onMove, onInit, game
           onMove={onMove}
         />
       ) : (
-        <LoadingPreview progress={attempts / Misc.MAX_SEARCH_ATTEMPTS} />
+        <LoadingPreview progress={attempts / MAX_SEARCH_ATTEMPTS} />
       )}
     </>
   );

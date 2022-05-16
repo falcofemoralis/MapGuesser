@@ -11,6 +11,7 @@ import { Banner } from '../components/Banner/Banner';
 import { GameButton } from '../components/interface/GameButton/GameButton';
 import { GameMode } from '../constants/gamemode';
 import { Position } from '../constants/position';
+import { StreetViewMode } from '../constants/streetviewmode';
 import { Unit } from '../constants/unit';
 import ProgressManager from '../managers/progress.manager';
 import { gameStore } from '../store/game.store';
@@ -74,6 +75,10 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
       totalXp: xp
     });
 
+    if (gameSettings.streetViewMode == StreetViewMode.FREE) {
+      userStore.updateCoins(Misc.COINS_PER_FREE_GAME, '+');
+    }
+
     // Unsubscribe from events on unmount
     return unsubscribe;
   }, []);
@@ -131,6 +136,9 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
         }
       >
         <UserMarker from={currentCoordinates} to={selectedCoordinates} />
+        {/**
+         * Other rounds except the latest one
+         */}
         {isLastRound() && toJS(gameStore.rounds).map((round, i) => <UserMarker key={i} from={round.from} to={round.to} />)}
       </MapView>
       <View style={styles.container}>

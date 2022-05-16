@@ -11,6 +11,7 @@ import { TopProgressBar, TOP_PROGRESS_BAR_HEIGHT } from '../components/TopProgre
 import { GameMode } from '../constants/gamemode';
 import { StreetViewMode } from '../constants/streetviewmode';
 import { gameStore } from '../store/game.store';
+import { userStore } from '../store/user.store';
 import Props from '../types/props.type';
 import { Colors } from '../values/colors';
 import { Misc } from '../values/misc';
@@ -61,6 +62,10 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
    */
   const onStreetViewInit = () => {
     startTime = Date.now();
+
+    if (gameSettings.streetViewMode == StreetViewMode.PAID) {
+      userStore.updateCoins(Misc.COINS_FOR_PAID_GAME, '-');
+    }
   };
 
   /**

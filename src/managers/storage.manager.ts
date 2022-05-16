@@ -4,7 +4,8 @@ export enum StorageItem {
   'USER',
   'PROGRESS',
   'UNIT',
-  'ADS'
+  'ADS',
+  'COINS'
 }
 
 export default class StorageManager {

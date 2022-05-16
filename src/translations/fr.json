@@ -47,6 +47,6 @@
     "FREE": "Gratuit",
     "PAID": "Payant",
     "FREE_MODE_DESC": "L'expérience de jeu est meilleure dans les jeux payants car les images panoramiques sont de meilleure qualité",
-    "PAID_MODE_DESC": "Le jeu payant nécessite $s pièces pour fonctionner. Vous gagnerez des pièces dans le jeu gratuit. Vous pouvez regarder des publicités ou acheter des pièces dans la boutique",
+    "PAID_MODE_DESC": "Le jeu payant nécessite $s pièces pour fonctionner. Maintenant, vous avez $s. Vous gagnerez des pièces dans le jeu gratuit. Vous pouvez regarder des publicités ou acheter des pièces dans la boutique",
     "PLAY": "Joue"
 }
