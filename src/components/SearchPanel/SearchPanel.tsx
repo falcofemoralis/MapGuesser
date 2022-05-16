@@ -1,15 +1,14 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Dimensions, FlatList, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import SearchBar from 'react-native-platform-searchbar';
-import { Colors } from '../../values/colors';
-import { ImageButton } from '../interface/ImageButton/ImageButton';
-import { Dimens } from '../../values/dimens';
-import { useTranslation } from 'react-i18next';
 import MapService, { SearchPlace } from '../../services/map.service';
-import { gameStore } from '../../store/game.store';
 import { searchStore } from '../../store/search.store';
 import { Utils } from '../../utils/utils';
+import { Colors } from '../../values/colors';
+import { Dimens } from '../../values/dimens';
 import { Misc } from '../../values/misc';
+import { ImageButton } from '../interface/ImageButton/ImageButton';
 
  //
 

@@ -1,9 +1,8 @@
 import MapillaryViewer from 'MapillaryViewer.html';
 import React from 'react';
-import { WebView, WebViewMessageEvent } from 'react-native-webview';
-import { GameMode } from '../../constants/gamemode';
-import { Keys } from '../../values/keys';
 import { LatLng } from 'react-native-maps';
+import { WebView, WebViewMessageEvent } from 'react-native-webview';
+import { Keys } from '../../values/keys';
 import { TOP_PROGRESS_BAR_HEIGHT } from '../TopProgressBar/TopProgressBar';
 
 export enum SequenceButtonPosition {

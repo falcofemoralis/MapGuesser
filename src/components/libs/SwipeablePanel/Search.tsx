@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, TouchableOpacity, View, Image } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 
 type SearchProps = {
   onPress: () => void;

@@ -130,13 +130,13 @@ class SwipeablePanel extends Component<SwipeablePanelProps, SwipeablePanelState>
   };
 
   _onOrientationChange = () => {
-    const dimesions = Dimensions.get('screen');
-    FULL_HEIGHT = dimesions.height;
-    FULL_WIDTH = dimesions.width;
+    const dimensions = Dimensions.get('screen');
+    FULL_HEIGHT = dimensions.height;
+    FULL_WIDTH = dimensions.width;
     PANEL_HEIGHT = FULL_HEIGHT - 100;
 
     this.setState({
-      orientation: dimesions.height >= dimesions.width ? 'portrait' : 'landscape',
+      orientation: dimensions.height >= dimensions.width ? 'portrait' : 'landscape',
       deviceWidth: FULL_WIDTH,
       deviceHeight: FULL_HEIGHT,
       panelHeight: PANEL_HEIGHT
@@ -324,3 +324,4 @@ const LARGE_PANEL_CONTENT_HEIGHT = PANEL_HEIGHT - 25;
 
 export { SwipeablePanel, LARGE_PANEL_CONTENT_HEIGHT, SMALL_PANEL_CONTENT_HEIGHT };
 export type { SwipeablePanelProps };
+

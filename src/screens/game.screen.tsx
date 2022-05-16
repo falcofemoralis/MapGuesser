@@ -5,7 +5,7 @@ import { LatLng } from 'react-native-maps';
 import { GoogleStreetView } from '../components/GoogleStreetView/GoogleStreetView';
 import { ImageButton } from '../components/interface/ImageButton/ImageButton';
 import Mapillary from '../components/Mapillary/Mapillary';
-import { mapillaryСore } from '../components/Mapillary/MapillaryСore.store';
+import { mapillaryСore } from '../components/Mapillary/MapillaryСore';
 import MapPanel from '../components/MapPanel/MapPanel';
 import { TopProgressBar, TOP_PROGRESS_BAR_HEIGHT } from '../components/TopProgressBar/TopProgressBar';
 import { GameMode } from '../constants/gamemode';
@@ -47,7 +47,7 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
           if (gameSettings.streetViewMode == StreetViewMode.FREE) {
             mapillaryСore.reset();
           }
-          if(gameSettings.gameMode == GameMode.ROUND) {
+          if (gameSettings.gameMode == GameMode.ROUND) {
             gameStore.resetRounds();
           }
           navigation.replace('Main');

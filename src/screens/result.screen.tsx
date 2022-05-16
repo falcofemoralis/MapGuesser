@@ -3,7 +3,7 @@ import { point } from '@turf/helpers';
 import { toJS } from 'mobx';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { BackHandler, Dimensions, Image, StyleSheet, Text, View } from 'react-native';
+import { BackHandler, Dimensions, Image, StyleSheet, View } from 'react-native';
 import { AdEventType, InterstitialAd, TestIds } from 'react-native-google-mobile-ads';
 import MapView, { LatLng, Marker, Polyline } from 'react-native-maps';
 import * as Progress from 'react-native-progress';
@@ -16,13 +16,13 @@ import ProgressManager from '../managers/progress.manager';
 import { gameStore } from '../store/game.store';
 import { settingsStore } from '../store/settings.store';
 import { userStore } from '../store/user.store';
+import { formatText } from '../translations/formatText';
 import Props from '../types/props.type';
 import { Colors } from '../values/colors';
 import { Dimens } from '../values/dimens';
 import { Keys } from '../values/keys';
 import { Misc } from '../values/misc';
 import { GlobalStyles } from '../values/styles';
-import { formatText } from '../translations/formatText';
 
 const interstitial = InterstitialAd.createForAdRequest(__DEV__ ? TestIds.INTERSTITIAL : Keys.interstellarIds.ResultScreenNext);
 
@@ -39,13 +39,14 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
   const xp = ProgressManager.xp(distance); // calculate xp
   const accuracy = ProgressManager.accuracy(distance); // calculate accuracy
   const playtime = route.params.playtime; // user playtime
-  const [interstitialLoaded, setInterstitialLoaded] = React.useState(false);
 
   /**
    * Check round functions
    */
   const isMoreRounds = () => gameStore.rounds.length + 1 !== Misc.MAX_ROUNDS;
   const isLastRound = () => gameStore.rounds.length + 1 == Misc.MAX_ROUNDS;
+
+  const [interstitialLoaded, setInterstitialLoaded] = React.useState(false);
 
   /**
    * Load interstitial ad
@@ -61,6 +62,17 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
       interstitial.load();
     }
     settingsStore.updateAdsCounter();
+
+    /**
+     * Update user progress
+     */
+    userStore.addProgress({
+      playtime,
+      accuracy: [accuracy],
+      xp,
+      lvl: 0,
+      totalXp: xp
+    });
 
     // Unsubscribe from events on unmount
     return unsubscribe;
@@ -105,17 +117,6 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
   const getXP = () => Number.parseInt(xp.toFixed(1));
   const getXProgress = () => getXP() / Misc.MAX_XP;
 
-  /**
-   * Update user progress
-   */
-  userStore.addProgress({
-    playtime,
-    accuracy: [accuracy],
-    xp,
-    lvl: 0,
-    totalXp: xp
-  });
-
   return (
     <>
       <Banner position={Position.TOP} id={Keys.bannersIds.ResultScreen} />
@@ -134,9 +135,9 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
       </MapView>
       <View style={styles.container}>
         <View style={styles.resultContainer}>
-          {formatText(t('RECEIVED_POINTS'), styles.resultTextXP, {style: styles.resultTextBold, text: getXP()})}
+          {formatText(t('RECEIVED_POINTS'), styles.resultTextXP, { style: styles.resultTextBold, text: getXP() })}
           <Progress.Bar style={styles.bar} color={Colors.primaryColor} progress={getXProgress()} width={Dimensions.get('window').width - 50} />
-          {formatText(t('RESULT_DISTANCE'), styles.resultText, {style: styles.resultTextBold, text: getDistance()})}
+          {formatText(t('RESULT_DISTANCE'), styles.resultText, { style: styles.resultTextBold, text: getDistance() })}
           <View style={GlobalStyles.rcc}>
             <GameButton style={styles.gameButton} img={require('../assets/menu.png')} title={t('MAIN_MENU')} onPress={toMainScreen} />
             {gameSettings.gameMode == GameMode.ROUND && isMoreRounds() && (

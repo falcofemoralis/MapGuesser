@@ -1,8 +1,9 @@
 import React from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
-import { ProgressStep, ProgressSteps } from 'react-native-progress-steps';
 import { Colors } from '../../values/colors';
 import { Dimens } from '../../values/dimens';
+import ProgressStep from '../libs/ProgressSteps/ProgressStep';
+import ProgressSteps from '../libs/ProgressSteps/ProgressSteps';
 
 export const TOP_PROGRESS_BAR_HEIGHT = 56;
 

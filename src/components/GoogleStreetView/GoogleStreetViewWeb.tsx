@@ -2,7 +2,6 @@ import React from 'react';
 import { LatLng } from 'react-native-maps';
 import { WebView, WebViewMessageEvent } from 'react-native-webview';
 import { Country } from '../../constants/country';
-import { PlayModeData } from '../../screens';
 
 interface GoogleStreetViewWebProps {
   country: Country;

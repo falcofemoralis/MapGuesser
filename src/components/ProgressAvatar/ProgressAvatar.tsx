@@ -3,10 +3,9 @@ import React from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
 import * as Progress from 'react-native-progress';
-import { settingsStore } from '../../store/settings.store';
+import { userStore } from '../../store/user.store';
 import { Colors } from '../../values/colors';
 import { ImageButton } from '../interface/ImageButton/ImageButton';
-import {userStore} from '../../store/user.store';
 
 interface ProgressAvatarProps {
   /** Container style */

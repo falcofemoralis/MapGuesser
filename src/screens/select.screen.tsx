@@ -10,7 +10,6 @@ import { GameMode } from '../constants/gamemode';
 import { PlayMode } from '../constants/playmode';
 import { StreetViewMode } from '../constants/streetviewmode';
 import { formatText } from '../translations/formatText';
-import { ContinentCard } from '../types/continentcard.type';
 import Props from '../types/props.type';
 import { Colors } from '../values/colors';
 import { Dimens } from '../values/dimens';

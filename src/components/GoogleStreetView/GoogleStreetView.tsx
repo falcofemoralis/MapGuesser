@@ -5,8 +5,6 @@ import { StreetViewSettings } from '../../types/streetviewsettings';
 import { LoadingPreview } from '../interface/LoadingPreview/LoadingPreview';
 import { GoogleCountriesList } from './data/googleCountriesList';
 import GoogleStreetViewWeb from './GoogleStreetViewWeb';
-import { Continent } from '../../constants/continent';
-import { ContinentPlaces } from '../Mapillary/data/continentPlaces';
 
 export const GoogleStreetView: React.FC<StreetViewSettings> = ({ onMove, onInit, gameSettings, playModeData }) => {
   const [init, setInit] = React.useState(false);
@@ -20,13 +18,13 @@ export const GoogleStreetView: React.FC<StreetViewSettings> = ({ onMove, onInit,
   };
 
   const getCountry = () => {
-    if (gameSettings.playMode == PlayMode.CONTINENTS) {
-      if(!playModeData?.continent) throw new Error('Continent mode must have selected continent')
-      const continent = GoogleCountriesList[playModeData.continent]; // get random continent
-      return continent[Math.floor(Math.random() * continent.length)];
-    } else {
+    if (gameSettings.playMode == PlayMode.NORMAL) {
       const values = Object.values(GoogleCountriesList);
       const continent = values[Math.floor(Math.random() * values.length)];
+      return continent[Math.floor(Math.random() * continent.length)];
+    } else {
+      if (!playModeData?.continent) throw new Error('Continent mode must have selected continent');
+      const continent = GoogleCountriesList[playModeData.continent]; // get random continent
       return continent[Math.floor(Math.random() * continent.length)];
     }
   };

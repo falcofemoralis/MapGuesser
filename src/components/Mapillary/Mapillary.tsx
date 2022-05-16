@@ -1,13 +1,12 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { View } from 'react-native';
 import { GameMode } from '../../constants/gamemode';
 import { StreetViewSettings } from '../../types/streetviewsettings';
 import { Misc } from '../../values/misc';
 import { LoadingPreview } from '../interface/LoadingPreview/LoadingPreview';
 import { Image } from './MapillaryImages.service';
 import MapillaryWeb, { SequenceButtonPosition } from './MapillaryWeb';
-import { mapillaryСore } from './MapillaryСore.store';
+import { mapillaryСore } from './MapillaryСore';
 
 const Mapillary: React.FC<StreetViewSettings> = observer(({ onMove, onInit, gameSettings, playModeData }) => {
   const [attempts, setAttempts] = React.useState(0); // count of fails to get a mapillary location

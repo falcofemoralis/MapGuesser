@@ -1,13 +1,17 @@
 {
     "cSpell.words": [
         "Сore",
+        "bbox",
         "dimens",
         "gamecard",
         "gamemode",
         "leaderboard",
+        "mapguesser",
         "Mapillary",
         "netinfo",
         "playmode",
+        "pluralrules",
+        "prebuild",
         "streetview",
         "streetviewsettings",
         "Swipeable"

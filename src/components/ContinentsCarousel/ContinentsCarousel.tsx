@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
 import Carousel from 'react-native-snap-carousel'; // Version can be specified in package.json
 import { MAIN_CONTAINER_PADDING } from '../../screens/main.screen';
 import { ContinentCard } from '../../types/continentcard.type';

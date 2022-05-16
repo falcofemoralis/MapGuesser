@@ -1,5 +1,5 @@
-import { Keys } from '../../values/keys';
 import { axiosMapillary } from '../../services/index';
+import { Keys } from '../../values/keys';
 
 export interface Image {
   id: string;

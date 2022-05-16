@@ -1,12 +1,11 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { Continent } from '../../constants/continent';
 import { PlayMode } from '../../constants/playmode';
-import { BeginnerPlaces } from './data/beginnerPlaces';
-import { ContinentPlaces } from './data/continentPlaces';
 import { PlayModeData } from '../../screens';
 import { userStore } from '../../store/user.store';
 import { generateCoordinate } from '../../utils/coordinates.util';
 import { Misc } from '../../values/misc';
+import { BeginnerPlaces } from './data/beginnerPlaces';
+import { ContinentPlaces } from './data/continentPlaces';
 import MapillaryImagesService, { Image } from './MapillaryImages.service';
 
 const DELAY = 350;
