@@ -1,23 +1,19 @@
+import { Banner } from '@/components/interface/Banner/Banner';
+import { GameButton } from '@/components/interface/GameButton/GameButton';
+import { GamesCarousel } from '@/components/mainScreen/GamesCarousel/GamesCarousel';
+import { ProgressAvatar } from '@/components/mainScreen/ProgressAvatar/ProgressAvatar';
+import { Settings } from '@/components/modal/Settings/Settings';
+import { Position } from '@/constants/position';
+import ProgressManager from '@/managers/progress.manager';
+import { userStore } from '@/store/user.store';
+import { GameCard } from '@/types/gamecard.type';
+import Props from '@/types/props.type';
+import { GlobalStyles, Keys, GlobalColors, Dimens } from '@/values';
 import date from 'date-and-time';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Banner } from '../components/Banner/Banner';
-import { GamesCarousel } from '../components/GamesCarousel/GamesCarousel';
-import { GameButton } from '../components/interface/GameButton/GameButton';
-import { ImageButton } from '../components/interface/ImageButton/ImageButton';
-import { ProgressAvatar } from '../components/ProgressAvatar/ProgressAvatar';
-import { Settings } from '../components/Settings/Settings';
-import { Position } from '../constants/position';
-import ProgressManager from '../managers/progress.manager';
-import { userStore } from '../store/user.store';
-import { GameCard } from '../types/gamecard.type';
-import Props from '../types/props.type';
-import { Colors } from '../values/colors';
-import { Dimens } from '../values/dimens';
-import { Keys } from '../values/keys';
-import { GlobalStyles } from '../values/styles';
 
 const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
   const { t } = useTranslation();
@@ -63,35 +59,35 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
             <View style={[GlobalStyles.rcc, styles.moneyRow]}>
               <View style={[GlobalStyles.rcc, styles.itemContainer]}>
                 <Text style={styles.itemText}>{getXP()}</Text>
-                <Image source={require('../assets/star.png')} style={styles.itemIcon} />
+                <Image source={require('@/assets/star.png')} style={styles.itemIcon} />
               </View>
               <View style={[GlobalStyles.rcc, styles.itemContainer]}>
                 <Text style={styles.itemText}>{getCoins()}</Text>
-                <Image source={require('../assets/coin.png')} style={styles.itemIcon} />
+                <Image source={require('@/assets/coin.png')} style={styles.itemIcon} />
               </View>
             </View>
           </View>
-          <ImageButton img={require('./../assets/settings.png')} buttonStyle={styles.settingsBtn} onPress={toggleSettings} />
+          <GameButton img={require('@/assets/settings.png')} fullIcon style={styles.settingsBtn} onPress={toggleSettings} />
         </View>
         {/** Game modes */}
         <GamesCarousel onSelect={onGameSelect} />
         {/** Main */}
         <View style={[styles.mainContainer]}>
           <View style={[styles.firstRow]}>
-            <GameButton style={[styles.leftGameButton]} img={require('../assets/mp.png')} title={t('MULTIPLAYER')} />
-            <GameButton style={[styles.leftGameButton]} img={require('../assets/challenges.png')} title={t('CHALLENGES')} />
+            <GameButton style={[styles.leftGameButton]} img={require('@/assets/mp.png')} title={t('MULTIPLAYER')} />
+            <GameButton style={[styles.leftGameButton]} img={require('@/assets/challenges.png')} title={t('CHALLENGES')} />
           </View>
           <View style={[styles.secondRow]}>
             <GameButton
               style={styles.rightSmallGameButton}
-              img={require('../assets/achievements.png')}
+              img={require('@/assets/achievements.png')}
               title={t('ACHIEVEMENTS')}
               iconStyle={styles.gameButtonIcon}
             />
-            <GameButton style={styles.rightGameButton} img={require('../assets/shop.png')} title={t('SHOP')} />
+            <GameButton style={styles.rightGameButton} img={require('@/assets/shop.png')} title={t('SHOP')} />
             <GameButton
               style={styles.rightSmallGameButton}
-              img={require('../assets/leaderboard.png')}
+              img={require('@/assets/leaderboard.png')}
               title={t('LEADERBOARD')}
               iconStyle={styles.gameButtonIcon}
             />
@@ -116,7 +112,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: Colors.mainBackground,
+    backgroundColor: GlobalColors.mainBackground,
     padding: MAIN_CONTAINER_PADDING
   },
   scroll: {
@@ -130,7 +126,7 @@ const styles = StyleSheet.create({
   },
   avatarBtn: {
     borderRadius: 32,
-    backgroundColor: Colors.backgroundTransparent
+    backgroundColor: GlobalColors.backgroundTransparent
   },
   statisticRow: {
     marginStart: 10,
@@ -138,12 +134,12 @@ const styles = StyleSheet.create({
     flexGrow: 1
   },
   username: {
-    color: Colors.white,
+    color: GlobalColors.white,
     fontSize: Dimens.headText,
     fontWeight: 'bold'
   },
   lvlText: {
-    color: Colors.gray,
+    color: GlobalColors.gray,
     fontSize: Dimens.normalText,
     alignSelf: 'center'
   },
@@ -153,7 +149,7 @@ const styles = StyleSheet.create({
     marginEnd: 25
   },
   itemText: {
-    color: Colors.gray,
+    color: GlobalColors.gray,
     fontSize: Dimens.normalText,
     alignSelf: 'center'
   },
@@ -167,7 +163,7 @@ const styles = StyleSheet.create({
     width: 50,
     padding: 12,
     borderRadius: 32,
-    backgroundColor: Colors.backgroundTransparent
+    backgroundColor: GlobalColors.backgroundTransparent
   },
   mainContainer: {
     flexDirection: 'row',
@@ -211,7 +207,7 @@ const styles = StyleSheet.create({
     marginBottom: 5 // 10 + 10 + 10 = 30
   },
   headerText: {
-    color: Colors.white,
+    color: GlobalColors.white,
     fontSize: Dimens.headText,
     fontWeight: 'bold'
   }

@@ -1,9 +1,9 @@
+import { Continent } from '@/constants/continent';
+import { GameMode } from '@/constants/gamemode';
+import { PlayMode } from '@/constants/playmode';
+import { StreetViewMode } from '@/constants/streetviewmode';
+import { GameCard } from '@/types/gamecard.type';
 import { LatLng } from 'react-native-maps';
-import { GameMode } from '../constants/gamemode';
-import { PlayMode } from '../constants/playmode';
-import { Continent } from './../constants/continent';
-import { StreetViewMode } from './../constants/streetviewmode';
-import { GameCard } from './../types/gamecard.type';
 
 export interface GameSettings {
   playMode: PlayMode;

@@ -1,20 +1,19 @@
+import MapPanel from '@/components/gameScreen/MapPanel/MapPanel';
+import { GoogleStreetView } from '@/components/gameScreen/streetview/GoogleStreetView/GoogleStreetView';
+import Mapillary from '@/components/gameScreen/streetview/Mapillary/Mapillary';
+import { mapillaryСore } from '@/components/gameScreen/streetview/Mapillary/MapillaryСore';
+import { TOP_PROGRESS_BAR_HEIGHT, TopProgressBar } from '@/components/gameScreen/TopProgressBar/TopProgressBar';
+import { GameButton } from '@/components/interface/GameButton/GameButton';
+import { GameMode } from '@/constants/gamemode';
+import { StreetViewMode } from '@/constants/streetviewmode';
+import { gameStore } from '@/store/game.store';
+import { userStore } from '@/store/user.store';
+import Props from '@/types/props.type';
+import { Misc, GlobalColors } from '@/values';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, BackHandler, StyleSheet, ToastAndroid } from 'react-native';
 import { LatLng } from 'react-native-maps';
-import { GoogleStreetView } from '../components/GoogleStreetView/GoogleStreetView';
-import { ImageButton } from '../components/interface/ImageButton/ImageButton';
-import Mapillary from '../components/Mapillary/Mapillary';
-import { mapillaryСore } from '../components/Mapillary/MapillaryСore';
-import MapPanel from '../components/MapPanel/MapPanel';
-import { TopProgressBar, TOP_PROGRESS_BAR_HEIGHT } from '../components/TopProgressBar/TopProgressBar';
-import { GameMode } from '../constants/gamemode';
-import { StreetViewMode } from '../constants/streetviewmode';
-import { gameStore } from '../store/game.store';
-import { userStore } from '../store/user.store';
-import Props from '../types/props.type';
-import { Colors } from '../values/colors';
-import { Misc } from '../values/misc';
 
 const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
   const { t } = useTranslation();
@@ -125,11 +124,12 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
   return (
     <>
       {gameSettings.gameMode === GameMode.ROUND && <TopProgressBar style={styles.progress} round={gameStore.rounds.length} max={Misc.MAX_ROUNDS} />}
-      <ImageButton img={require('../assets/logout.png')} buttonStyle={[styles.leaveBtn, styles.button, { top: getButtonHeight() }]} onPress={leaveGame} />
+      <GameButton img={require('@/assets/logout.png')} fullIcon style={[styles.leaveBtn, styles.button, { top: getButtonHeight() }]} onPress={leaveGame} />
       {gameSettings.streetViewMode == StreetViewMode.FREE && (
-        <ImageButton
-          img={require('../assets/refresh.png')}
-          buttonStyle={[styles.refreshBtn, styles.button, { top: getButtonHeight() }]}
+        <GameButton
+          img={require('@/assets/refresh.png')}
+          fullIcon
+          style={[styles.refreshBtn, styles.button, { top: getButtonHeight() }]}
           onPress={refreshLocation}
         />
       )}
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
   },
   button: {
     position: 'absolute',
-    backgroundColor: Colors.backgroundButton,
+    backgroundColor: GlobalColors.backgroundButton,
     borderRadius: 32,
     textAlign: 'center',
     justifyContent: 'center',

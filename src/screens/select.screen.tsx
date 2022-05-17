@@ -1,24 +1,20 @@
+import { GameButton } from '@/components/interface/GameButton/GameButton';
+import SwitchSelector from '@/components/libs/SwitchSelector/SwitchSelector';
+import { ContinentsCarousel } from '@/components/selectScreen/ContinentsCarousel/ContinentsCarousel';
+import { Continent } from '@/constants/continent';
+import { GameMode } from '@/constants/gamemode';
+import { PlayMode } from '@/constants/playmode';
+import { StreetViewMode } from '@/constants/streetviewmode';
+import { userStore } from '@/store/user.store';
+import { formatText } from '@/translations/formatText';
+import Props from '@/types/props.type';
+import { Keys, Misc, GlobalStyles, GlobalColors, Dimens } from '@/values';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Dimensions, Image, StyleSheet, Text, ToastAndroid, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { RewardedAd, RewardedAdEventType, TestIds } from 'react-native-google-mobile-ads';
-import { ContinentsCarousel } from '../components/ContinentsCarousel/ContinentsCarousel';
-import { GameButton } from '../components/interface/GameButton/GameButton';
-import SwitchSelector from '../components/libs/SwitchSelector/SwitchSelector';
-import { Continent } from '../constants/continent';
-import { GameMode } from '../constants/gamemode';
-import { PlayMode } from '../constants/playmode';
-import { StreetViewMode } from '../constants/streetviewmode';
-import { userStore } from '../store/user.store';
-import { formatText } from '../translations/formatText';
-import Props from '../types/props.type';
-import { Colors } from '../values/colors';
-import { Dimens } from '../values/dimens';
-import { Keys } from '../values/keys';
-import { Misc } from '../values/misc';
-import { GlobalStyles } from '../values/styles';
 import { MAIN_CONTAINER_PADDING } from './main.screen';
 
 const rewarded = RewardedAd.createForAdRequest(__DEV__ ? TestIds.REWARDED : Keys.rewardIds.SelectScreen);
@@ -93,10 +89,10 @@ export const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, r
             initial={gameMode}
             style={styles.selector}
             onPress={(value: GameMode) => setGameMode(value)}
-            textColor={Colors.white}
-            selectedColor={Colors.white}
-            buttonColor={Colors.primaryColor}
-            backgroundColor={Colors.backgroundOpposite}
+            textColor={GlobalColors.white}
+            selectedColor={GlobalColors.white}
+            buttonColor={GlobalColors.primaryColor}
+            backgroundColor={GlobalColors.backgroundOpposite}
             options={[
               { label: t('SINGLE'), value: GameMode.SINGLE },
               { label: t('ROUNDS'), value: GameMode.ROUND },
@@ -107,10 +103,10 @@ export const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, r
             initial={streetViewMode}
             style={styles.selector}
             onPress={(value: StreetViewMode) => setStreetViewMode(value)}
-            textColor={Colors.white}
-            selectedColor={Colors.white}
-            buttonColor={Colors.primaryColor}
-            backgroundColor={Colors.backgroundOpposite}
+            textColor={GlobalColors.white}
+            selectedColor={GlobalColors.white}
+            buttonColor={GlobalColors.primaryColor}
+            backgroundColor={GlobalColors.backgroundOpposite}
             options={[
               { label: t('FREE'), value: StreetViewMode.FREE },
               { label: t('PAID'), value: StreetViewMode.PAID }
@@ -132,25 +128,23 @@ export const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, r
           <GameButton
             disabled={!adLoaded}
             style={[styles.smallButton]}
-            disabledStyle={styles.buttonDisabled}
             title={`+ ${Misc.COINS_PER_AD}`}
-            img={require('../assets/advertisement.png')}
-            titleIcon={require('../assets/coin.png')}
+            img={require('@/assets/advertisement.png')}
+            titleIcon={require('@/assets/coin.png')}
             onPress={showAd}
           />
           <GameButton
             disabled={!isPaidPlayable()}
             style={[styles.playButton]}
-            disabledStyle={styles.buttonDisabled}
             iconStyle={styles.playButtonIcon}
             title={t('PLAY')}
             subTitle={streetViewMode == StreetViewMode.PAID ? `- ${Misc.COINS_FOR_PAID_GAME}` : undefined}
-            subTitleIcon={streetViewMode == StreetViewMode.PAID ? require('../assets/coin.png') : undefined}
+            subTitleIcon={streetViewMode == StreetViewMode.PAID ? require('@/assets/coin.png') : undefined}
             textStyle={{ fontWeight: 'bold' }}
             textIconStyle={{ width: '15%' }}
             onPress={playGame}
           />
-          <GameButton style={styles.smallButton} title={t('SHOP')} img={require('../assets/shop.png')} />
+          <GameButton style={styles.smallButton} title={t('SHOP')} img={require('@/assets/shop.png')} />
         </View>
       </ScrollView>
     </View>
@@ -162,7 +156,7 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.mainBackground
+    backgroundColor: GlobalColors.mainBackground
   },
   scroll: {
     width: '100%',
@@ -183,10 +177,10 @@ const styles = StyleSheet.create({
     left: 0,
     width: '100%',
     padding: 10,
-    backgroundColor: Colors.backgroundTransparent
+    backgroundColor: GlobalColors.backgroundTransparent
   },
   previewText: {
-    color: Colors.white,
+    color: GlobalColors.white,
     fontWeight: 'bold',
     fontSize: 40
   },
@@ -195,12 +189,12 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   descriptionTitle: {
-    color: Colors.white,
+    color: GlobalColors.white,
     fontSize: Dimens.headText,
     fontWeight: 'bold'
   },
   descriptionText: {
-    color: Colors.white,
+    color: GlobalColors.white,
     fontSize: Dimens.normalText
   },
   mainContainer: {
@@ -217,7 +211,7 @@ const styles = StyleSheet.create({
   playButton: {
     aspectRatio: 3,
     width: SCREEN_WIDTH / 2,
-    backgroundColor: Colors.secondaryColor
+    backgroundColor: GlobalColors.secondaryColor
   },
   playButtonIcon: {
     position: 'absolute',
@@ -227,15 +221,12 @@ const styles = StyleSheet.create({
   smallButton: {
     width: SCREEN_WIDTH / 4 / 1.5
   },
-  buttonDisabled: {
-    opacity: 0.5
-  },
   hintText: {
-    color: Colors.white,
+    color: GlobalColors.white,
     fontSize: Dimens.normalText
   },
   hintBold: {
-    color: Colors.secondaryColor,
+    color: GlobalColors.secondaryColor,
     fontWeight: 'bold'
   }
 });

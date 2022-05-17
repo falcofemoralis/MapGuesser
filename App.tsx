@@ -9,7 +9,7 @@ import GameScreen from './src/screens/game.screen';
 import MainScreen from './src/screens/main.screen';
 import ResultScreen from './src/screens/result.screen';
 import { SelectScreen } from './src/screens/select.screen';
-import { Colors } from './src/values/colors';
+import { GlobalColors } from './src/values/colors';
 
 mobileAds()
   .initialize()
@@ -29,7 +29,7 @@ const App = () => {
       <StatusBar
         animated={true}
         showHideTransition='fade'
-        backgroundColor={Colors.black}
+        backgroundColor={GlobalColors.black}
         // translucent={true}
       />
       <NavigationContainer>

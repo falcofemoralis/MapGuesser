@@ -10,7 +10,7 @@ type SearchProps = {
 export const Search = ({ onPress, rootStyle, iconStyle }: SearchProps) => {
   return (
     <TouchableOpacity activeOpacity={0.5} onPress={() => onPress()} style={[SearchStyles.closeButton, rootStyle]}>
-      <Image source={require('../../../assets/search.png')} style={SearchStyles.iconLine} />
+      <Image source={require('@/assets/search.png')} style={SearchStyles.iconLine} />
     </TouchableOpacity>
   );
 };

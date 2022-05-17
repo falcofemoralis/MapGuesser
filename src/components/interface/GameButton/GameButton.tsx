@@ -1,14 +1,12 @@
+import { GlobalStyles, Dimens, GlobalColors } from '@/values';
 import React from 'react';
 import { Image, ImageSourcePropType, ImageStyle, StyleProp, StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
-import { Colors } from '../../../values/colors';
-import { Dimens } from '../../../values/dimens';
-import { GlobalStyles } from '../../../values/styles';
 
 interface GameButtonProps {
   /** Image to display. Use 'require' to get the image */
   img?: ImageSourcePropType;
   /** Button title */
-  title: string;
+  title?: string;
   /** Subtitle under title */
   subTitle?: string;
   /** Button style */
@@ -27,8 +25,7 @@ interface GameButtonProps {
   textIconStyle?: StyleProp<ImageStyle>;
   /** Disabled button option */
   disabled?: boolean;
-  /** Style when button is disabled */
-  disabledStyle?: StyleProp<ViewStyle>;
+  fullIcon?: boolean;
 }
 export const GameButton: React.FC<GameButtonProps> = ({
   style,
@@ -42,19 +39,23 @@ export const GameButton: React.FC<GameButtonProps> = ({
   subTitleIcon,
   textIconStyle,
   disabled,
-  disabledStyle
+  fullIcon
 }) => {
   return (
-    <TouchableOpacity style={[styles.container, style, disabled ? disabledStyle : undefined]} onPress={onPress} disabled={disabled} activeOpacity={0.5}>
-      {img && <Image style={[styles.icon, iconStyle]} source={img} />}
-      <View style={[GlobalStyles.rcc]}>
-        <Text style={[styles.title, textStyle]}>{title}</Text>
-        {titleIcon && <Image style={[styles.textIcon, textIconStyle]} source={titleIcon} />}
-      </View>
-      <View style={[GlobalStyles.rcc]}>
-        {subTitle && <Text style={[styles.subTitle]}>{subTitle}</Text>}
-        {subTitleIcon && <Image style={[styles.textIcon, textIconStyle]} source={subTitleIcon} />}
-      </View>
+    <TouchableOpacity style={[styles.container, style, disabled ? styles.buttonDisabled : undefined]} onPress={onPress} disabled={disabled} activeOpacity={0.5}>
+      {img && <Image style={[styles.icon, fullIcon ? { height: '100%', width: '100%' } : undefined, iconStyle]} source={img} />}
+      {title && (
+        <View style={[GlobalStyles.rcc]}>
+          <Text style={[styles.title, textStyle]}>{title}</Text>
+          {titleIcon && <Image style={[styles.textIcon, textIconStyle]} source={titleIcon} />}
+        </View>
+      )}
+      {subTitle && (
+        <View style={[GlobalStyles.rcc]}>
+          {subTitle && <Text style={[styles.subTitle]}>{subTitle}</Text>}
+          {subTitleIcon && <Image style={[styles.textIcon, textIconStyle]} source={subTitleIcon} />}
+        </View>
+      )}
     </TouchableOpacity>
   );
 };
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
   container: {
     aspectRatio: 1,
     width: '30%',
-    backgroundColor: Colors.backgroundOpposite,
+    backgroundColor: GlobalColors.backgroundOpposite,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 15,
@@ -78,14 +79,14 @@ const styles = StyleSheet.create({
     paddingStart: 0,
     paddingEnd: 0,
     marginTop: 5,
-    color: Colors.white,
+    color: GlobalColors.white,
     fontSize: Dimens.normalText,
     textAlign: 'center'
   },
   subTitle: {
     paddingStart: 0,
     paddingEnd: 0,
-    color: Colors.white,
+    color: GlobalColors.white,
     fontSize: Dimens.normalText,
     textAlign: 'center'
   },
@@ -94,5 +95,8 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     marginStart: 5,
     marginTop: 5
+  },
+  buttonDisabled: {
+    opacity: 0.5
   }
 });

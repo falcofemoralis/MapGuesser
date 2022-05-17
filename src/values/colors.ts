@@ -1,4 +1,4 @@
-export const Colors = {
+export const GlobalColors = {
   primaryColor: '#2792eb',
   secondaryColor: '#2DBF40',
   white: '#fff',

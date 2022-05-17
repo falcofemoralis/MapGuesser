@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Animated, Dimensions, PanResponder, ScrollView, ScrollViewProps, StyleSheet, TouchableHighlight, TouchableWithoutFeedback, View } from 'react-native';
-import { Colors } from '../../../values/colors';
+import { GlobalColors } from '../../../values/colors';
 import { Bar } from './Bar';
 import { Close } from './Close';
 import { Search } from './Search';
@@ -280,7 +280,7 @@ const SwipeablePanelStyles = StyleSheet.create({
     alignItems: 'center',
     height: '100%',
     width: '100%',
-    backgroundColor: Colors.background
+    backgroundColor: GlobalColors.background
   },
   background: {
     position: 'absolute',

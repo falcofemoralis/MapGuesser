@@ -1,3 +1,16 @@
+import { Banner } from '@/components/interface/Banner/Banner';
+import { GameButton } from '@/components/interface/GameButton/GameButton';
+import { GameMode } from '@/constants/gamemode';
+import { Position } from '@/constants/position';
+import { StreetViewMode } from '@/constants/streetviewmode';
+import { Unit } from '@/constants/unit';
+import ProgressManager from '@/managers/progress.manager';
+import { gameStore } from '@/store/game.store';
+import { settingsStore } from '@/store/settings.store';
+import { userStore } from '@/store/user.store';
+import { formatText } from '@/translations/formatText';
+import Props from '@/types/props.type';
+import { Keys, Misc, GlobalColors, GlobalStyles, Dimens } from '@/values';
 import turfDistance from '@turf/distance';
 import { point } from '@turf/helpers';
 import { toJS } from 'mobx';
@@ -7,23 +20,6 @@ import { BackHandler, Dimensions, Image, StyleSheet, View } from 'react-native';
 import { AdEventType, InterstitialAd, TestIds } from 'react-native-google-mobile-ads';
 import MapView, { LatLng, Marker, Polyline } from 'react-native-maps';
 import * as Progress from 'react-native-progress';
-import { Banner } from '../components/Banner/Banner';
-import { GameButton } from '../components/interface/GameButton/GameButton';
-import { GameMode } from '../constants/gamemode';
-import { Position } from '../constants/position';
-import { StreetViewMode } from '../constants/streetviewmode';
-import { Unit } from '../constants/unit';
-import ProgressManager from '../managers/progress.manager';
-import { gameStore } from '../store/game.store';
-import { settingsStore } from '../store/settings.store';
-import { userStore } from '../store/user.store';
-import { formatText } from '../translations/formatText';
-import Props from '../types/props.type';
-import { Colors } from '../values/colors';
-import { Dimens } from '../values/dimens';
-import { Keys } from '../values/keys';
-import { Misc } from '../values/misc';
-import { GlobalStyles } from '../values/styles';
 
 const interstitial = InterstitialAd.createForAdRequest(__DEV__ ? TestIds.INTERSTITIAL : Keys.interstellarIds.ResultScreenNext);
 
@@ -144,12 +140,12 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
       <View style={styles.container}>
         <View style={styles.resultContainer}>
           {formatText(t('RECEIVED_POINTS'), styles.resultTextXP, { style: styles.resultTextBold, text: getXP() })}
-          <Progress.Bar style={styles.bar} color={Colors.primaryColor} progress={getXProgress()} width={Dimensions.get('window').width - 50} />
+          <Progress.Bar style={styles.bar} color={GlobalColors.primaryColor} progress={getXProgress()} width={Dimensions.get('window').width - 50} />
           {formatText(t('RESULT_DISTANCE'), styles.resultText, { style: styles.resultTextBold, text: getDistance() })}
           <View style={GlobalStyles.rcc}>
-            <GameButton style={styles.gameButton} img={require('../assets/menu.png')} title={t('MAIN_MENU')} onPress={toMainScreen} />
+            <GameButton style={styles.gameButton} img={require('@/assets/menu.png')} title={t('MAIN_MENU')} onPress={toMainScreen} />
             {gameSettings.gameMode == GameMode.ROUND && isMoreRounds() && (
-              <GameButton style={styles.gameButton} img={require('../assets/next.png')} title={t('NEXT_ROUND')} onPress={toNextRound} />
+              <GameButton style={styles.gameButton} img={require('@/assets/next.png')} title={t('NEXT_ROUND')} onPress={toNextRound} />
             )}
           </View>
         </View>
@@ -166,7 +162,7 @@ const UserMarker: React.FC<UserMarkerProps> = ({ from, to }) => {
   return (
     <>
       <Marker coordinate={from}>
-        <Image source={require('../assets/user.png')} style={styles.userMarker} resizeMode='contain' />
+        <Image source={require('@/assets/user.png')} style={styles.userMarker} resizeMode='contain' />
       </Marker>
       <Marker coordinate={to} />
       <Polyline coordinates={[from, to]} />
@@ -186,7 +182,7 @@ const styles = StyleSheet.create({
     height: '35%', // 100 - 70 + 5
     borderTopStartRadius: 25,
     borderTopEndRadius: 25,
-    backgroundColor: Colors.background
+    backgroundColor: GlobalColors.background
   },
   resultContainer: {
     flex: 1,
@@ -195,18 +191,18 @@ const styles = StyleSheet.create({
     padding: 25
   },
   resultText: {
-    color: Colors.white,
+    color: GlobalColors.white,
     textAlign: 'center',
     fontSize: Dimens.normalText,
     marginTop: 5
   },
   resultTextBold: {
     fontWeight: 'bold',
-    color: Colors.primaryColor
+    color: GlobalColors.primaryColor
   },
   resultTextXP: {
     fontWeight: 'bold',
-    color: Colors.primaryColor,
+    color: GlobalColors.primaryColor,
     fontSize: 30
   },
   userMarker: {
