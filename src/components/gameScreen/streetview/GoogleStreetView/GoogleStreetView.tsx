@@ -1,0 +1,38 @@
+import React from 'react';
+import { LatLng } from 'react-native-maps';
+import { PlayMode } from '../../../../constants/playmode';
+import { StreetViewSettings } from '../../../../types/streetviewsettings';
+import { LoadingPanel } from '../../../interface/LoadingPanel/LoadingPanel';
+import { GoogleCountriesList } from './data/googleCountriesList';
+import GoogleStreetViewWeb from './GoogleStreetViewWeb';
+
+export const GoogleStreetView: React.FC<StreetViewSettings> = ({ onMove, onInit, gameSettings, playModeData }) => {
+  const [init, setInit] = React.useState(false);
+
+  const onLoaded = (coordinates: LatLng) => {
+    onMove(coordinates);
+    if (!init) {
+      onInit();
+      setInit(true);
+    }
+  };
+
+  const getCountry = () => {
+    if (gameSettings.playMode == PlayMode.NORMAL) {
+      const values = Object.values(GoogleCountriesList);
+      const continent = values[Math.floor(Math.random() * values.length)];
+      return continent[Math.floor(Math.random() * continent.length)];
+    } else {
+      if (!playModeData?.continent) throw new Error('Continent mode must have selected continent');
+      const continent = GoogleCountriesList[playModeData.continent]; // get random continent
+      return continent[Math.floor(Math.random() * continent.length)];
+    }
+  };
+
+  return (
+    <>
+      {!init && <LoadingPanel />}
+      <GoogleStreetViewWeb onMove={onLoaded} country={getCountry()} />
+    </>
+  );
+};
