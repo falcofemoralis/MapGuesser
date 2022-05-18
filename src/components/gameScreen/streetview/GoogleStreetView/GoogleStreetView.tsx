@@ -1,4 +1,5 @@
 import { LoadingPanel } from '@/components/interface/LoadingPanel/LoadingPanel';
+import { Country } from '@/constants/country';
 import { PlayMode } from '@/constants/playmode';
 import { StreetViewSettings } from '@/types/streetviewsettings';
 import React from 'react';
@@ -23,10 +24,15 @@ export const GoogleStreetView: React.FC<GoogleStreetViewProps> = ({ onMove, onIn
       const values = Object.values(GoogleCountriesList);
       const continent = values[Math.floor(Math.random() * values.length)];
       return continent[Math.floor(Math.random() * continent.length)];
-    } else {
+    } else if (gameSettings.playMode == PlayMode.CONTINENTS) {
       if (!gameData?.continent) throw new Error('Continent mode must have selected continent');
       const continent = GoogleCountriesList[gameData.continent]; // get random continent
       return continent[Math.floor(Math.random() * continent.length)];
+    } else if (gameSettings.playMode == PlayMode.COUNTRIES) {
+      if (!gameData?.country) throw new Error("Country wasn't provided");
+      return gameData?.country;
+    } else {
+      return Country.Andorra;
     }
   };
 

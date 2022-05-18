@@ -142,7 +142,7 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
           gameSettings={gameSettings}
           gameData={gameData}
           sequenceTop={getButtonMargin()}
-          buttonStyle={styles.button}
+          buttonStyle={[styles.button, styles.refreshBtn]}
           buttonTop={getButtonMargin() + BTN_MARGIN}
         />
       ) : (
@@ -182,6 +182,12 @@ const styles = StyleSheet.create({
     width: 52,
     padding: 14,
     left: 10
+  },
+  refreshBtn: {
+    height: 52,
+    width: 52,
+    padding: 14,
+    right: 10
   }
 });
 

@@ -1,8 +1,10 @@
 import { GameButton } from '@/components/interface/GameButton/GameButton';
-import { Carousel } from '@/components/selectScreen/Carousel/Carousel';
+import { ContinentsCarousel } from '@/components/selectScreen/ContinentsCarousel/ContinentsCarousel';
+import { CountriesCarousel } from '@/components/selectScreen/CountriesCarousel/CountriesCarousel';
 import { Slider } from '@/components/selectScreen/Slider/Slider';
 import { Switch } from '@/components/selectScreen/Switch/Switch';
 import { Continent } from '@/constants/continent';
+import { Country } from '@/constants/country';
 import { Difficulty } from '@/constants/difficulty';
 import { GameMode } from '@/constants/gamemode';
 import { PlayMode } from '@/constants/playmode';
@@ -30,6 +32,7 @@ export const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, r
   const [time, setTime] = React.useState(Misc.GAME_MODE_TIME_ST);
   const [rounds, setRounds] = React.useState(Misc.GAME_MODE_ROUNDS_ST);
   let selectedContinent: Continent;
+  let selectedCountry: Country;
 
   const [adLoaded, setAdLoaded] = React.useState(false);
 
@@ -59,9 +62,11 @@ export const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, r
       return;
     }
 
+    console.log(selectedCountry);
+    
     navigation.replace('Game', {
       gameSettings: { gameMode, playMode: gameCard.playMode, streetViewMode, difficulty },
-      gameData: { continent: selectedContinent, time, rounds }
+      gameData: { continent: selectedContinent, country: selectedCountry, time, rounds }
     });
   };
 
@@ -72,7 +77,7 @@ export const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, r
   };
 
   const isPaidPlayable = () => {
-    if (streetViewMode == StreetViewMode.PAID && userStore.coins >= 10) {
+    if (streetViewMode == StreetViewMode.PAID && userStore.coins >= Misc.COINS_FOR_PAID_GAME) {
       return true;
     } else if (streetViewMode == StreetViewMode.FREE) {
       return true;
@@ -120,7 +125,8 @@ export const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, r
       </View>
       <ScrollView style={styles.scroll}>
         <View style={[GlobalStyles.ccc, styles.mainContainer]}>
-          {gameCard.playMode == PlayMode.CONTINENTS && <Carousel onSelect={continentCard => (selectedContinent = continentCard.continent)} />}
+          {gameCard.playMode == PlayMode.CONTINENTS && <ContinentsCarousel onSelect={continentCard => (selectedContinent = continentCard.continent)} />}
+          {gameCard.playMode == PlayMode.COUNTRIES && <CountriesCarousel onSelect={countryCard => (selectedCountry = countryCard.country)} />}
           <Switch initial={gameMode} onSelect={value => setGameMode(value)} options={gameModes} />
           {gameMode == GameMode.TIME && (
             <Slider min={Misc.GAME_MODE_TIME_MIN} max={Misc.GAME_MODE_TIME_MAX} onSelect={v => setTime(v)} unit='min' initial={Misc.GAME_MODE_TIME_ST} />

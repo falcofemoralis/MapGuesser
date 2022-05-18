@@ -42,7 +42,7 @@ export const GamesCarousel: React.FC<GamesCarouselProps> = ({ onSelect }) => {
       preview: require('@/assets/rounds.jpg'),
       description: t('COUNTRY_TITLE'),
       playMode: PlayMode.COUNTRIES,
-      requiredLvl: 5
+      requiredLvl: 0
     }
   ];
   

@@ -13,6 +13,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, StyleProp, StyleSheet, ToastAndroid, ViewStyle } from 'react-native';
 import { continentPlaces } from './data/continentPlaces';
+import { countryPlaces } from './data/countryPlaces';
 import { EasyPlaces } from './data/easyPlaces';
 import MapillaryImagesService, { Image } from './MapillaryImages.service';
 import MapillaryWeb from './MapillaryWeb';
@@ -96,6 +97,20 @@ export const Mapillary: React.FC<MapillaryProps> = ({ onMove, onInit, gameSettin
        */
       if (!gameData?.continent) throw new Error("Continent wasn't provided");
       place = continentPlaces[gameData?.continent]; // get random continent
+    } else if (gameSettings.playMode == PlayMode.COUNTRIES) {
+      /**
+       * COUNTRIES mode initialization
+       */
+      if (!gameData?.country) throw new Error("Country wasn't provided");
+      const values = Object.values(countryPlaces)[0];
+      console.log(gameData.country);
+      
+      const country = values[gameData.country];
+      if (!country) {
+        throw new Error("Country don't exist");
+      }
+
+      place = country;
     }
 
     if (place) {
@@ -160,12 +175,7 @@ export const Mapillary: React.FC<MapillaryProps> = ({ onMove, onInit, gameSettin
   return (
     <>
       {gameSettings.streetViewMode == StreetViewMode.FREE && (
-        <GameButton
-          img={require('@/assets/refresh.png')}
-          fullIcon
-          style={[styles.refreshBtn, buttonStyle, { top: buttonTop ?? 0 }]}
-          onPress={refreshLocation}
-        />
+        <GameButton img={require('@/assets/refresh.png')} fullIcon style={[buttonStyle, { top: buttonTop ?? 0 }]} onPress={refreshLocation} />
       )}
       {currentImage ? (
         <MapillaryWeb imageId={currentImage.id} sequenceTop={sequenceTop} onMove={onMove} />
@@ -175,12 +185,3 @@ export const Mapillary: React.FC<MapillaryProps> = ({ onMove, onInit, gameSettin
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  refreshBtn: {
-    height: 52,
-    width: 52,
-    padding: 14,
-    right: 10
-  }
-});

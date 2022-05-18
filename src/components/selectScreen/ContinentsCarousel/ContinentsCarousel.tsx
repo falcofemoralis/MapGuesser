@@ -1,26 +1,24 @@
 import { Continent } from '@/constants/continent';
+import { StreetViewMode } from '@/constants/streetviewmode';
 import { MAIN_CONTAINER_PADDING } from '@/screens/main.screen';
 import { ContinentCard } from '@/types/continentcard.type';
 import { GlobalDimens, GlobalColors } from '@/values';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Dimensions, Image, StyleSheet, Text, View } from 'react-native';
-import * as SnapCarousel from 'react-native-snap-carousel'; // Version can be specified in package.json
+import Carousel from 'react-native-snap-carousel'; // Version can be specified in package.json
 
 const SLIDER_WIDTH = Dimensions.get('window').width - MAIN_CONTAINER_PADDING * 2;
 const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.3);
 const ITEM_HEIGHT = Math.round((ITEM_WIDTH * 5) / 5);
 
-const DECK_SIZE = '35%';
-const SMALL_DECK_SIZE = '23%';
-
 interface CarouselProps {
   /** Triggered on game select */
   onSelect: (continentCard: ContinentCard) => void;
 }
-export const Carousel: React.FC<CarouselProps> = ({ onSelect }) => {
+export const ContinentsCarousel: React.FC<CarouselProps> = ({ onSelect }) => {
   const { t } = useTranslation();
-  const cards = [
+  const cards: ContinentCard[] = [
     { name: t('AS'), img: require('@/assets/asia.jpg'), continent: Continent.as },
     { name: t('EU'), img: require('@/assets/europe.jpg'), continent: Continent.eu },
     { name: t('NA'), img: require('@/assets/north_america.jpg'), continent: Continent.na },
@@ -44,12 +42,12 @@ export const Carousel: React.FC<CarouselProps> = ({ onSelect }) => {
     setIndex(i);
   };
 
-  console.log(`onSelect: ${cards[currentIndex].continent}`);
-
+  console.log(cards[currentIndex]);
+  
   onSelect(cards[currentIndex]);
 
   return (
-    <SnapCarousel.default
+    <Carousel
       containerCustomStyle={styles.carouselContainer}
       firstItem={currentIndex}
       layout={'default'}

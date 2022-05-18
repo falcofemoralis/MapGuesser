@@ -5,6 +5,7 @@ import { PlayMode } from '@/constants/playmode';
 import { StreetViewMode } from '@/constants/streetviewmode';
 import { GameCard } from '@/types/gamecard.type';
 import { LatLng } from 'react-native-maps';
+import { Country } from '@/constants/country';
 
 export interface GameSettings {
   playMode: PlayMode;
@@ -17,7 +18,7 @@ export interface GameData {
   continent?: Continent;
   time?: number;
   rounds?: number;
-  // country?: Country;
+  country?: Country;
 }
 
 export interface SelectProps {
