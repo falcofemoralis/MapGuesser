@@ -1,3 +1,4 @@
+import { Difficulty } from './../constants/difficulty';
 import { Continent } from '@/constants/continent';
 import { GameMode } from '@/constants/gamemode';
 import { PlayMode } from '@/constants/playmode';
@@ -9,10 +10,13 @@ export interface GameSettings {
   playMode: PlayMode;
   gameMode: GameMode;
   streetViewMode: StreetViewMode;
+  difficulty: Difficulty;
 }
 
-export interface PlayModeData {
+export interface GameData {
   continent?: Continent;
+  time?: number;
+  rounds?: number;
   // country?: Country;
 }
 
@@ -22,7 +26,7 @@ export interface SelectProps {
 
 interface GameProps {
   gameSettings: GameSettings;
-  playModeData?: PlayModeData;
+  gameData?: GameData;
 }
 
 interface ResultProps extends GameProps {

@@ -1,12 +1,13 @@
-import { makeAutoObservable, runInAction } from 'mobx';
-import { PlayMode } from '../../../../constants/playmode';
-import { PlayModeData } from '../../../../screens';
-import { userStore } from '../../../../store/user.store';
-import { generateCoordinate } from '../../../../utils/coordinates.util';
-import { Misc } from '../../../../values/misc';
 import { BeginnerPlaces } from './data/beginnerPlaces';
 import { ContinentPlaces } from './data/continentPlaces';
 import MapillaryImagesService, { Image } from './MapillaryImages.service';
+import { Difficulty } from '@/constants/difficulty';
+import { PlayMode } from '@/constants/playmode';
+import { GameSettings, GameData } from '@/screens';
+import { userStore } from '@/store/user.store';
+import { generateCoordinate } from '@/utils/coordinates.util';
+import { Misc } from '@/values';
+import { makeAutoObservable, runInAction } from 'mobx';
 
 const DELAY = 350;
 
@@ -26,21 +27,21 @@ class MapillaryСore {
    * @param onFail - receiving image was failed
    * @returns
    */
-  async init(playMode: PlayMode, playModeData: PlayModeData | undefined, onSuccess: (image: Image) => void, onFail: () => void) {
+  async init(gameSettings: GameSettings, gameData: GameData | undefined, onSuccess: (image: Image) => void, onFail: () => void) {
     /**
      * GETTING REGION DEPENDING ON GAME OPTIONS
      */
     let region;
-    if (playMode == PlayMode.NORMAL) {
-      if (userStore.progress.lvl <= Misc.UNLOCK_ALL_LVL) {
+    if (gameSettings.playMode == PlayMode.NORMAL) {
+      if (gameSettings.difficulty == Difficulty.EASY) {
         region = BeginnerPlaces;
-      } else {
+      } else if(gameSettings.difficulty == Difficulty.NORMAL) {
         const values = Object.values(ContinentPlaces);
         region = values[Math.floor(Math.random() * values.length)];
       }
-    } else if (playMode == PlayMode.CONTINENTS) {
-      if(!playModeData?.continent) throw new Error('Continent mode must have selected continent')
-      region = ContinentPlaces[playModeData?.continent]; // get random continent
+    } else if (gameSettings.playMode == PlayMode.CONTINENTS) {
+      if(!gameData?.continent) throw new Error('Continent mode must have selected continent')
+      region = ContinentPlaces[gameData?.continent]; // get random continent
     }
 
     if (!region) {

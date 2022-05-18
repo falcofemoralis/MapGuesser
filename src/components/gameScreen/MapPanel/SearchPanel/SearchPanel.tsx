@@ -2,7 +2,7 @@ import { GameButton } from '@/components/interface/GameButton/GameButton';
 import MapService, { SearchPlace } from '@/services/map.service';
 import { searchStore } from '@/store/search.store';
 import { Utils } from '@/utils/utils';
-import { Misc, Dimens } from '@/values';
+import { Misc, GlobalDimens } from '@/values';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Dimensions, FlatList, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: Colors.white,
-    fontSize: Dimens.headText,
+    fontSize: GlobalDimens.headText,
     fontWeight: 'bold'
   },
   closeBtn: {

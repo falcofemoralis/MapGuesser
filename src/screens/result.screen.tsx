@@ -10,7 +10,7 @@ import { settingsStore } from '@/store/settings.store';
 import { userStore } from '@/store/user.store';
 import { formatText } from '@/translations/formatText';
 import Props from '@/types/props.type';
-import { Keys, Misc, GlobalColors, GlobalStyles, Dimens } from '@/values';
+import { Keys, Misc, GlobalColors, GlobalStyles, GlobalDimens } from '@/values';
 import turfDistance from '@turf/distance';
 import { point } from '@turf/helpers';
 import { toJS } from 'mobx';
@@ -26,6 +26,7 @@ const interstitial = InterstitialAd.createForAdRequest(__DEV__ ? TestIds.INTERST
 const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
   const { t } = useTranslation();
   const gameSettings = route.params.gameSettings;
+  const gameData = route.params.gameData;
   const mapRef = React.useRef<MapView | null>(null); // ref to map
   const currentCoordinates = { ...route.params.from }; // spread fix error
   const selectedCoordinates = { ...route.params.to };
@@ -40,8 +41,8 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
   /**
    * Check round functions
    */
-  const isMoreRounds = () => gameStore.rounds.length + 1 !== Misc.MAX_ROUNDS;
-  const isLastRound = () => gameStore.rounds.length + 1 == Misc.MAX_ROUNDS;
+  const isMoreRounds = () => gameStore.rounds.length + 1 !== gameData?.rounds;
+  const isLastRound = () => gameStore.rounds.length + 1 == gameData?.rounds;
 
   const [interstitialLoaded, setInterstitialLoaded] = React.useState(false);
 
@@ -92,7 +93,7 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
       interstitial.show();
     }
     gameStore.addRound({ from: currentCoordinates, to: selectedCoordinates });
-    navigation.replace('Game', { gameSettings, playModeData: route.params.playModeData });
+    navigation.replace('Game', { gameSettings, gameData: route.params.gameData });
   };
 
   /**
@@ -193,7 +194,7 @@ const styles = StyleSheet.create({
   resultText: {
     color: GlobalColors.white,
     textAlign: 'center',
-    fontSize: Dimens.normalText,
+    fontSize: GlobalDimens.normalText,
     marginTop: 5
   },
   resultTextBold: {

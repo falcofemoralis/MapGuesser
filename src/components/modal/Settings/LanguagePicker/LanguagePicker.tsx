@@ -1,4 +1,4 @@
-import { Arrays, Dimens, GlobalColors } from '@/values';
+import { GlobalDimens, GlobalColors } from '@/values';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
@@ -7,7 +7,15 @@ import SelectDropdown from 'react-native-select-dropdown';
 interface LanguagePickerProps {}
 export const LanguagePicker: React.FC<LanguagePickerProps> = () => {
   const { i18n } = useTranslation();
-  const languages = Arrays.getLanguages();
+  const languages = [
+    { code: 'en', name: 'English' },
+    { code: 'ua', name: 'Українська' },
+    { code: 'pl', name: 'Polskie' },
+    { code: 'es', name: 'Español' },
+    { code: 'ru', name: 'Русский' },
+    { code: 'fr', name: 'Français' },
+    { code: 'de', name: 'Deutsch' }
+  ];
 
   /**
    * Get default language index
@@ -50,7 +58,7 @@ const styles = StyleSheet.create({
     height: 40
   },
   text: {
-    fontSize: Dimens.normalText,
+    fontSize: GlobalDimens.normalText,
     color: GlobalColors.white,
     textAlign: 'center'
   }

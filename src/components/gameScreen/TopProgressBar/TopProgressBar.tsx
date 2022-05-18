@@ -1,10 +1,10 @@
 import ProgressStep from '@/components/libs/ProgressSteps/ProgressStep';
 import ProgressSteps from '@/components/libs/ProgressSteps/ProgressSteps';
-import { GlobalColors, Dimens } from '@/values';
+import { GlobalColors, GlobalDimens } from '@/values';
 import React from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
-export const TOP_PROGRESS_BAR_HEIGHT = 56;
+export const TOP_PROGRESS_BAR_MARGIN = 56;
 
 interface TopProgressBarProps {
   /** Container style */
@@ -14,6 +14,7 @@ interface TopProgressBarProps {
   /** Max rounds */
   max: number;
 }
+
 export const TopProgressBar: React.FC<TopProgressBarProps> = ({ style, round, max }) => {
   return (
     <View style={[styles.container, style]}>
@@ -49,6 +50,6 @@ const styles = StyleSheet.create({
   },
   text: {
     color: GlobalColors.white,
-    fontSize: Dimens.headText
+    fontSize: GlobalDimens.headText
   }
 });

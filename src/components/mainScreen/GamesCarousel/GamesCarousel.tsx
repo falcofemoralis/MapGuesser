@@ -1,8 +1,9 @@
+import { PlayMode } from '@/constants/playmode';
 import { MAIN_CONTAINER_PADDING } from '@/screens/main.screen';
 import { userStore } from '@/store/user.store';
 import { formatText } from '@/translations/formatText';
 import { GameCard } from '@/types/gamecard.type';
-import { Arrays, GlobalColors, Dimens } from '@/values';
+import { GlobalDimens, GlobalColors } from '@/values';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -21,7 +22,30 @@ interface GamesCarouselProps {
 }
 export const GamesCarousel: React.FC<GamesCarouselProps> = ({ onSelect }) => {
   const { t } = useTranslation();
-  const cards = Arrays.getGameCards(t);
+  const cards = [
+    {
+      title: t('NORMAL_MODE'),
+      preview: require('@/assets/classic.jpg'),
+      description: t('NORMAL_TITLE'),
+      playMode: PlayMode.NORMAL,
+      requiredLvl: 0
+    },
+    {
+      title: t('CONTINENTS_MODE'),
+      preview: require('@/assets/earth.jpg'),
+      description: t('CONTINENTS_TITLE'),
+      playMode: PlayMode.CONTINENTS,
+      requiredLvl: 0
+    },
+    {
+      title: t('COUNTRY_MODE'),
+      preview: require('@/assets/rounds.jpg'),
+      description: t('COUNTRY_TITLE'),
+      playMode: PlayMode.COUNTRIES,
+      requiredLvl: 5
+    }
+  ];
+  
   const [currentIndex, setIndex] = React.useState(0); // index of current item
 
   /**
@@ -100,17 +124,17 @@ const styles = StyleSheet.create({
   },
   title: {
     color: GlobalColors.white,
-    fontSize: Dimens.normalText,
+    fontSize: GlobalDimens.normalText,
     fontWeight: 'bold'
   },
   description: {
     marginTop: 4,
     color: GlobalColors.white,
-    fontSize: Dimens.normalText
+    fontSize: GlobalDimens.normalText
   },
   level: {
     color: GlobalColors.gray,
-    fontSize: Dimens.normalText,
+    fontSize: GlobalDimens.normalText,
     marginBottom: 5
   }
 });

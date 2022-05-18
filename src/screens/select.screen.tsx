@@ -1,14 +1,16 @@
 import { GameButton } from '@/components/interface/GameButton/GameButton';
-import SwitchSelector from '@/components/libs/SwitchSelector/SwitchSelector';
-import { ContinentsCarousel } from '@/components/selectScreen/ContinentsCarousel/ContinentsCarousel';
+import { Carousel } from '@/components/selectScreen/Carousel/Carousel';
+import { Slider } from '@/components/selectScreen/Slider/Slider';
+import { Switch } from '@/components/selectScreen/Switch/Switch';
 import { Continent } from '@/constants/continent';
+import { Difficulty } from '@/constants/difficulty';
 import { GameMode } from '@/constants/gamemode';
 import { PlayMode } from '@/constants/playmode';
 import { StreetViewMode } from '@/constants/streetviewmode';
 import { userStore } from '@/store/user.store';
 import { formatText } from '@/translations/formatText';
 import Props from '@/types/props.type';
-import { Keys, Misc, GlobalStyles, GlobalColors, Dimens } from '@/values';
+import { GlobalDimens, GlobalColors, GlobalStyles, Keys, Misc } from '@/values';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -24,6 +26,9 @@ export const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, r
   const gameCard = route.params.gameCard;
   const [streetViewMode, setStreetViewMode] = React.useState(StreetViewMode.FREE);
   const [gameMode, setGameMode] = React.useState(GameMode.SINGLE);
+  const [difficulty, setDifficulty] = React.useState(userStore.progress.lvl > Misc.UNLOCK_ALL_LVL ? Difficulty.NORMAL : Difficulty.EASY);
+  const [time, setTime] = React.useState(Misc.GAME_MODE_TIME_ST);
+  const [rounds, setRounds] = React.useState(Misc.GAME_MODE_ROUNDS_ST);
   let selectedContinent: Continent;
 
   const [adLoaded, setAdLoaded] = React.useState(false);
@@ -48,6 +53,18 @@ export const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, r
     };
   }, []);
 
+  const playGame = () => {
+    if (!isPaidPlayable()) {
+      ToastAndroid.showWithGravityAndOffset('Not allowed', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
+      return;
+    }
+
+    navigation.replace('Game', {
+      gameSettings: { gameMode, playMode: gameCard.playMode, streetViewMode, difficulty },
+      gameData: { continent: selectedContinent, time, rounds }
+    });
+  };
+
   const showAd = () => {
     if (adLoaded) {
       rewarded.show();
@@ -64,14 +81,33 @@ export const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, r
     }
   };
 
-  const playGame = () => {
-    if (!isPaidPlayable()) {
-      ToastAndroid.showWithGravityAndOffset('Not allowed', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
-      return;
-    }
+  const gameModes = [
+    { label: t('SINGLE'), value: GameMode.SINGLE },
+    { label: t('ROUNDS'), value: GameMode.ROUND },
+    { label: t('TIME'), value: GameMode.TIME }
+  ];
 
-    navigation.replace('Game', { gameSettings: { gameMode, playMode: gameCard.playMode, streetViewMode }, playModeData: { continent: selectedContinent } });
-  };
+  const streetViewModes = [
+    { label: t('FREE'), value: StreetViewMode.FREE },
+    { label: t('PAID'), value: StreetViewMode.PAID }
+  ];
+
+  const difficulties = [
+    { label: t('EASY'), value: Difficulty.EASY },
+    { label: t('NORMAL'), value: Difficulty.NORMAL }
+  ];
+
+  const freeHintText = formatText(t('FREE_MODE_DESC'), styles.hintText);
+
+  const paidHintText = formatText(
+    t('PAID_MODE_DESC'),
+    styles.hintText,
+    {
+      style: styles.hintBold,
+      text: Misc.COINS_FOR_PAID_GAME
+    },
+    { style: styles.hintBold, text: userStore.coins.toFixed(0) }
+  );
 
   return (
     <View style={styles.container}>
@@ -84,45 +120,23 @@ export const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, r
       </View>
       <ScrollView style={styles.scroll}>
         <View style={[GlobalStyles.ccc, styles.mainContainer]}>
-          {gameCard.playMode == PlayMode.CONTINENTS && <ContinentsCarousel onSelect={continentCard => (selectedContinent = continentCard.continent)} />}
-          <SwitchSelector
-            initial={gameMode}
-            style={styles.selector}
-            onPress={(value: GameMode) => setGameMode(value)}
-            textColor={GlobalColors.white}
-            selectedColor={GlobalColors.white}
-            buttonColor={GlobalColors.primaryColor}
-            backgroundColor={GlobalColors.backgroundOpposite}
-            options={[
-              { label: t('SINGLE'), value: GameMode.SINGLE },
-              { label: t('ROUNDS'), value: GameMode.ROUND },
-              { label: t('TIME'), value: GameMode.TIME }
-            ]}
-          />
-          <SwitchSelector
-            initial={streetViewMode}
-            style={styles.selector}
-            onPress={(value: StreetViewMode) => setStreetViewMode(value)}
-            textColor={GlobalColors.white}
-            selectedColor={GlobalColors.white}
-            buttonColor={GlobalColors.primaryColor}
-            backgroundColor={GlobalColors.backgroundOpposite}
-            options={[
-              { label: t('FREE'), value: StreetViewMode.FREE },
-              { label: t('PAID'), value: StreetViewMode.PAID }
-            ]}
-          />
-          {streetViewMode == StreetViewMode.FREE
-            ? formatText(t('FREE_MODE_DESC'), styles.hintText)
-            : formatText(
-                t('PAID_MODE_DESC'),
-                styles.hintText,
-                {
-                  style: styles.hintBold,
-                  text: Misc.COINS_FOR_PAID_GAME
-                },
-                { style: styles.hintBold, text: userStore.coins }
-              )}
+          {gameCard.playMode == PlayMode.CONTINENTS && <Carousel onSelect={continentCard => (selectedContinent = continentCard.continent)} />}
+          <Switch initial={gameMode} onSelect={value => setGameMode(value)} options={gameModes} />
+          {gameMode == GameMode.TIME && (
+            <Slider min={Misc.GAME_MODE_TIME_MIN} max={Misc.GAME_MODE_TIME_MAX} onSelect={v => setTime(v)} unit='min' initial={Misc.GAME_MODE_TIME_ST} />
+          )}
+          {gameMode == GameMode.ROUND && (
+            <Slider
+              min={Misc.GAME_MODE_ROUNDS_MIN}
+              max={Misc.GAME_MODE_ROUNDS_MAX}
+              onSelect={v => setRounds(v)}
+              unit='rnd'
+              initial={Misc.GAME_MODE_ROUNDS_ST}
+            />
+          )}
+          <Switch initial={streetViewMode} onSelect={value => setStreetViewMode(value)} options={streetViewModes} />
+          {streetViewMode == StreetViewMode.FREE ? freeHintText : paidHintText}
+          {streetViewMode == StreetViewMode.FREE && <Switch initial={difficulty} onSelect={value => setDifficulty(value)} options={difficulties} />}
         </View>
         <View style={[GlobalStyles.rcc, styles.buttons]}>
           <GameButton
@@ -190,19 +204,15 @@ const styles = StyleSheet.create({
   },
   descriptionTitle: {
     color: GlobalColors.white,
-    fontSize: Dimens.headText,
+    fontSize: GlobalDimens.headText,
     fontWeight: 'bold'
   },
   descriptionText: {
     color: GlobalColors.white,
-    fontSize: Dimens.normalText
+    fontSize: GlobalDimens.normalText
   },
   mainContainer: {
     padding: 5
-  },
-  selector: {
-    marginTop: 10,
-    marginBottom: 10
   },
   buttons: {
     width: '100%',
@@ -223,7 +233,7 @@ const styles = StyleSheet.create({
   },
   hintText: {
     color: GlobalColors.white,
-    fontSize: Dimens.normalText
+    fontSize: GlobalDimens.normalText
   },
   hintBold: {
     color: GlobalColors.secondaryColor,

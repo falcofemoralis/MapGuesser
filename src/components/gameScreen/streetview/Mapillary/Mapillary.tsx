@@ -1,15 +1,18 @@
+import { LoadingPanel } from '@/components/interface/LoadingPanel/LoadingPanel';
+import { StreetViewSettings } from '@/types/streetviewsettings';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { GameMode } from '../../../../constants/gamemode';
-import { StreetViewSettings } from '../../../../types/streetviewsettings';
-import { LoadingPanel } from '../../../interface/LoadingPanel/LoadingPanel';
 import { Image } from './MapillaryImages.service';
-import MapillaryWeb, { SequenceButtonPosition } from './MapillaryWeb';
+import MapillaryWeb from './MapillaryWeb';
 import { mapillaryСore } from './MapillaryСore';
 
-const MAX_SEARCH_ATTEMPTS = 10
+const MAX_SEARCH_ATTEMPTS = 10;
 
-const Mapillary: React.FC<StreetViewSettings> = observer(({ onMove, onInit, gameSettings, playModeData }) => {
+interface MapillaryProps extends StreetViewSettings {
+  /** Margin of sequence button */
+  sequenceTop?: number;
+}
+const Mapillary: React.FC<MapillaryProps> = observer(({ onMove, onInit, gameSettings, gameData, sequenceTop }) => {
   const [attempts, setAttempts] = React.useState(0); // count of fails to get a mapillary location
 
   /**
@@ -30,7 +33,7 @@ const Mapillary: React.FC<StreetViewSettings> = observer(({ onMove, onInit, game
 
   // if image is not exists and attempts is not 999, then try to init mapillary
   if (!mapillaryСore.currentImage && attempts != 999) {
-    mapillaryСore.init(gameSettings.playMode, playModeData, onSuccess, onFail);
+    mapillaryСore.init(gameSettings, gameData, onSuccess, onFail);
   }
 
   // if image is exist then emit coordinates update
@@ -41,11 +44,7 @@ const Mapillary: React.FC<StreetViewSettings> = observer(({ onMove, onInit, game
   return (
     <>
       {mapillaryСore.currentImage ? (
-        <MapillaryWeb
-          imageId={mapillaryСore.currentImage.id}
-          position={gameSettings.gameMode == GameMode.SINGLE ? SequenceButtonPosition.TOP : SequenceButtonPosition.MARGIN_TOP}
-          onMove={onMove}
-        />
+        <MapillaryWeb imageId={mapillaryСore.currentImage.id} sequenceTop={sequenceTop} onMove={onMove} />
       ) : (
         <LoadingPanel progress={attempts / MAX_SEARCH_ATTEMPTS} />
       )}

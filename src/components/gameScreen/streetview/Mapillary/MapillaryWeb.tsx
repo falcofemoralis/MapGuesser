@@ -3,17 +3,14 @@ import MapillaryViewer from 'MapillaryViewer.html';
 import React from 'react';
 import { LatLng } from 'react-native-maps';
 import { WebView, WebViewMessageEvent } from 'react-native-webview';
-import { TOP_PROGRESS_BAR_HEIGHT } from '../../TopProgressBar/TopProgressBar';
 
-export enum SequenceButtonPosition {
-  TOP,
-  MARGIN_TOP
-}
+const SEQUENCE_BTN_MARGIN = 14;
+
 interface MapillaryWebProps {
+  /** Sequence button margin */
+  sequenceTop?: number;
   /** Street View image id*/
   imageId: string;
-  /** Required for the correct button position */
-  position: SequenceButtonPosition;
   /** Triggered on user moves to the next street view image */
   onMove: (coordinates: LatLng) => void;
 }
@@ -27,7 +24,7 @@ class MapillaryWeb extends React.Component<MapillaryWebProps> {
     const html = (MapillaryViewer as string)
       .replace('<ID>', imageId)
       .replace('<TOKEN>', Keys.mapillaryToken)
-      .replace(`'TOP'`, this.props.position == SequenceButtonPosition.MARGIN_TOP ? `${14 + TOP_PROGRESS_BAR_HEIGHT}px` : '14px');
+      .replace(`'TOP'`, `${this.props.sequenceTop ? this.props.sequenceTop + SEQUENCE_BTN_MARGIN : SEQUENCE_BTN_MARGIN}px`);
     return html;
   };
 

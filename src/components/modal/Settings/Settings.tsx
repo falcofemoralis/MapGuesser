@@ -2,7 +2,7 @@ import { GameButton } from '@/components/interface/GameButton/GameButton';
 import SwitchSelector from '@/components/libs/SwitchSelector/SwitchSelector';
 import { Unit } from '@/constants/unit';
 import { settingsStore } from '@/store/settings.store';
-import { GlobalColors, Dimens } from '@/values';
+import { GlobalColors, GlobalDimens } from '@/values';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Modal, StyleSheet, Text, View } from 'react-native';
@@ -35,7 +35,7 @@ export const Settings: React.FC<SettingsProps> = ({ visible, onClose }) => {
             buttonColor={GlobalColors.primaryColor}
             backgroundColor={GlobalColors.backgroundOpposite}
             textColor={GlobalColors.white}
-            fontSize={Dimens.normalText}
+            fontSize={GlobalDimens.normalText}
           />
           <LanguagePicker />
         </View>
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: GlobalColors.white,
-    fontSize: Dimens.headText,
+    fontSize: GlobalDimens.headText,
     fontWeight: 'bold'
   },
   closeBtn: {

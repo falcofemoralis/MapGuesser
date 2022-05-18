@@ -1,4 +1,4 @@
-import { GlobalStyles, Dimens, GlobalColors } from '@/values';
+import { GlobalStyles, GlobalDimens, GlobalColors } from '@/values';
 import React from 'react';
 import { Image, ImageSourcePropType, ImageStyle, StyleProp, StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
 
@@ -80,14 +80,14 @@ const styles = StyleSheet.create({
     paddingEnd: 0,
     marginTop: 5,
     color: GlobalColors.white,
-    fontSize: Dimens.normalText,
+    fontSize: GlobalDimens.normalText,
     textAlign: 'center'
   },
   subTitle: {
     paddingStart: 0,
     paddingEnd: 0,
     color: GlobalColors.white,
-    fontSize: Dimens.normalText,
+    fontSize: GlobalDimens.normalText,
     textAlign: 'center'
   },
   textIcon: {

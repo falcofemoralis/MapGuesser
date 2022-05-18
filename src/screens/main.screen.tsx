@@ -1,3 +1,4 @@
+import { CountdownTimer } from '@/components/gameScreen/CountdownTimer/CountdownTimer';
 import { Banner } from '@/components/interface/Banner/Banner';
 import { GameButton } from '@/components/interface/GameButton/GameButton';
 import { GamesCarousel } from '@/components/mainScreen/GamesCarousel/GamesCarousel';
@@ -8,7 +9,7 @@ import ProgressManager from '@/managers/progress.manager';
 import { userStore } from '@/store/user.store';
 import { GameCard } from '@/types/gamecard.type';
 import Props from '@/types/props.type';
-import { GlobalStyles, Keys, GlobalColors, Dimens } from '@/values';
+import { GlobalStyles, Keys, GlobalColors, GlobalDimens } from '@/values';
 import date from 'date-and-time';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
@@ -36,7 +37,7 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
   const getXP = () => userStore.progress.totalXp.toFixed(0);
   const getAccuracy = () => ProgressManager.getTotalAccuracy(userStore.progress.accuracy).toFixed(2);
   const getTime = () => date.format(new Date(userStore.progress.playtime), 'HH:mm:ss', true);
-  const getCoins = () => userStore.coins;
+  const getCoins = () => userStore.coins.toFixed(0);
   /**
    * Window togglers
    */
@@ -135,12 +136,12 @@ const styles = StyleSheet.create({
   },
   username: {
     color: GlobalColors.white,
-    fontSize: Dimens.headText,
+    fontSize: GlobalDimens.headText,
     fontWeight: 'bold'
   },
   lvlText: {
     color: GlobalColors.gray,
-    fontSize: Dimens.normalText,
+    fontSize: GlobalDimens.normalText,
     alignSelf: 'center'
   },
   moneyRow: {},
@@ -150,7 +151,7 @@ const styles = StyleSheet.create({
   },
   itemText: {
     color: GlobalColors.gray,
-    fontSize: Dimens.normalText,
+    fontSize: GlobalDimens.normalText,
     alignSelf: 'center'
   },
   itemIcon: {
@@ -208,7 +209,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     color: GlobalColors.white,
-    fontSize: Dimens.headText,
+    fontSize: GlobalDimens.headText,
     fontWeight: 'bold'
   }
 });
