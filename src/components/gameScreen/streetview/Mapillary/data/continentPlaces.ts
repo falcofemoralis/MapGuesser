@@ -1,4 +1,6 @@
-export const ContinentPlaces = {
+import { ContinentPlaces } from "@/types/places.type";
+
+export const continentPlaces: ContinentPlaces = {
   na: [
     [-124.9602931085904, 42.728468060363866, -103.99427913772057, 50.98240761129304],
     [-119.75982257536333, 51.05870329164571, -109.88327053949932, 55.10293631145635],

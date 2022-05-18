@@ -1,4 +1,4 @@
-import { Country } from "../../../../../constants/country";
+import { Country } from "@/constants/country";
 
 export const GoogleCountriesList = {
   na: [Country.Canada, Country.Mexico, Country.UnitedStates],

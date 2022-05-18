@@ -1,8 +1,7 @@
 import { CountdownTimer, COUNT_DOWN_TIMER_MARGIN } from '@/components/gameScreen/CountdownTimer/CountdownTimer';
 import MapPanel from '@/components/gameScreen/MapPanel/MapPanel';
 import { GoogleStreetView } from '@/components/gameScreen/streetview/GoogleStreetView/GoogleStreetView';
-import Mapillary from '@/components/gameScreen/streetview/Mapillary/Mapillary';
-import { mapillaryСore } from '@/components/gameScreen/streetview/Mapillary/MapillaryСore';
+import { Mapillary } from '@/components/gameScreen/streetview/Mapillary/Mapillary';
 import { TopProgressBar, TOP_PROGRESS_BAR_MARGIN } from '@/components/gameScreen/TopProgressBar/TopProgressBar';
 import { GameButton } from '@/components/interface/GameButton/GameButton';
 import { GameMode } from '@/constants/gamemode';
@@ -45,9 +44,6 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
         style: 'destructive',
         onPress: () => {
           BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-          if (gameSettings.streetViewMode == StreetViewMode.FREE) {
-            mapillaryСore.reset();
-          }
           if (gameSettings.gameMode == GameMode.ROUND) {
             gameStore.resetRounds();
           }
@@ -91,35 +87,14 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
     if (time) {
       const playtime = Date.now() - time;
       BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-      if (gameSettings.streetViewMode == StreetViewMode.FREE) {
-        mapillaryСore.reset();
-      }
 
       // timer finish
       if (toCoordinates) {
         navigation.replace('Result', { from: fromCoordinates, to: toCoordinates, playtime, ...route.params });
       } else {
-        navigation.replace('Main');
+        //navigation.replace('Main');
       }
     }
-  };
-
-  /**
-   * Refresh location handler
-   */
-  const refreshLocation = () => {
-    Alert.alert(t('REFRESH_GAME'), t('REFRESH_GAME_HINT'), [
-      { text: t('STAY'), style: 'cancel', onPress: () => {} },
-      {
-        text: t('REFRESH'),
-        style: 'destructive',
-        onPress: () => {
-          mapillaryСore.refresh(() => {
-            ToastAndroid.showWithGravityAndOffset(t('NO_REFRESH'), ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
-          });
-        }
-      }
-    ]);
   };
 
   /**
@@ -138,8 +113,13 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
     }
   };
 
+  const getRounds = () => {
+    if (!gameData?.rounds) throw new Error("Rounds wasn't provided");
+    return gameData?.rounds;
+  };
+
   const getTime = (): [number, number] => {
-    if (!gameData?.time) throw new Error('Not time was provided');
+    if (!gameData?.time) throw new Error("Time wasn't provided");
     const TOTAL_TIME = gameData?.time * 60 * 1000;
     const NOW_IN_MS = new Date().getTime();
     return [NOW_IN_MS + TOTAL_TIME, TOTAL_TIME];
@@ -147,7 +127,7 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
 
   return (
     <>
-      {gameSettings.gameMode === GameMode.ROUND && <TopProgressBar style={styles.progress} round={gameStore.rounds.length} max={gameData?.rounds!!} />}
+      {gameSettings.gameMode === GameMode.ROUND && <TopProgressBar style={styles.progress} round={gameStore.rounds.length} max={getRounds()} />}
       {gameSettings.gameMode === GameMode.TIME && time && <CountdownTimer onFinish={handleComplete} time={getTime()} />}
       <GameButton
         img={require('@/assets/logout.png')}
@@ -155,16 +135,16 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
         style={[styles.leaveBtn, styles.button, { top: getButtonMargin() + BTN_MARGIN }]}
         onPress={leaveGame}
       />
-      {gameSettings.streetViewMode == StreetViewMode.FREE && (
-        <GameButton
-          img={require('@/assets/refresh.png')}
-          fullIcon
-          style={[styles.refreshBtn, styles.button, { top: getButtonMargin() + BTN_MARGIN }]}
-          onPress={refreshLocation}
-        />
-      )}
       {gameSettings.streetViewMode == StreetViewMode.FREE ? (
-        <Mapillary onMove={onMove} onInit={onStreetViewInit} gameSettings={gameSettings} gameData={gameData} sequenceTop={getButtonMargin()} />
+        <Mapillary
+          onMove={onMove}
+          onInit={onStreetViewInit}
+          gameSettings={gameSettings}
+          gameData={gameData}
+          sequenceTop={getButtonMargin()}
+          buttonStyle={styles.button}
+          buttonTop={getButtonMargin() + BTN_MARGIN}
+        />
       ) : (
         <GoogleStreetView onMove={onMove} onInit={onStreetViewInit} gameSettings={gameSettings} gameData={gameData} />
       )}
@@ -202,12 +182,6 @@ const styles = StyleSheet.create({
     width: 52,
     padding: 14,
     left: 10
-  },
-  refreshBtn: {
-    height: 52,
-    width: 52,
-    padding: 14,
-    right: 10
   }
 });
 

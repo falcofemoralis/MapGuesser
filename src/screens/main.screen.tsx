@@ -94,15 +94,7 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
             />
           </View>
         </View>
-        {/* <Text style={styles.headerText}>Game modes</Text> */}
       </ScrollView>
-      {/* <View style={[GlobalStyles.rcc, styles.progressesContainer]}>
-        <ProgressValue value={getXP()} text={t('XP')} />
-        <ProgressValue value={getTime()} unit='' text={t('PLAYTIME')} />
-        <ProgressValue value={getAccuracy()} unit='%' text={t('ACCURACY')} />
-      </View> */}
-      {/* <GamesCarousel onSelect={onGameSelect} />
-      <ContinentsSelector visible={isContinents} onClose={toggleContinents} onSelect={onContinentSelect} /> */}
       <Banner position={Position.BOTTOM} id={Keys.bannersIds.MainScreen} />
     </View>
   );
