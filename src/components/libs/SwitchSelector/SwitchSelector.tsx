@@ -29,18 +29,6 @@ export default class SwitchSelector extends Component {
       selected: initial
     };
 
-    for (let i = 0; i < options.length; i++) {
-      const option = options[i];
-
-      if (initial === option.value) {
-        this.state = {
-          selected: i
-        };
-
-        break;
-      }
-    }
-
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: this.shouldSetResponder,
       onMoveShouldSetPanResponder: this.shouldSetResponder,

@@ -1,6 +1,5 @@
 import { Banner } from '@/components/interface/Banner/Banner';
 import { GameButton } from '@/components/interface/GameButton/GameButton';
-import { GameMode } from '@/constants/gamemode';
 import { Position } from '@/constants/position';
 import { StreetViewMode } from '@/constants/streetviewmode';
 import { Unit } from '@/constants/unit';
@@ -10,13 +9,13 @@ import { settingsStore } from '@/store/settings.store';
 import { userStore } from '@/store/user.store';
 import { formatText } from '@/translations/formatText';
 import Props from '@/types/props.type';
-import { Keys, Misc, GlobalColors, GlobalStyles, GlobalDimens } from '@/values';
+import { GlobalColors, GlobalDimens, GlobalStyles, Keys, Misc } from '@/values';
 import turfDistance from '@turf/distance';
 import { point } from '@turf/helpers';
 import { toJS } from 'mobx';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { BackHandler, Dimensions, Image, StyleSheet, View } from 'react-native';
+import { BackHandler, Dimensions, Image, StyleSheet, Text, View } from 'react-native';
 import { AdEventType, InterstitialAd, TestIds } from 'react-native-google-mobile-ads';
 import MapView, { LatLng, Marker, Polyline } from 'react-native-maps';
 import * as Progress from 'react-native-progress';
@@ -29,14 +28,23 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
   const gameData = route.params.gameData;
   const mapRef = React.useRef<MapView | null>(null); // ref to map
   const currentCoordinates = { ...route.params.from }; // spread fix error
-  const selectedCoordinates = { ...route.params.to };
   const from = point([currentCoordinates?.latitude, currentCoordinates?.longitude]); // 'from' point
-  const to = point([selectedCoordinates?.latitude, selectedCoordinates?.longitude]); // 'to' point
-  const distance = turfDistance(from, to, { units: Unit.KM }); // calculate distance between 'from' and 'to' points (in km)
-  const miles = turfDistance(from, to, { units: Unit.ML }); // in miles
-  const xp = ProgressManager.xp(distance); // calculate xp
-  const accuracy = ProgressManager.accuracy(distance); // calculate accuracy
   const playtime = route.params.playtime; // user playtime
+  const [interstitialLoaded, setInterstitialLoaded] = React.useState(false);
+
+  let selectedCoordinates: LatLng | undefined = undefined,
+    distance: number,
+    miles: number,
+    xp: number,
+    accuracy: number;
+  if (route.params.to) {
+    selectedCoordinates = { ...route.params.to };
+    const to = point([selectedCoordinates?.latitude, selectedCoordinates?.longitude]); // 'to' point
+    distance = turfDistance(from, to, { units: Unit.KM }); // calculate distance between 'from' and 'to' points (in km)
+    miles = turfDistance(from, to, { units: Unit.ML }); // in miles
+    xp = ProgressManager.xp(distance); // calculate xp
+    accuracy = ProgressManager.accuracy(distance); // calculate accuracy
+  }
 
   /**
    * Check round functions
@@ -44,11 +52,6 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
   const isMoreRounds = () => gameStore.rounds.length + 1 !== gameData?.rounds;
   const isLastRound = () => gameStore.rounds.length + 1 == gameData?.rounds;
 
-  const [interstitialLoaded, setInterstitialLoaded] = React.useState(false);
-
-  /**
-   * Load interstitial ad
-   */
   React.useEffect(() => {
     const unsubscribe = interstitial.addAdEventListener(AdEventType.LOADED, () => {
       setInterstitialLoaded(true);
@@ -61,16 +64,15 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
     }
     settingsStore.updateAdsCounter();
 
-    /**
-     * Update user progress
-     */
-    userStore.addProgress({
-      playtime,
-      accuracy: [accuracy],
-      xp,
-      lvl: 0,
-      totalXp: xp
-    });
+    if (accuracy && xp) {
+      userStore.addProgress({
+        playtime,
+        accuracy: [accuracy],
+        xp,
+        lvl: 0,
+        totalXp: xp
+      });
+    }
 
     if (gameSettings.streetViewMode == StreetViewMode.FREE) {
       userStore.updateCoins(Misc.COINS_PER_FREE_GAME, '+');
@@ -100,7 +102,7 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
    * Navigate to main screen
    */
   const toMainScreen = () => {
-    if (gameSettings.gameMode == GameMode.ROUND) {
+    if (gameSettings.isRounds) {
       gameStore.resetRounds();
     }
 
@@ -125,27 +127,33 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
       <MapView
         ref={mapRef}
         style={styles.map}
-        onMapReady={() =>
-          mapRef?.current?.fitToCoordinates([selectedCoordinates, currentCoordinates], {
+        onMapReady={() => {
+          const fitTo = selectedCoordinates ? [selectedCoordinates, currentCoordinates] : [currentCoordinates];
+          mapRef?.current?.fitToCoordinates(fitTo, {
             edgePadding: { top: 30, right: 10, bottom: 5, left: 10 },
             animated: true
-          })
-        }
+          });
+        }}
       >
         <UserMarker from={currentCoordinates} to={selectedCoordinates} />
-        {/**
-         * Other rounds except the latest one
-         */}
+        {/** Other rounds except the latest one */}
         {isLastRound() && toJS(gameStore.rounds).map((round, i) => <UserMarker key={i} from={round.from} to={round.to} />)}
       </MapView>
       <View style={styles.container}>
         <View style={styles.resultContainer}>
-          {formatText(t('RECEIVED_POINTS'), styles.resultTextXP, { style: styles.resultTextBold, text: getXP() })}
-          <Progress.Bar style={styles.bar} color={GlobalColors.primaryColor} progress={getXProgress()} width={Dimensions.get('window').width - 50} />
-          {formatText(t('RESULT_DISTANCE'), styles.resultText, { style: styles.resultTextBold, text: getDistance() })}
+          {selectedCoordinates ? (
+            <>
+              {formatText(t('RECEIVED_POINTS'), styles.resultTextXP, { style: styles.resultTextBold, text: getXP() })}
+              <Progress.Bar style={styles.bar} color={GlobalColors.primaryColor} progress={getXProgress()} width={Dimensions.get('window').width - 50} />
+              {formatText(t('RESULT_DISTANCE'), styles.resultText, { style: styles.resultTextBold, text: getDistance() })}
+            </>
+          ) : (
+            <Text style={styles.resultText}>Time was expired</Text>
+          )}
+
           <View style={GlobalStyles.rcc}>
             <GameButton style={styles.gameButton} img={require('@/assets/menu.png')} title={t('MAIN_MENU')} onPress={toMainScreen} />
-            {gameSettings.gameMode == GameMode.ROUND && isMoreRounds() && (
+            {gameSettings.isRounds && isMoreRounds() && (
               <GameButton style={styles.gameButton} img={require('@/assets/next.png')} title={t('NEXT_ROUND')} onPress={toNextRound} />
             )}
           </View>
@@ -157,7 +165,7 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
 
 interface UserMarkerProps {
   from: LatLng;
-  to: LatLng;
+  to?: LatLng;
 }
 const UserMarker: React.FC<UserMarkerProps> = ({ from, to }) => {
   return (
@@ -165,8 +173,12 @@ const UserMarker: React.FC<UserMarkerProps> = ({ from, to }) => {
       <Marker coordinate={from}>
         <Image source={require('@/assets/user.png')} style={styles.userMarker} resizeMode='contain' />
       </Marker>
-      <Marker coordinate={to} />
-      <Polyline coordinates={[from, to]} />
+      {to && (
+        <>
+          <Marker coordinate={to} />
+          <Polyline coordinates={[from, to]} />
+        </>
+      )}
     </>
   );
 };

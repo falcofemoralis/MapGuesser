@@ -1,4 +1,3 @@
-import { CountdownTimer } from '@/components/gameScreen/CountdownTimer/CountdownTimer';
 import { Banner } from '@/components/interface/Banner/Banner';
 import { GameButton } from '@/components/interface/GameButton/GameButton';
 import { GamesCarousel } from '@/components/mainScreen/GamesCarousel/GamesCarousel';
@@ -18,7 +17,6 @@ import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
   const { t } = useTranslation();
-
   const [isSettings, setSetting] = React.useState(false); // state of modal settings window
 
   /**
@@ -30,7 +28,7 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
   };
 
   /**
-   * Set of functions that returns formatted user data
+   *  Functions that return formatted user data
    */
   const getProgress = () => userStore.progress.xp / ProgressManager.lvl(userStore.progress.lvl + 1);
   const getLvl = () => userStore.progress.lvl;
@@ -38,6 +36,7 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
   const getAccuracy = () => ProgressManager.getTotalAccuracy(userStore.progress.accuracy).toFixed(2);
   const getTime = () => date.format(new Date(userStore.progress.playtime), 'HH:mm:ss', true);
   const getCoins = () => userStore.coins.toFixed(0);
+
   /**
    * Window togglers
    */

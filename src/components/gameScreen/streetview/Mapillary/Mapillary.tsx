@@ -3,7 +3,6 @@ import { LoadingPanel } from '@/components/interface/LoadingPanel/LoadingPanel';
 import { Difficulty } from '@/constants/difficulty';
 import { PlayMode } from '@/constants/playmode';
 import { StreetViewMode } from '@/constants/streetviewmode';
-import { userStore } from '@/store/user.store';
 import { Place } from '@/types/places.type';
 import { StreetViewSettings } from '@/types/streetviewsettings';
 import { generateCoordinate } from '@/utils/coordinates.util';
@@ -31,17 +30,19 @@ interface MapillaryProps extends StreetViewSettings {
 }
 export const Mapillary: React.FC<MapillaryProps> = ({ onMove, onInit, gameSettings, gameData, sequenceTop, buttonTop, buttonStyle }) => {
   const { t } = useTranslation();
-  const [images, setImages] = React.useState<Image[] | null>(null); // available street view images
   const [currentImage, setCurrentImage] = React.useState<Image | null>(null); // current street view image
   const [attempts, setAttempts] = React.useState(0); // count of fails to get a mapillary location
+  let availableImages: Image[] = [] // available street view images
 
   /**
    * Success of getting image handler
-   * @param image - StreetView image
+   * @param images - StreetView images
    */
-  const onSuccess = (image: Image) => {
+  const onSuccess = (images: Image[]) => {
     setAttempts(999);
-    updateCurrentImage(image);
+    console.log('onSuccess');
+    availableImages = images;
+    updateCurrentImage(getRandomImage(images));
     onInit();
   };
 
@@ -104,7 +105,7 @@ export const Mapillary: React.FC<MapillaryProps> = ({ onMove, onInit, gameSettin
       if (!gameData?.country) throw new Error("Country wasn't provided");
       const values = Object.values(countryPlaces)[0];
       console.log(gameData.country);
-      
+
       const country = values[gameData.country];
       if (!country) {
         throw new Error("Country don't exist");
@@ -126,8 +127,7 @@ export const Mapillary: React.FC<MapillaryProps> = ({ onMove, onInit, gameSettin
           }
 
           if (images.length > 0) {
-            setImages(images);
-            onSuccess(getRandomImage(images));
+            onSuccess(images);
           } else {
             onFail();
           }
@@ -146,6 +146,8 @@ export const Mapillary: React.FC<MapillaryProps> = ({ onMove, onInit, gameSettin
     onMove({ latitude: currentImage.computed_geometry.coordinates[1], longitude: currentImage.computed_geometry.coordinates[0] });
   }
 
+  //console.log(currentImage?.id);
+
   /**
    * Refresh current image from the list of available images
    */
@@ -156,12 +158,11 @@ export const Mapillary: React.FC<MapillaryProps> = ({ onMove, onInit, gameSettin
         text: t('REFRESH'),
         style: 'destructive',
         onPress: () => {
-          if (images && images.length > 0) {
-            const imgs = images.filter(img => img.sequence != currentImage?.sequence);
-            setImages(imgs);
+          if (availableImages.length > 0) {
+            availableImages = availableImages.filter(img => img.sequence != currentImage?.sequence);
 
-            if (imgs.length > 0) {
-              updateCurrentImage(getRandomImage(imgs));
+            if (availableImages.length > 0) {
+              updateCurrentImage(getRandomImage(availableImages));
               return;
             }
           }

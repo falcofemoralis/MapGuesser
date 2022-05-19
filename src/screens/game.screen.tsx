@@ -4,7 +4,6 @@ import { GoogleStreetView } from '@/components/gameScreen/streetview/GoogleStree
 import { Mapillary } from '@/components/gameScreen/streetview/Mapillary/Mapillary';
 import { TopProgressBar, TOP_PROGRESS_BAR_MARGIN } from '@/components/gameScreen/TopProgressBar/TopProgressBar';
 import { GameButton } from '@/components/interface/GameButton/GameButton';
-import { GameMode } from '@/constants/gamemode';
 import { StreetViewMode } from '@/constants/streetviewmode';
 import { gameStore } from '@/store/game.store';
 import { userStore } from '@/store/user.store';
@@ -19,8 +18,7 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
   const { t } = useTranslation();
   const gameSettings = route.params.gameSettings;
   const gameData = route.params.gameData;
-  const [time, setTime] = React.useState<number | null>();
-
+  const [startTime, setStartTime] = React.useState<number | null>();
   let fromCoordinates: LatLng; // user street view coordinates
   let toCoordinates: LatLng; // marker coordinates
 
@@ -43,8 +41,8 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
         text: t('LEAVE'),
         style: 'destructive',
         onPress: () => {
-          BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-          if (gameSettings.gameMode == GameMode.ROUND) {
+          resetGame();
+          if (gameSettings.isRounds) {
             gameStore.resetRounds();
           }
           navigation.replace('Main');
@@ -53,11 +51,15 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
     ]);
   };
 
+  const resetGame = () => {
+    BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+  };
+
   /**
    * Listener for streetview init
    */
   const onStreetViewInit = () => {
-    setTime(Date.now());
+    setStartTime(Date.now());
 
     if (gameSettings.streetViewMode == StreetViewMode.PAID) {
       userStore.updateCoins(Misc.COINS_FOR_PAID_GAME, '-');
@@ -84,17 +86,8 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
    * Complete button handler
    */
   const handleComplete = () => {
-    if (time) {
-      const playtime = Date.now() - time;
-      BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-
-      // timer finish
-      if (toCoordinates) {
-        navigation.replace('Result', { from: fromCoordinates, to: toCoordinates, playtime, ...route.params });
-      } else {
-        //navigation.replace('Main');
-      }
-    }
+    resetGame();
+    navigation.replace('Result', { from: fromCoordinates, to: toCoordinates, playtime: getPlaytime(), ...route.params });
   };
 
   /**
@@ -102,15 +95,14 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
    * @returns
    */
   const getButtonMargin = () => {
-    const gm = gameSettings.gameMode;
-
-    if (gm == GameMode.ROUND) {
-      return TOP_PROGRESS_BAR_MARGIN;
-    } else if (gm == GameMode.TIME) {
-      return COUNT_DOWN_TIMER_MARGIN;
-    } else {
-      return 0;
+    let margin = 0;
+    if (gameSettings.isRounds) {
+      margin += TOP_PROGRESS_BAR_MARGIN;
     }
+    if (gameSettings.isTimer) {
+      margin += COUNT_DOWN_TIMER_MARGIN;
+    }
+    return margin;
   };
 
   const getRounds = () => {
@@ -120,15 +112,29 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
 
   const getTime = (): [number, number] => {
     if (!gameData?.time) throw new Error("Time wasn't provided");
-    const TOTAL_TIME = gameData?.time * 60 * 1000;
+    const TOTAL_TIME = gameData?.time * 1 * 1000;
     const NOW_IN_MS = new Date().getTime();
     return [NOW_IN_MS + TOTAL_TIME, TOTAL_TIME];
   };
 
+  const getPlaytime = () => {
+    if (startTime) {
+      return Date.now() - startTime;
+    } else {
+      return 0;
+    }
+  };
+
   return (
     <>
-      {gameSettings.gameMode === GameMode.ROUND && <TopProgressBar style={styles.progress} round={gameStore.rounds.length} max={getRounds()} />}
-      {gameSettings.gameMode === GameMode.TIME && time && <CountdownTimer onFinish={handleComplete} time={getTime()} />}
+      {gameSettings.isTimer && startTime && <CountdownTimer onFinish={handleComplete} time={getTime()} />}
+      {gameSettings.isRounds && (
+        <TopProgressBar
+          style={[styles.progress, { marginTop: gameSettings.isTimer ? COUNT_DOWN_TIMER_MARGIN : 0 }]}
+          round={gameStore.rounds.length}
+          max={getRounds()}
+        />
+      )}
       <GameButton
         img={require('@/assets/logout.png')}
         fullIcon

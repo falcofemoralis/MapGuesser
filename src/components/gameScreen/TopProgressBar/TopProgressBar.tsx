@@ -44,10 +44,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  progress: {
-    alignSelf: 'center',
-    marginTop: 5
-  },
   text: {
     color: GlobalColors.white,
     fontSize: GlobalDimens.headText

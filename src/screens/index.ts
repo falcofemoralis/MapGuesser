@@ -1,15 +1,14 @@
 import { Difficulty } from './../constants/difficulty';
 import { Continent } from '@/constants/continent';
-import { GameMode } from '@/constants/gamemode';
 import { PlayMode } from '@/constants/playmode';
 import { StreetViewMode } from '@/constants/streetviewmode';
 import { GameCard } from '@/types/gamecard.type';
 import { LatLng } from 'react-native-maps';
 import { Country } from '@/constants/country';
+import { GameMode } from '@/types/gamemode.type';
 
-export interface GameSettings {
+export interface GameSettings extends GameMode {
   playMode: PlayMode;
-  gameMode: GameMode;
   streetViewMode: StreetViewMode;
   difficulty: Difficulty;
 }
@@ -32,7 +31,7 @@ interface GameProps {
 
 interface ResultProps extends GameProps {
   from: LatLng;
-  to: LatLng;
+  to?: LatLng;
   playtime: number;
 }
 

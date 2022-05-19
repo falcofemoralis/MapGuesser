@@ -9,7 +9,7 @@ interface Option<T> {
 }
 
 interface SwitchProps<T> {
-  initial: T;
+  initial: number;
   onSelect: (value: T) => void;
   options: Option<T>[];
 }

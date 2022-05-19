@@ -8,7 +8,7 @@ import { RootStackParamList } from './src/screens';
 import GameScreen from './src/screens/game.screen';
 import MainScreen from './src/screens/main.screen';
 import ResultScreen from './src/screens/result.screen';
-import { SelectScreen } from './src/screens/select.screen';
+import SelectScreen from './src/screens/select.screen';
 import { GlobalColors } from './src/values/colors';
 
 mobileAds()

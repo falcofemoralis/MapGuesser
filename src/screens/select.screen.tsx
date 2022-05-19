@@ -6,11 +6,11 @@ import { Switch } from '@/components/selectScreen/Switch/Switch';
 import { Continent } from '@/constants/continent';
 import { Country } from '@/constants/country';
 import { Difficulty } from '@/constants/difficulty';
-import { GameMode } from '@/constants/gamemode';
 import { PlayMode } from '@/constants/playmode';
 import { StreetViewMode } from '@/constants/streetviewmode';
 import { userStore } from '@/store/user.store';
 import { formatText } from '@/translations/formatText';
+import { GameMode } from '@/types/gamemode.type';
 import Props from '@/types/props.type';
 import { GlobalDimens, GlobalColors, GlobalStyles, Keys, Misc } from '@/values';
 import { observer } from 'mobx-react-lite';
@@ -23,18 +23,17 @@ import { MAIN_CONTAINER_PADDING } from './main.screen';
 
 const rewarded = RewardedAd.createForAdRequest(__DEV__ ? TestIds.REWARDED : Keys.rewardIds.SelectScreen);
 
-export const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, route }) => {
+const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, route }) => {
   const { t } = useTranslation();
   const gameCard = route.params.gameCard;
   const [streetViewMode, setStreetViewMode] = React.useState(StreetViewMode.FREE);
-  const [gameMode, setGameMode] = React.useState(GameMode.SINGLE);
+  const [gameMode, setGameMode] = React.useState<GameMode>({ isRounds: false, isTimer: false });
   const [difficulty, setDifficulty] = React.useState(userStore.progress.lvl > Misc.UNLOCK_ALL_LVL ? Difficulty.NORMAL : Difficulty.EASY);
   const [time, setTime] = React.useState(Misc.GAME_MODE_TIME_ST);
   const [rounds, setRounds] = React.useState(Misc.GAME_MODE_ROUNDS_ST);
+  const [adLoaded, setAdLoaded] = React.useState(false);
   let selectedContinent: Continent;
   let selectedCountry: Country;
-
-  const [adLoaded, setAdLoaded] = React.useState(false);
 
   React.useEffect(() => {
     const unsubscribeLoaded = rewarded.addAdEventListener(RewardedAdEventType.LOADED, () => {
@@ -56,54 +55,69 @@ export const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, r
     };
   }, []);
 
+  /**
+   * Start a game
+   */
   const playGame = () => {
-    if (!isPaidPlayable()) {
+    if (!isGamePlayable()) {
       ToastAndroid.showWithGravityAndOffset('Not allowed', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
       return;
     }
 
-    console.log(selectedCountry);
-    
     navigation.replace('Game', {
-      gameSettings: { gameMode, playMode: gameCard.playMode, streetViewMode, difficulty },
+      gameSettings: { playMode: gameCard.playMode, streetViewMode, difficulty, isRounds: gameMode.isRounds, isTimer: gameMode.isTimer },
       gameData: { continent: selectedContinent, country: selectedCountry, time, rounds }
     });
   };
 
+  /**
+   * Show reward advert
+   */
   const showAd = () => {
     if (adLoaded) {
       rewarded.show();
     }
   };
 
-  const isPaidPlayable = () => {
+  /**
+   * Identifies if user can play the the game
+   * @returns true - playable, false - user can't play the paid game
+   */
+  const isGamePlayable = () => {
     if (streetViewMode == StreetViewMode.PAID && userStore.coins >= Misc.COINS_FOR_PAID_GAME) {
+      // selected paid game mode and user has required coins
       return true;
     } else if (streetViewMode == StreetViewMode.FREE) {
+      // free mode don't have any restrictions
       return true;
     } else {
+      // not allowed
       return false;
     }
   };
 
-  const gameModes = [
-    { label: t('SINGLE'), value: GameMode.SINGLE },
-    { label: t('ROUNDS'), value: GameMode.ROUND },
-    { label: t('TIME'), value: GameMode.TIME }
+  /**
+   * Switches data
+   */
+  const gameModes: { label: string; value: GameMode }[] = [
+    { label: t('SINGLE'), value: { isTimer: false, isRounds: false } },
+    { label: t('ROUNDS'), value: { isTimer: false, isRounds: true } },
+    { label: t('TIME'), value: { isTimer: true, isRounds: false } },
+    { label: 'timerounds', value: { isTimer: true, isRounds: true } }
   ];
-
   const streetViewModes = [
     { label: t('FREE'), value: StreetViewMode.FREE },
     { label: t('PAID'), value: StreetViewMode.PAID }
   ];
-
   const difficulties = [
     { label: t('EASY'), value: Difficulty.EASY },
     { label: t('NORMAL'), value: Difficulty.NORMAL }
   ];
 
+  /**
+   * Hints for selected street view mode
+   */
   const freeHintText = formatText(t('FREE_MODE_DESC'), styles.hintText);
-
   const paidHintText = formatText(
     t('PAID_MODE_DESC'),
     styles.hintText,
@@ -127,11 +141,11 @@ export const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, r
         <View style={[GlobalStyles.ccc, styles.mainContainer]}>
           {gameCard.playMode == PlayMode.CONTINENTS && <ContinentsCarousel onSelect={continentCard => (selectedContinent = continentCard.continent)} />}
           {gameCard.playMode == PlayMode.COUNTRIES && <CountriesCarousel onSelect={countryCard => (selectedCountry = countryCard.country)} />}
-          <Switch initial={gameMode} onSelect={value => setGameMode(value)} options={gameModes} />
-          {gameMode == GameMode.TIME && (
+          <Switch initial={0} onSelect={value => setGameMode(value)} options={gameModes} />
+          {gameMode.isRounds && (
             <Slider min={Misc.GAME_MODE_TIME_MIN} max={Misc.GAME_MODE_TIME_MAX} onSelect={v => setTime(v)} unit='min' initial={Misc.GAME_MODE_TIME_ST} />
           )}
-          {gameMode == GameMode.ROUND && (
+          {gameMode.isTimer && (
             <Slider
               min={Misc.GAME_MODE_ROUNDS_MIN}
               max={Misc.GAME_MODE_ROUNDS_MAX}
@@ -154,7 +168,7 @@ export const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, r
             onPress={showAd}
           />
           <GameButton
-            disabled={!isPaidPlayable()}
+            disabled={!isGamePlayable()}
             style={[styles.playButton]}
             iconStyle={styles.playButtonIcon}
             title={t('PLAY')}
@@ -246,3 +260,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   }
 });
+
+export default SelectScreen;
