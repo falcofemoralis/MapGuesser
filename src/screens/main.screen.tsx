@@ -6,7 +6,7 @@ import { Settings } from '@/components/modal/Settings/Settings';
 import { Position } from '@/constants/position';
 import ProgressManager from '@/managers/progress.manager';
 import { userStore } from '@/store/user.store';
-import { GameCard } from '@/types/gamecard.type';
+import { GameCard } from '@/types/card.type';
 import Props from '@/types/props.type';
 import { GlobalStyles, Keys, GlobalColors, GlobalDimens } from '@/values';
 import date from 'date-and-time';

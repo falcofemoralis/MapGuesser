@@ -49,7 +49,14 @@
   "FREE_MODE_DESC": "The gaming experience is better in paid games because panoramic images have better quality",
   "PAID_MODE_DESC": "The paid game requires $s coins to run. Now you have $s. You will earn coins in the free game. You can watch ads or buy coins in the shop",
   "PLAY": "Play",
-  
   "EASY": "Easy", 
-  "NORMAL": "Normal"
+  "NORMAL": "Normal",
+  "ROUNDS_UNIT": "rounds",
+  "TIME_UNIT": "min",
+  "TIME_ROUNDS": "Time & Rounds",
+  "TIME_EXPIRED": "Time is over",
+  "LOADING_HINT_1": "Generating random location...",
+  "LOADING_HINT_2": "Location refinement...",
+  "LOADING_HINT_3": "Difficult to determine location...",
+  "LOADING_HINT_4": "Wait a while longer"
 }

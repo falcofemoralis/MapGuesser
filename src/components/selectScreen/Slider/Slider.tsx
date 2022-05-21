@@ -1,6 +1,6 @@
 import { GlobalDimens, GlobalColors, GlobalStyles, Misc } from '@/values';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import MultiSlider from '../../libs/react-native-multi-slider-master';
 
 interface SliderProps {
@@ -12,10 +12,17 @@ interface SliderProps {
   onSelect: (value: number) => void;
 }
 export const Slider: React.FC<SliderProps> = ({ min, max, unit, onSelect, initial, step }) => {
+  const [value, setValue] = React.useState(initial ?? 0);
+
+  const changeValue = (v: any) => {
+    onSelect(v[0]);
+    setValue(v[0]);
+  };
+
   return (
     <View style={[GlobalStyles.rcc, styles.slider]}>
       <Text style={styles.text}>
-        {min} {unit}
+        {value} {unit}
       </Text>
       <MultiSlider
         values={[initial ?? 0]}
@@ -26,19 +33,20 @@ export const Slider: React.FC<SliderProps> = ({ min, max, unit, onSelect, initia
         min={min}
         max={max}
         step={step ?? 1}
-        sliderLength={240}
-        onValuesChangeFinish={(v: any) => onSelect(v[0])}
+        onValuesChangeFinish={(v: any) => changeValue(v)}
         trackStyle={{ backgroundColor: GlobalColors.backgroundOpposite }}
         selectedStyle={{ backgroundColor: GlobalColors.primaryColor }}
         pressedMarkerStyle={{ backgroundColor: GlobalColors.primaryColor }}
         markerStyle={{ backgroundColor: GlobalColors.primaryColor }}
       />
-      <Text style={styles.text}>
+      {/* <Text style={styles.text}>
         {max} {unit}
-      </Text>
+      </Text> */}
     </View>
   );
 };
+
+const margin = 10
 
 const styles = StyleSheet.create({
   text: {
@@ -47,7 +55,8 @@ const styles = StyleSheet.create({
   },
   slider: {
     width: '100%',
-    marginLeft: 10,
-    marginRight: 10
+    marginLeft: margin,
+    marginRight: margin,
+    justifyContent: 'space-between'
   }
 });

@@ -22,18 +22,15 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
   let fromCoordinates: LatLng; // user street view coordinates
   let toCoordinates: LatLng; // marker coordinates
 
-  /**
-   * BackPress override.
-   */
-  const onBackPress = () => {
-    leaveGame();
-    return true;
-  };
-  BackHandler.addEventListener('hardwareBackPress', onBackPress);
+  React.useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      leaveGame();
 
-  /**
-   * Leave the game handler
-   */
+      return true;
+    });
+    return () => backHandler.remove();
+  }, []);
+
   const leaveGame = () => {
     Alert.alert(t('LEAVE_GAME'), t('LEAVE_GAME_HINT'), [
       { text: t('STAY'), style: 'cancel', onPress: () => {} },
@@ -41,7 +38,6 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
         text: t('LEAVE'),
         style: 'destructive',
         onPress: () => {
-          resetGame();
           if (gameSettings.isRounds) {
             gameStore.resetRounds();
           }
@@ -49,10 +45,6 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
         }
       }
     ]);
-  };
-
-  const resetGame = () => {
-    BackHandler.removeEventListener('hardwareBackPress', onBackPress);
   };
 
   /**
@@ -86,7 +78,6 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
    * Complete button handler
    */
   const handleComplete = () => {
-    resetGame();
     navigation.replace('Result', { from: fromCoordinates, to: toCoordinates, playtime: getPlaytime(), ...route.params });
   };
 

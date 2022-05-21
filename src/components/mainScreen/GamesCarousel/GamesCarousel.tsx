@@ -2,8 +2,8 @@ import { PlayMode } from '@/constants/playmode';
 import { MAIN_CONTAINER_PADDING } from '@/screens/main.screen';
 import { userStore } from '@/store/user.store';
 import { formatText } from '@/translations/formatText';
-import { GameCard } from '@/types/gamecard.type';
-import { GlobalDimens, GlobalColors } from '@/values';
+import { GameCard } from '@/types/card.type';
+import { GlobalColors, GlobalDimens } from '@/values';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -22,30 +22,30 @@ interface GamesCarouselProps {
 }
 export const GamesCarousel: React.FC<GamesCarouselProps> = ({ onSelect }) => {
   const { t } = useTranslation();
-  const cards = [
+  const cards: GameCard[] = [
     {
       title: t('NORMAL_MODE'),
-      preview: require('@/assets/classic.jpg'),
+      img: require('@/assets/classic.jpg'),
       description: t('NORMAL_TITLE'),
       playMode: PlayMode.NORMAL,
       requiredLvl: 0
     },
     {
       title: t('CONTINENTS_MODE'),
-      preview: require('@/assets/earth.jpg'),
+      img: require('@/assets/earth.jpg'),
       description: t('CONTINENTS_TITLE'),
       playMode: PlayMode.CONTINENTS,
       requiredLvl: 0
     },
     {
       title: t('COUNTRY_MODE'),
-      preview: require('@/assets/rounds.jpg'),
+      img: require('@/assets/rounds.jpg'),
       description: t('COUNTRY_TITLE'),
       playMode: PlayMode.COUNTRIES,
       requiredLvl: 0
     }
   ];
-  
+
   const [currentIndex, setIndex] = React.useState(0); // index of current item
 
   /**
@@ -60,7 +60,7 @@ export const GamesCarousel: React.FC<GamesCarouselProps> = ({ onSelect }) => {
   const _renderItem = ({ item, index }: { item: GameCard; index: number }) => {
     return (
       <TouchableOpacity style={styles.itemContainer} onPress={() => onSelect(item)} disabled={index != currentIndex || !isUnlocked(item.requiredLvl)}>
-        <Image style={styles.preview} source={item.preview} />
+        <Image style={styles.preview} source={item.img} />
         <View style={[styles.deck, { height: isUnlocked(item.requiredLvl) ? SMALL_DECK_SIZE : DECK_SIZE }]} />
         <View style={[styles.deckContainer, { height: isUnlocked(item.requiredLvl) ? SMALL_DECK_SIZE : DECK_SIZE }]}>
           <Text style={styles.title}>{item.title}</Text>

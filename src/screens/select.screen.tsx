@@ -1,6 +1,5 @@
 import { GameButton } from '@/components/interface/GameButton/GameButton';
-import { ContinentsCarousel } from '@/components/selectScreen/ContinentsCarousel/ContinentsCarousel';
-import { CountriesCarousel } from '@/components/selectScreen/CountriesCarousel/CountriesCarousel';
+import { SelectCarousel } from '@/components/selectScreen/Carousel/Carousel';
 import { Slider } from '@/components/selectScreen/Slider/Slider';
 import { Switch } from '@/components/selectScreen/Switch/Switch';
 import { Continent } from '@/constants/continent';
@@ -10,16 +9,16 @@ import { PlayMode } from '@/constants/playmode';
 import { StreetViewMode } from '@/constants/streetviewmode';
 import { userStore } from '@/store/user.store';
 import { formatText } from '@/translations/formatText';
+import { ContinentCard, CountryCard } from '@/types/card.type';
 import { GameMode } from '@/types/gamemode.type';
 import Props from '@/types/props.type';
-import { GlobalDimens, GlobalColors, GlobalStyles, Keys, Misc } from '@/values';
+import { GlobalColors, GlobalDimens, GlobalStyles, Keys, Misc } from '@/values';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Dimensions, Image, StyleSheet, Text, ToastAndroid, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { RewardedAd, RewardedAdEventType, TestIds } from 'react-native-google-mobile-ads';
-import { MAIN_CONTAINER_PADDING } from './main.screen';
 
 const rewarded = RewardedAd.createForAdRequest(__DEV__ ? TestIds.REWARDED : Keys.rewardIds.SelectScreen);
 
@@ -103,7 +102,7 @@ const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, route })
     { label: t('SINGLE'), value: { isTimer: false, isRounds: false } },
     { label: t('ROUNDS'), value: { isTimer: false, isRounds: true } },
     { label: t('TIME'), value: { isTimer: true, isRounds: false } },
-    { label: 'timerounds', value: { isTimer: true, isRounds: true } }
+    { label: t('TIME_ROUNDS'), value: { isTimer: true, isRounds: true } }
   ];
   const streetViewModes = [
     { label: t('FREE'), value: StreetViewMode.FREE },
@@ -128,10 +127,34 @@ const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, route })
     { style: styles.hintBold, text: userStore.coins.toFixed(0) }
   );
 
+  /**
+   * Carousels data
+   */
+  const continentCards: ContinentCard[] = [
+    { title: t('AS'), img: require('@/assets/asia.jpg'), continent: Continent.as },
+    { title: t('EU'), img: require('@/assets/europe.jpg'), continent: Continent.eu },
+    { title: t('NA'), img: require('@/assets/north_america.jpg'), continent: Continent.na },
+    { title: t('SA'), img: require('@/assets/south_america.jpg'), continent: Continent.sa },
+    { title: t('AF'), img: require('@/assets/africa.jpg'), continent: Continent.af },
+    { title: t('AU'), img: require('@/assets/australia.jpg'), continent: Continent.au }
+  ];
+  const countryCards: CountryCard[] = [
+    {
+      title: 'Canada',
+      img: require('@/assets/asia.jpg'),
+      country: Country.Canada
+    },
+    {
+      title: 'Andorra',
+      img: require('@/assets/asia.jpg'),
+      country: Country.Andorra
+    }
+  ];
+
   return (
     <View style={styles.container}>
       <View style={styles.previewContainer}>
-        <Image source={gameCard.preview} style={styles.previewImg} />
+        <Image source={gameCard.img} style={styles.previewImg} />
         <View style={styles.previewTitle}>
           <Text style={styles.previewText}>{gameCard.title}</Text>
           <Text style={styles.descriptionText}>{gameCard.description}</Text>
@@ -139,46 +162,54 @@ const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, route })
       </View>
       <ScrollView style={styles.scroll}>
         <View style={[GlobalStyles.ccc, styles.mainContainer]}>
-          {gameCard.playMode == PlayMode.CONTINENTS && <ContinentsCarousel onSelect={continentCard => (selectedContinent = continentCard.continent)} />}
-          {gameCard.playMode == PlayMode.COUNTRIES && <CountriesCarousel onSelect={countryCard => (selectedCountry = countryCard.country)} />}
-          <Switch initial={0} onSelect={value => setGameMode(value)} options={gameModes} />
-          {gameMode.isRounds && (
-            <Slider min={Misc.GAME_MODE_TIME_MIN} max={Misc.GAME_MODE_TIME_MAX} onSelect={v => setTime(v)} unit='min' initial={Misc.GAME_MODE_TIME_ST} />
+          {gameCard.playMode == PlayMode.CONTINENTS && (
+            <SelectCarousel cards={continentCards} onSelect={continentCard => (selectedContinent = continentCard.continent)} />
           )}
+          {gameCard.playMode == PlayMode.COUNTRIES && <SelectCarousel cards={countryCards} onSelect={countryCard => (selectedCountry = countryCard.country)} />}
+          <Switch initial={0} onSelect={value => setGameMode(value)} options={gameModes} />
           {gameMode.isTimer && (
+            <Slider
+              min={Misc.GAME_MODE_TIME_MIN}
+              max={Misc.GAME_MODE_TIME_MAX}
+              onSelect={v => setTime(v)}
+              unit={t('TIME_UNIT')}
+              initial={Misc.GAME_MODE_TIME_ST}
+            />
+          )}
+          {gameMode.isRounds && (
             <Slider
               min={Misc.GAME_MODE_ROUNDS_MIN}
               max={Misc.GAME_MODE_ROUNDS_MAX}
               onSelect={v => setRounds(v)}
-              unit='rnd'
+              unit={t('ROUNDS_UNIT')}
               initial={Misc.GAME_MODE_ROUNDS_ST}
             />
           )}
           <Switch initial={streetViewMode} onSelect={value => setStreetViewMode(value)} options={streetViewModes} />
           {streetViewMode == StreetViewMode.FREE ? freeHintText : paidHintText}
           {streetViewMode == StreetViewMode.FREE && <Switch initial={difficulty} onSelect={value => setDifficulty(value)} options={difficulties} />}
-        </View>
-        <View style={[GlobalStyles.rcc, styles.buttons]}>
-          <GameButton
-            disabled={!adLoaded}
-            style={[styles.smallButton]}
-            title={`+ ${Misc.COINS_PER_AD}`}
-            img={require('@/assets/advertisement.png')}
-            titleIcon={require('@/assets/coin.png')}
-            onPress={showAd}
-          />
-          <GameButton
-            disabled={!isGamePlayable()}
-            style={[styles.playButton]}
-            iconStyle={styles.playButtonIcon}
-            title={t('PLAY')}
-            subTitle={streetViewMode == StreetViewMode.PAID ? `- ${Misc.COINS_FOR_PAID_GAME}` : undefined}
-            subTitleIcon={streetViewMode == StreetViewMode.PAID ? require('@/assets/coin.png') : undefined}
-            textStyle={{ fontWeight: 'bold' }}
-            textIconStyle={{ width: '15%' }}
-            onPress={playGame}
-          />
-          <GameButton style={styles.smallButton} title={t('SHOP')} img={require('@/assets/shop.png')} />
+          <View style={[GlobalStyles.rcc, styles.buttons]}>
+            <GameButton
+              disabled={!adLoaded}
+              style={[styles.smallButton]}
+              title={`+ ${Misc.COINS_PER_AD}`}
+              img={require('@/assets/advertisement.png')}
+              titleIcon={require('@/assets/coin.png')}
+              onPress={showAd}
+            />
+            <GameButton
+              disabled={!isGamePlayable()}
+              style={[styles.playButton]}
+              iconStyle={styles.playButtonIcon}
+              title={t('PLAY')}
+              subTitle={streetViewMode == StreetViewMode.PAID ? `- ${Misc.COINS_FOR_PAID_GAME}` : undefined}
+              subTitleIcon={streetViewMode == StreetViewMode.PAID ? require('@/assets/coin.png') : undefined}
+              textStyle={{ fontWeight: 'bold' }}
+              textIconStyle={{ width: '15%' }}
+              onPress={playGame}
+            />
+            <GameButton style={styles.smallButton} img={require('@/assets/shop.png')} />
+          </View>
         </View>
       </ScrollView>
     </View>
@@ -194,8 +225,7 @@ const styles = StyleSheet.create({
   },
   scroll: {
     width: '100%',
-    height: '100%',
-    padding: MAIN_CONTAINER_PADDING
+    height: '100%'
   },
   previewContainer: {
     height: '30%',
@@ -236,7 +266,7 @@ const styles = StyleSheet.create({
   },
   buttons: {
     width: '100%',
-    padding: 5
+    marginTop: 5
   },
   playButton: {
     aspectRatio: 3,

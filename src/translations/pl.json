@@ -48,5 +48,15 @@
     "PAID": "Płatne",
     "FREE_MODE_DESC": "Wrażenia z gry są lepsze w grach płatnych, ponieważ obrazy panoramiczne są lepszej jakości",
     "PAID_MODE_DESC": "Płatna gra wymaga $s monet do uruchomienia. Teraz masz $s. Zarabiasz monety w darmowej grze. Możesz oglądać reklamy lub kupować monety w sklepie",
-    "PLAY": "Grać"
+    "PLAY": "Grać",
+    "EASY": "Łatwy",
+    "NORMAL": "Normalny",
+    "ROUNDS_UNIT": "rundy",
+    "TIME_UNIT": "min",
+    "TIME_ROUNDS": "Czas i rundy",
+    "TIME_EXPIRED": "Czas się skończył",
+    "LOADING_HINT_1": "Generowanie losowej lokalizacji...",
+    "LOADING_HINT_2": "Udoskonalenie lokalizacji...",
+    "LOADING_HINT_3": "Trudno określić lokalizację...",
+    "LOADING_HINT_4": "Poczekaj chwilę"
 }

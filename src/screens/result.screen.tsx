@@ -74,18 +74,34 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
       });
     }
 
-    if (gameSettings.streetViewMode == StreetViewMode.FREE) {
-      userStore.updateCoins(Misc.COINS_PER_FREE_GAME, '+');
+    if (selectedCoordinates) {
+      if (gameSettings.streetViewMode == StreetViewMode.FREE) {
+        userStore.updateCoins(Misc.COINS_PER_FREE_GAME, '+');
+      }
     }
 
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => true);
+
     // Unsubscribe from events on unmount
-    return unsubscribe;
+    return () => {
+      unsubscribe();
+      backHandler.remove();
+    };
   }, []);
 
   /**
    * BackPress override. BackPress wil do nothing.
    */
-  BackHandler.addEventListener('hardwareBackPress', () => true);
+  const onBackPress = () => {
+    console.log('stuck here 1');
+
+    return true;
+  };
+  BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+  const resetScreen = () => {
+    BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+  };
 
   /**
    * Navigate to next round
@@ -94,6 +110,7 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
     if (interstitialLoaded) {
       interstitial.show();
     }
+    resetScreen();
     gameStore.addRound({ from: currentCoordinates, to: selectedCoordinates });
     navigation.replace('Game', { gameSettings, gameData: route.params.gameData });
   };
@@ -110,6 +127,7 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
       interstitial.show();
     }
 
+    resetScreen();
     navigation.replace('Main');
   };
 
@@ -126,7 +144,7 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
       <Banner position={Position.TOP} id={Keys.bannersIds.ResultScreen} />
       <MapView
         ref={mapRef}
-        style={styles.map}
+        style={(styles.map, { height: selectedCoordinates ? SUCCESS_HEIGHT + '%' : TIME_EXPIRED_HEIGHT + '%' })}
         onMapReady={() => {
           const fitTo = selectedCoordinates ? [selectedCoordinates, currentCoordinates] : [currentCoordinates];
           mapRef?.current?.fitToCoordinates(fitTo, {
@@ -139,7 +157,7 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
         {/** Other rounds except the latest one */}
         {isLastRound() && toJS(gameStore.rounds).map((round, i) => <UserMarker key={i} from={round.from} to={round.to} />)}
       </MapView>
-      <View style={styles.container}>
+      <View style={[styles.container, { height: selectedCoordinates ? 100 - SUCCESS_HEIGHT + '%' : 100 - TIME_EXPIRED_HEIGHT + '%' }]}>
         <View style={styles.resultContainer}>
           {selectedCoordinates ? (
             <>
@@ -148,7 +166,7 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
               {formatText(t('RESULT_DISTANCE'), styles.resultText, { style: styles.resultTextBold, text: getDistance() })}
             </>
           ) : (
-            <Text style={styles.resultText}>Time was expired</Text>
+            <Text style={styles.resultText}>{t('TIME_EXPIRED')}</Text>
           )}
 
           <View style={GlobalStyles.rcc}>
@@ -183,16 +201,17 @@ const UserMarker: React.FC<UserMarkerProps> = ({ from, to }) => {
   );
 };
 
+const SUCCESS_HEIGHT = 65;
+const TIME_EXPIRED_HEIGHT = 77;
+
 const styles = StyleSheet.create({
   map: {
-    width: '100%',
-    height: '70%'
+    width: '100%'
   },
   container: {
     position: 'absolute',
     bottom: 0,
     width: '100%',
-    height: '35%', // 100 - 70 + 5
     borderTopStartRadius: 25,
     borderTopEndRadius: 25,
     backgroundColor: GlobalColors.background

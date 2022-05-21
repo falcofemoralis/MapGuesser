@@ -48,5 +48,15 @@
   "PAID": "Pagado",
   "FREE_MODE_DESC": "La experiencia de juego es mejor en los juegos pagos porque las imágenes panorámicas son de mejor calidad",
   "PAID_MODE_DESC": "El juego pago requiere $s monedas para funcionar. Ahora tienes $s. Ganarás monedas en el juego gratuito. Puedes ver anuncios o comprar monedas en la tienda",
-  "PLAY": "Jugar"
+  "PLAY": "Jugar",
+  "EASY": "Fácil",
+  "NORMAL": "Normal",
+  "ROUNDS_UNIT": "rondas",
+  "TIME_UNIT": "min",
+  "TIME_ROUNDS": "Tiempo y rondas",
+  "TIME_EXPIRED": "Se acabó el tiempo",
+  "LOADING_HINT_1": "Generando ubicación aleatoria...",
+  "LOADING_HINT_2": "Refinamiento de la ubicación...",
+  "LOADING_HINT_3": "Difícil determinar la ubicación...",
+  "LOADING_HINT_4": "Espere un poco más"
 }

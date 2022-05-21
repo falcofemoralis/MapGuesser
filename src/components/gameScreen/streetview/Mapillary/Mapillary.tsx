@@ -10,15 +10,12 @@ import { Misc } from '@/values';
 import { runInAction } from 'mobx';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, StyleProp, StyleSheet, ToastAndroid, ViewStyle } from 'react-native';
+import { Alert, StyleProp, StyleSheet, Text, ToastAndroid, ViewStyle } from 'react-native';
 import { continentPlaces } from './data/continentPlaces';
 import { countryPlaces } from './data/countryPlaces';
 import { EasyPlaces } from './data/easyPlaces';
 import MapillaryImagesService, { Image } from './MapillaryImages.service';
 import MapillaryWeb from './MapillaryWeb';
-
-const MAX_SEARCH_ATTEMPTS = 10;
-const DELAY = 350;
 
 interface MapillaryProps extends StreetViewSettings {
   /** Margin of sequence button */
@@ -31,15 +28,13 @@ interface MapillaryProps extends StreetViewSettings {
 export const Mapillary: React.FC<MapillaryProps> = ({ onMove, onInit, gameSettings, gameData, sequenceTop, buttonTop, buttonStyle }) => {
   const { t } = useTranslation();
   const [currentImage, setCurrentImage] = React.useState<Image | null>(null); // current street view image
-  const [attempts, setAttempts] = React.useState(0); // count of fails to get a mapillary location
-  let availableImages: Image[] = [] // available street view images
+  let availableImages: Image[] = []; // available street view images
 
   /**
    * Success of getting image handler
    * @param images - StreetView images
    */
   const onSuccess = (images: Image[]) => {
-    setAttempts(999);
     console.log('onSuccess');
     availableImages = images;
     updateCurrentImage(getRandomImage(images));
@@ -50,7 +45,7 @@ export const Mapillary: React.FC<MapillaryProps> = ({ onMove, onInit, gameSettin
    * Fail of getting image handler
    */
   const onFail = () => {
-    setAttempts(attempts + 1);
+    init();
   };
 
   /**
@@ -68,17 +63,10 @@ export const Mapillary: React.FC<MapillaryProps> = ({ onMove, onInit, gameSettin
    * @param image
    */
   const updateCurrentImage = (image: Image) => {
-    setTimeout(
-      () =>
-        runInAction(() => {
-          setCurrentImage(image);
-        }),
-      DELAY
-    );
+    setCurrentImage(image);
   };
 
-  // if image is not exists and attempts is not 999, then try to init mapillary
-  if (!currentImage && attempts != 999) {
+  const init = () => {
     let place: Place | null = null;
     if (gameSettings.playMode == PlayMode.NORMAL) {
       /**
@@ -139,6 +127,11 @@ export const Mapillary: React.FC<MapillaryProps> = ({ onMove, onInit, gameSettin
     } else {
       onFail();
     }
+  };
+
+  // if image is not exists and attempts is not 999, then try to init mapillary
+  if (!currentImage) {
+    init();
   }
 
   // if image is exist then emit coordinates update
@@ -178,11 +171,7 @@ export const Mapillary: React.FC<MapillaryProps> = ({ onMove, onInit, gameSettin
       {gameSettings.streetViewMode == StreetViewMode.FREE && (
         <GameButton img={require('@/assets/refresh.png')} fullIcon style={[buttonStyle, { top: buttonTop ?? 0 }]} onPress={refreshLocation} />
       )}
-      {currentImage ? (
-        <MapillaryWeb imageId={currentImage.id} sequenceTop={sequenceTop} onMove={onMove} />
-      ) : (
-        <LoadingPanel progress={attempts / MAX_SEARCH_ATTEMPTS} />
-      )}
+      {currentImage ? <MapillaryWeb imageId={currentImage.id} sequenceTop={sequenceTop} onMove={onMove} /> : <LoadingPanel />}
     </>
   );
 };

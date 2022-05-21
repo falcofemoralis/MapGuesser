@@ -48,5 +48,15 @@
     "PAID": "Kostenpflichtig",
     "FREE_MODE_DESC": "Das Spielerlebnis ist bei kostenpflichtigen Spielen besser, da Panoramabilder von besserer Qualität sind",
     "PAID_MODE_DESC": "Für das kostenpflichtige Spiel sind $s Münzen erforderlich. Jetzt hast du $s. Sie werden Münzen im kostenlosen Spiel verdienen. Sie können Anzeigen ansehen oder Münzen im Shop kaufen",
-    "PLAY": "Spiel"
+    "PLAY": "Spiel",
+    "EASY": "Einfach",
+    "NORMAL": "Normal",
+    "ROUNDS_UNIT": "Runden",
+  "TIME_UNIT": "min",
+  "TIME_ROUNDS": "Zeit & Runden",
+  "TIME_EXPIRED": "Zeit ist abgelaufen",
+  "LOADING_HINT_1": "Erzeuge zufälligen Standort...",
+  "LOADING_HINT_2": "Standortverfeinerung...",
+  "LOADING_HINT_3": "Schwierig, Standort zu bestimmen...",
+  "LOADING_HINT_4": "Warte noch eine Weile"
 }

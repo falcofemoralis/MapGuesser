@@ -33,7 +33,7 @@
     "NO_REFRESH": "Plus d'emplacements disponibles!",
     "NO_INTERNET": "Pas de connexion Internet",
     "REFRESH": "Actualiser",
-    "REFRESH_GAME": "Actualiser le jeu ?",
+    "REFRESH_GAME": "Actualiser le jeu?",
     "REFRESH_GAME_HINT": "Vous obtiendrez un nouvel emplacement à côté de l'actuel",
     "SEARCH": "Recherche",
     "MULTIPLAYER": "Multijoueur",
@@ -48,5 +48,15 @@
     "PAID": "Payant",
     "FREE_MODE_DESC": "L'expérience de jeu est meilleure dans les jeux payants car les images panoramiques sont de meilleure qualité",
     "PAID_MODE_DESC": "Le jeu payant nécessite $s pièces pour fonctionner. Maintenant, vous avez $s. Vous gagnerez des pièces dans le jeu gratuit. Vous pouvez regarder des publicités ou acheter des pièces dans la boutique",
-    "PLAY": "Joue"
+    "PLAY": "Joue",
+    "EASY": "Facile",
+    "NORMAL": "Normal",
+    "ROUNDS_UNIT": "tours",
+    "TIME_UNIT": "min",
+    "TIME_ROUNDS": "Temps et tours",
+    "TIME_EXPIRED": "Le temps est écoulé",
+    "LOADING_HINT_1": "Génération d'un emplacement aléatoire...",
+    "LOADING_HINT_2": "Affinement de l'emplacement...",
+    "LOADING_HINT_3": "Difficile de déterminer l'emplacement...",
+    "LOADING_HINT_4": "Attendez encore un peu"
 }
