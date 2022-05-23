@@ -1,4 +1,3 @@
-import { PlayMode } from '@/constants/playmode';
 import { MAIN_CONTAINER_PADDING } from '@/screens/main.screen';
 import { userStore } from '@/store/user.store';
 import { formatText } from '@/translations/formatText';
@@ -17,35 +16,13 @@ const DECK_SIZE = '35%';
 const SMALL_DECK_SIZE = '23%';
 
 interface GamesCarouselProps {
+  /** Cards */
+  cards: GameCard[];
   /** Triggered on game select */
   onSelect: (gameCard: GameCard) => void;
 }
-export const GamesCarousel: React.FC<GamesCarouselProps> = ({ onSelect }) => {
+export const GamesCarousel: React.FC<GamesCarouselProps> = ({ onSelect, cards }) => {
   const { t } = useTranslation();
-  const cards: GameCard[] = [
-    {
-      title: t('NORMAL_MODE'),
-      img: require('@/assets/classic.jpg'),
-      description: t('NORMAL_TITLE'),
-      playMode: PlayMode.NORMAL,
-      requiredLvl: 0
-    },
-    {
-      title: t('CONTINENTS_MODE'),
-      img: require('@/assets/earth.jpg'),
-      description: t('CONTINENTS_TITLE'),
-      playMode: PlayMode.CONTINENTS,
-      requiredLvl: 0
-    },
-    {
-      title: t('COUNTRY_MODE'),
-      img: require('@/assets/rounds.jpg'),
-      description: t('COUNTRY_TITLE'),
-      playMode: PlayMode.COUNTRIES,
-      requiredLvl: 0
-    }
-  ];
-
   const [currentIndex, setIndex] = React.useState(0); // index of current item
 
   /**

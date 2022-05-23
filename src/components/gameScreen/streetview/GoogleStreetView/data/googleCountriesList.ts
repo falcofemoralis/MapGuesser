@@ -26,7 +26,6 @@ export const GoogleCountriesList = {
     Country.Poland,
     Country.Portugal,
     Country.Romania,
-    Country.Russia,
     Country.Slovakia,
     Country.Slovenia,
     Country.Spain,
@@ -47,7 +46,8 @@ export const GoogleCountriesList = {
     Country.Singapore,
     Country.SouthKorea,
     Country.Taiwan,
-    Country.Thailand
+    Country.Thailand,
+    Country.Russia
   ],
   af: [Country.Botswana, Country.SouthAfrica, Country.Swaziland],
   au: [Country.Australia, Country.NewZealand]

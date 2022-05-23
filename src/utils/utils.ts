@@ -5,4 +5,6 @@ export class Utils {
         resolve(0);
       }, ms)
     );
+  static random = (n: number) => Math.floor(Math.random() * n);
+  static randomFromArray = <T>(arr: T[])=> arr[this.random(arr.length)];
 }

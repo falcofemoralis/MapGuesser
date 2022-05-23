@@ -1,8 +1,8 @@
 import { Continent } from '@/constants/continent';
 import { Country } from '@/constants/country';
 
-export type Place = number[][];
+export type Places = number[][];
 
-export type ContinentPlaces = { [k in Continent]: Place };
+export type ContinentPlaces = { [k in Continent]: Places };
 
-export type CountryPlaces = { [k in Continent]: { [k in Country]?: Place } };
+export type CountryPlaces = { [k in Continent]: { [k in Country]?: Places } };

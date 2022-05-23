@@ -141,13 +141,28 @@ const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, route })
   const countryCards: CountryCard[] = [
     {
       title: 'Canada',
-      img: require('@/assets/asia.jpg'),
+      img: require('@/assets/countries/canada.jpg'),
       country: Country.Canada
     },
     {
-      title: 'Andorra',
-      img: require('@/assets/asia.jpg'),
-      country: Country.Andorra
+      title: 'Mexico',
+      img: require('@/assets/countries/mexico.jpg'),
+      country: Country.Mexico
+    },
+    {
+      title: 'USA',
+      img: require('@/assets/countries/usa.jpg'),
+      country: Country.UnitedStates
+    },
+    {
+      title: 'Argentina',
+      img: require('@/assets/countries/argentina.jpg'),
+      country: Country.Argentina
+    },
+    {
+      title: 'Brazil',
+      img: require('@/assets/countries/brazil.jpg'),
+      country: Country.Brazil
     }
   ];
 
@@ -187,7 +202,9 @@ const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, route })
           )}
           <Switch initial={streetViewMode} onSelect={value => setStreetViewMode(value)} options={streetViewModes} />
           {streetViewMode == StreetViewMode.FREE ? freeHintText : paidHintText}
-          {streetViewMode == StreetViewMode.FREE && <Switch initial={difficulty} onSelect={value => setDifficulty(value)} options={difficulties} />}
+          {streetViewMode == StreetViewMode.FREE && gameCard.playMode == PlayMode.NORMAL && (
+            <Switch initial={difficulty} onSelect={value => setDifficulty(value)} options={difficulties} />
+          )}
           <View style={[GlobalStyles.rcc, styles.buttons]}>
             <GameButton
               disabled={!adLoaded}

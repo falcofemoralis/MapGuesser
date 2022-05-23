@@ -14,7 +14,7 @@ interface CarouselProps<T> {
   onSelect: (card: T) => void;
 }
 export const SelectCarousel = <T extends Card>({ cards, onSelect }: CarouselProps<T>) => {
-  const [currentIndex, setIndex] = React.useState(cards.length / 2); // index of current item
+  const [currentIndex, setIndex] = React.useState(Math.floor(cards.length / 2)); // index of current item
 
   const _renderItem = ({ item, index }: { item: T; index: number }) => {
     return (
@@ -29,7 +29,6 @@ export const SelectCarousel = <T extends Card>({ cards, onSelect }: CarouselProp
     setIndex(i);
   };
 
-  console.log(cards[currentIndex]);
   onSelect(cards[currentIndex]);
 
   return (

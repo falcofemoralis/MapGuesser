@@ -3,12 +3,13 @@ import { GameButton } from '@/components/interface/GameButton/GameButton';
 import { GamesCarousel } from '@/components/mainScreen/GamesCarousel/GamesCarousel';
 import { ProgressAvatar } from '@/components/mainScreen/ProgressAvatar/ProgressAvatar';
 import { Settings } from '@/components/modal/Settings/Settings';
+import { PlayMode } from '@/constants/playmode';
 import { Position } from '@/constants/position';
 import ProgressManager from '@/managers/progress.manager';
 import { userStore } from '@/store/user.store';
 import { GameCard } from '@/types/card.type';
 import Props from '@/types/props.type';
-import { GlobalStyles, Keys, GlobalColors, GlobalDimens } from '@/values';
+import { GlobalColors, GlobalDimens, GlobalStyles, Keys } from '@/values';
 import date from 'date-and-time';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
@@ -42,6 +43,30 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
    */
   const toggleSettings = () => setSetting(!isSettings);
 
+  const cards: GameCard[] = [
+    {
+      title: t('NORMAL_MODE'),
+      img: require('@/assets/classic.jpg'),
+      description: t('NORMAL_TITLE'),
+      playMode: PlayMode.NORMAL,
+      requiredLvl: 0
+    },
+    {
+      title: t('CONTINENTS_MODE'),
+      img: require('@/assets/earth.jpg'),
+      description: t('CONTINENTS_TITLE'),
+      playMode: PlayMode.CONTINENTS,
+      requiredLvl: 0
+    },
+    {
+      title: t('COUNTRY_MODE'),
+      img: require('@/assets/rounds.jpg'),
+      description: t('COUNTRY_TITLE'),
+      playMode: PlayMode.COUNTRIES,
+      requiredLvl: 0
+    }
+  ];
+
   return (
     <View style={[styles.container]}>
       <Settings visible={isSettings} onClose={toggleSettings} />
@@ -70,7 +95,7 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
           <GameButton img={require('@/assets/settings.png')} fullIcon style={styles.settingsBtn} onPress={toggleSettings} />
         </View>
         {/** Game modes */}
-        <GamesCarousel onSelect={onGameSelect} />
+        <GamesCarousel cards={cards} onSelect={onGameSelect} />
         {/** Main */}
         <View style={[styles.mainContainer]}>
           <View style={[styles.firstRow]}>

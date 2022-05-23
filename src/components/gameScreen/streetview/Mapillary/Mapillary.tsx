@@ -3,7 +3,7 @@ import { LoadingPanel } from '@/components/interface/LoadingPanel/LoadingPanel';
 import { Difficulty } from '@/constants/difficulty';
 import { PlayMode } from '@/constants/playmode';
 import { StreetViewMode } from '@/constants/streetviewmode';
-import { Place } from '@/types/places.type';
+import { Places } from '@/types/places.type';
 import { StreetViewSettings } from '@/types/streetviewsettings';
 import { generateCoordinate } from '@/utils/coordinates.util';
 import { Misc } from '@/values';
@@ -11,11 +11,11 @@ import { runInAction } from 'mobx';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, StyleProp, StyleSheet, Text, ToastAndroid, ViewStyle } from 'react-native';
-import { continentPlaces } from './data/continentPlaces';
-import { countryPlaces } from './data/countryPlaces';
+import { MapillaryCountriesList } from './data/mapillaryCountriesList';
 import { EasyPlaces } from './data/easyPlaces';
 import MapillaryImagesService, { Image } from './MapillaryImages.service';
 import MapillaryWeb from './MapillaryWeb';
+import { Utils } from '@/utils/utils';
 
 interface MapillaryProps extends StreetViewSettings {
   /** Margin of sequence button */
@@ -67,44 +67,39 @@ export const Mapillary: React.FC<MapillaryProps> = ({ onMove, onInit, gameSettin
   };
 
   const init = () => {
-    let place: Place | null = null;
+    let places: Places | null | undefined = null;
+
     if (gameSettings.playMode == PlayMode.NORMAL) {
       /**
        * NORMAL mode initialization
        */
-      let values: Place[] = [];
       if (gameSettings.difficulty == Difficulty.EASY) {
-        values = Object.values(EasyPlaces);
+        places = Utils.randomFromArray(Object.values(EasyPlaces));
       } else if (gameSettings.difficulty == Difficulty.NORMAL) {
-        values = Object.values(continentPlaces);
+        const countries = Utils.randomFromArray(Object.values(MapillaryCountriesList));
+        places = Utils.randomFromArray(Object.values(countries));
       }
-
-      place = values[Math.floor(Math.random() * values.length)];
     } else if (gameSettings.playMode == PlayMode.CONTINENTS) {
       /**
        * CONTINENTS mode initialization
        */
       if (!gameData?.continent) throw new Error("Continent wasn't provided");
-      place = continentPlaces[gameData?.continent]; // get random continent
+
+      const continent = MapillaryCountriesList[gameData.continent]; // get random continent
+      places = Utils.randomFromArray(Object.values(continent));
     } else if (gameSettings.playMode == PlayMode.COUNTRIES) {
       /**
        * COUNTRIES mode initialization
        */
       if (!gameData?.country) throw new Error("Country wasn't provided");
-      const values = Object.values(countryPlaces)[0];
-      console.log(gameData.country);
 
-      const country = values[gameData.country];
-      if (!country) {
-        throw new Error("Country don't exist");
-      }
-
-      place = country;
+      const countries = Utils.randomFromArray(Object.values(MapillaryCountriesList));
+      places = countries[gameData.country]
     }
 
-    if (place) {
-      const randomPlace = place[Math.floor(Math.random() * place.length)];
-      const startPoint = [generateCoordinate(randomPlace[1], randomPlace[3], 7), generateCoordinate(randomPlace[0], randomPlace[2], 7)];
+    if (places) {
+      const place = places[Math.floor(Math.random() * places.length)]; // bbox
+      const startPoint = [generateCoordinate(place[1], place[3], 7), generateCoordinate(place[0], place[2], 7)]; // lat, lng
 
       MapillaryImagesService.searchForImages(startPoint)
         .then(images => {
