@@ -1,8 +1,10 @@
+import { CountryCard } from '@/types/card.type';
 import { makeAutoObservable } from 'mobx';
 import Round from '../types/round.type';
 
 class GameStore {
   rounds: Round[] = []; // list of played rounds
+  countryCards: CountryCard[] | null = null;
 
   constructor() {
     makeAutoObservable(this, {}, { deep: true });

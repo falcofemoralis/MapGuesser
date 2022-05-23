@@ -148,19 +148,6 @@ export default class SwitchSelector extends Component {
           testID={element.testID}
         >
           {typeof element.customIcon === 'function' ? element.customIcon(isSelected) : element.customIcon}
-          {element.imageIcon && (
-            <Image
-              source={element.imageIcon}
-              style={[
-                {
-                  height: 30,
-                  width: 30
-                  // tintColor: isSelected ? selectedColor : textColor
-                },
-                imageStyle
-              ]}
-            />
-          )}
           <Text
             style={[
               {
@@ -175,6 +162,20 @@ export default class SwitchSelector extends Component {
           >
             {element.label}
           </Text>
+          {element.imageIcon && (
+            <Image
+              source={element.imageIcon}
+              style={[
+                {
+                  height: 30,
+                  width: 30,
+                  marginStart: 5
+                  // tintColor: isSelected ? selectedColor : textColor
+                },
+                imageStyle
+              ]}
+            />
+          )}
         </TouchableOpacity>
       );
     });

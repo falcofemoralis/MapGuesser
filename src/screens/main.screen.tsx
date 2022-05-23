@@ -17,7 +17,7 @@ import date from 'date-and-time';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Image, ScrollView, StyleSheet, Text, View, ToastAndroid } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, ToastAndroid, View } from 'react-native';
 
 const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
   const { t } = useTranslation();
@@ -71,8 +71,25 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
     }
   ];
 
-  const showSoonToast = () => {
+  const real = ['mp', 'sh', 'mp', 'sh', 'le', 'mp', 'ac', 'ch'];
+  let codes: string[] = [];
+  const debug = (id: string) => {
+    if (real[codes.length] == id) {
+      codes.push(id);
+    } else {
+      codes = [];
+    }
+
+    if (real.length == codes.length) {
+      ToastAndroid.showWithGravityAndOffset('Cheat code activated', ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
+      userStore.updateCoins(10, '+');
+      codes = [];
+    }
+  };
+
+  const showSoonToast = (id: string) => {
     ToastAndroid.showWithGravityAndOffset(t('SOON'), ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
+    debug(id);
   };
 
   return (
@@ -108,8 +125,8 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
         {/** Main */}
         <View style={[styles.mainContainer]}>
           <View style={[styles.firstRow]}>
-            <GameButton style={[styles.leftGameButton]} img={require('@/assets/mp.png')} title={t('MULTIPLAYER')} onPress={showSoonToast} />
-            <GameButton style={[styles.leftGameButton]} img={require('@/assets/challenges.png')} title={t('CHALLENGES')} onPress={showSoonToast} />
+            <GameButton style={[styles.leftGameButton]} img={require('@/assets/mp.png')} title={t('MULTIPLAYER')} onPress={() => showSoonToast('mp')} />
+            <GameButton style={[styles.leftGameButton]} img={require('@/assets/challenges.png')} title={t('CHALLENGES')} onPress={() => showSoonToast('ch')} />
           </View>
           <View style={[styles.secondRow]}>
             <GameButton
@@ -117,15 +134,15 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
               img={require('@/assets/achievements.png')}
               title={t('ACHIEVEMENTS')}
               iconStyle={styles.gameButtonIcon}
-              onPress={showSoonToast}
+              onPress={() => showSoonToast('ac')}
             />
-            <GameButton style={styles.rightGameButton} img={require('@/assets/shop.png')} title={t('SHOP')} onPress={showSoonToast} />
+            <GameButton style={styles.rightGameButton} img={require('@/assets/shop.png')} title={t('SHOP')} onPress={() => showSoonToast('sh')} />
             <GameButton
               style={styles.rightSmallGameButton}
               img={require('@/assets/leaderboard.png')}
               title={t('LEADERBOARD')}
               iconStyle={styles.gameButtonIcon}
-              onPress={showSoonToast}
+              onPress={() => showSoonToast('le')}
             />
           </View>
         </View>

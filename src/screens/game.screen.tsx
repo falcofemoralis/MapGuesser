@@ -103,7 +103,7 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
 
   const getTime = (): [number, number] => {
     if (!gameData?.time) throw new Error("Time wasn't provided");
-    const TOTAL_TIME = gameData?.time * 1 * 1000;
+    const TOTAL_TIME = gameData?.time * 60 * 1000;
     const NOW_IN_MS = new Date().getTime();
     return [NOW_IN_MS + TOTAL_TIME, TOTAL_TIME];
   };

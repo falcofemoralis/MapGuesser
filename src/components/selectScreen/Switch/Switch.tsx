@@ -1,11 +1,12 @@
 import SwitchSelector from '@/components/libs/SwitchSelector/SwitchSelector';
 import { GlobalColors } from '@/values';
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import {StyleSheet, ImageSourcePropType} from 'react-native';
 
 interface Option<T> {
   label: string;
   value: T;
+  imageIcon?: ImageSourcePropType;
 }
 
 interface SwitchProps<T> {

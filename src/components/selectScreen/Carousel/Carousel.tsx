@@ -14,7 +14,7 @@ interface CarouselProps<T> {
   onSelect: (card: T) => void;
 }
 export const SelectCarousel = <T extends Card>({ cards, onSelect }: CarouselProps<T>) => {
-  const [currentIndex, setIndex] = React.useState(Math.floor(cards.length / 2)); // index of current item
+  //const [currentIndex, setIndex] = React.useState(0); // index of current item
 
   const _renderItem = ({ item, index }: { item: T; index: number }) => {
     return (
@@ -26,16 +26,16 @@ export const SelectCarousel = <T extends Card>({ cards, onSelect }: CarouselProp
   };
 
   const onSnap = (i: number) => {
-    setIndex(i);
+  //  setIndex(i);
+    onSelect(cards[i]);
   };
 
-  onSelect(cards[currentIndex]);
-  console.log(cards[currentIndex]);
+ // onSelect(cards[currentIndex]);
+ // console.log(cards[currentIndex]);
 
   return (
     <Carousel
       containerCustomStyle={styles.carouselContainer}
-      firstItem={currentIndex}
       layout={'default'}
       data={cards}
       enableMomentum={true}
@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden'
   },
   title: {
+    textAlign: 'center',
     color: GlobalColors.white,
     fontSize: GlobalDimens.normalText,
     fontWeight: 'bold'

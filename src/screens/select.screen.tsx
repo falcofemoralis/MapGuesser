@@ -8,6 +8,7 @@ import { Country } from '@/constants/country';
 import { Difficulty } from '@/constants/difficulty';
 import { PlayMode } from '@/constants/playmode';
 import { StreetViewMode } from '@/constants/streetviewmode';
+import { gameStore } from '@/store/game.store';
 import { userStore } from '@/store/user.store';
 import { formatText } from '@/translations/formatText';
 import { ContinentCard, CountryCard } from '@/types/card.type';
@@ -31,13 +32,37 @@ const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, route })
   const [difficulty, setDifficulty] = React.useState(
     userStore.progress.lvl <= Misc.UNLOCK_ALL_LVL && gameCard.playMode == PlayMode.NORMAL ? Difficulty.EASY : Difficulty.NORMAL
   );
-  console.log(difficulty);
-
   const [time, setTime] = React.useState(Misc.GAME_MODE_TIME_ST);
   const [rounds, setRounds] = React.useState(Misc.GAME_MODE_ROUNDS_ST);
   const [adLoaded, setAdLoaded] = React.useState(false);
+  /**
+   * Carousels data
+   */
   let selectedContinent: Continent;
-  let selectedCountry: Country;
+  const continentCards: ContinentCard[] = [
+    { title: t('AS'), img: require('@/assets/asia.jpg'), continent: Continent.as },
+    { title: t('EU'), img: require('@/assets/europe.jpg'), continent: Continent.eu },
+    { title: t('NA'), img: require('@/assets/north_america.jpg'), continent: Continent.na },
+    { title: t('SA'), img: require('@/assets/south_america.jpg'), continent: Continent.sa },
+    { title: t('AF'), img: require('@/assets/africa.jpg'), continent: Continent.af },
+    { title: t('AU'), img: require('@/assets/australia.jpg'), continent: Continent.au }
+  ];
+
+  const getCountryCards = (): CountryCard[] => {
+    const cards: CountryCard[] = [];
+    for (const country of Object.values(Country)) {
+      cards.push({ title: t(country.toString() as any), img: CountryImages[country], country });
+    }
+
+    console.log('cards');
+
+    return cards;
+  };
+  const [selectedCountryCard, setSelectedCountryCard] = React.useState<CountryCard>();
+  if (!gameStore.countryCards) {
+    gameStore.countryCards = getCountryCards();
+    setSelectedCountryCard(gameStore.countryCards[0]);
+  }
 
   React.useEffect(() => {
     const unsubscribeLoaded = rewarded.addAdEventListener(RewardedAdEventType.LOADED, () => {
@@ -68,7 +93,7 @@ const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, route })
       return;
     }
 
-    if (selectedCountry == Country.Ukraine && streetViewMode == StreetViewMode.FREE) {
+    if (selectedCountryCard && selectedCountryCard.country == Country.Ukraine && streetViewMode == StreetViewMode.FREE) {
       ToastAndroid.showWithGravityAndOffset(t('SOON'), ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
       return;
     }
@@ -81,7 +106,7 @@ const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, route })
         isRounds: gameMode.isRounds,
         isTimer: gameMode.isTimer
       },
-      gameData: { continent: selectedContinent, country: selectedCountry, time, rounds }
+      gameData: { continent: selectedContinent, country: selectedCountryCard?.country, time, rounds }
     });
   };
 
@@ -126,7 +151,7 @@ const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, route })
   ];
   const streetViewModes = [
     { label: t('FREE'), value: StreetViewMode.FREE },
-    { label: t('PAID'), value: StreetViewMode.PAID }
+    { label: t('PAID'), value: StreetViewMode.PAID, imageIcon: require('@/assets/crown.png') }
   ];
   const difficulties = [
     { label: t('EASY'), value: Difficulty.EASY },
@@ -147,31 +172,10 @@ const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, route })
     { style: styles.hintBold, text: userStore.coins.toFixed(0) }
   );
 
-  /**
-   * Carousels data
-   */
-  const continentCards: ContinentCard[] = [
-    { title: t('AS'), img: require('@/assets/asia.jpg'), continent: Continent.as },
-    { title: t('EU'), img: require('@/assets/europe.jpg'), continent: Continent.eu },
-    { title: t('NA'), img: require('@/assets/north_america.jpg'), continent: Continent.na },
-    { title: t('SA'), img: require('@/assets/south_america.jpg'), continent: Continent.sa },
-    { title: t('AF'), img: require('@/assets/africa.jpg'), continent: Continent.af },
-    { title: t('AU'), img: require('@/assets/australia.jpg'), continent: Continent.au }
-  ];
-
-  const getCountryCards = (): CountryCard[] => {
-    const cards: CountryCard[] = [];
-    for (const country of Object.values(Country)) {
-      cards.push({ title: t(country.toString() as any), img: CountryImages[country], country });
-    }
-
-    return cards;
-  };
-
   return (
     <View style={styles.container}>
       <View style={styles.previewContainer}>
-        <Image source={gameCard.img} style={styles.previewImg} />
+        <Image source={selectedCountryCard ? selectedCountryCard.img : gameCard.img} style={styles.previewImg} />
         <View style={styles.previewTitle}>
           <Text style={styles.previewText}>{gameCard.title}</Text>
           <Text style={styles.descriptionText}>{gameCard.description}</Text>
@@ -183,7 +187,7 @@ const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, route })
             <SelectCarousel cards={continentCards} onSelect={continentCard => (selectedContinent = continentCard.continent)} />
           )}
           {gameCard.playMode == PlayMode.COUNTRIES && (
-            <SelectCarousel cards={getCountryCards()} onSelect={countryCard => (selectedCountry = countryCard.country)} />
+            <SelectCarousel cards={gameStore.countryCards} onSelect={countryCard => setSelectedCountryCard(countryCard)} />
           )}
           <Switch initial={0} onSelect={value => setGameMode(value)} options={gameModes} />
           {gameMode.isTimer && (
@@ -283,7 +287,7 @@ const styles = StyleSheet.create({
     fontSize: GlobalDimens.normalText
   },
   mainContainer: {
-    padding: 5
+    padding: 10
   },
   buttons: {
     width: '100%',
