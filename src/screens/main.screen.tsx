@@ -1,24 +1,28 @@
+import { CountryImages } from '@/assets/countries';
 import { Banner } from '@/components/interface/Banner/Banner';
 import { GameButton } from '@/components/interface/GameButton/GameButton';
 import { GamesCarousel } from '@/components/mainScreen/GamesCarousel/GamesCarousel';
 import { ProgressAvatar } from '@/components/mainScreen/ProgressAvatar/ProgressAvatar';
 import { Settings } from '@/components/modal/Settings/Settings';
+import { Country } from '@/constants/country';
 import { PlayMode } from '@/constants/playmode';
 import { Position } from '@/constants/position';
 import ProgressManager from '@/managers/progress.manager';
 import { userStore } from '@/store/user.store';
 import { GameCard } from '@/types/card.type';
 import Props from '@/types/props.type';
+import { Utils } from '@/utils/utils';
 import { GlobalColors, GlobalDimens, GlobalStyles, Keys } from '@/values';
 import date from 'date-and-time';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, View, ToastAndroid } from 'react-native';
 
 const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
   const { t } = useTranslation();
   const [isSettings, setSetting] = React.useState(false); // state of modal settings window
+  const [countryImage, setCountryImage] = React.useState(CountryImages[Utils.randomFromArray(Object.values(Country))]);
 
   /**
    * User select game handler
@@ -52,20 +56,24 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
       requiredLvl: 0
     },
     {
+      title: t('COUNTRY_MODE'),
+      img: countryImage,
+      description: t('COUNTRY_TITLE'),
+      playMode: PlayMode.COUNTRIES,
+      requiredLvl: 0
+    },
+    {
       title: t('CONTINENTS_MODE'),
       img: require('@/assets/earth.jpg'),
       description: t('CONTINENTS_TITLE'),
       playMode: PlayMode.CONTINENTS,
       requiredLvl: 0
-    },
-    {
-      title: t('COUNTRY_MODE'),
-      img: require('@/assets/rounds.jpg'),
-      description: t('COUNTRY_TITLE'),
-      playMode: PlayMode.COUNTRIES,
-      requiredLvl: 0
     }
   ];
+
+  const showSoonToast = () => {
+    ToastAndroid.showWithGravityAndOffset(t('SOON'), ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
+  };
 
   return (
     <View style={[styles.container]}>
@@ -78,9 +86,10 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
             <Text style={styles.lvlText}>
               {t('LEVEL')} {getLvl()}
             </Text>
-            <Text style={styles.username}>
+            {/* <Text style={styles.username}>
               {t('LOCAL_USER')} {getLvl()}
-            </Text>
+            </Text> */}
+            <Text style={styles.username}>{getTime()}</Text>
             <View style={[GlobalStyles.rcc, styles.moneyRow]}>
               <View style={[GlobalStyles.rcc, styles.itemContainer]}>
                 <Text style={styles.itemText}>{getXP()}</Text>
@@ -99,8 +108,8 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
         {/** Main */}
         <View style={[styles.mainContainer]}>
           <View style={[styles.firstRow]}>
-            <GameButton style={[styles.leftGameButton]} img={require('@/assets/mp.png')} title={t('MULTIPLAYER')} />
-            <GameButton style={[styles.leftGameButton]} img={require('@/assets/challenges.png')} title={t('CHALLENGES')} />
+            <GameButton style={[styles.leftGameButton]} img={require('@/assets/mp.png')} title={t('MULTIPLAYER')} onPress={showSoonToast} />
+            <GameButton style={[styles.leftGameButton]} img={require('@/assets/challenges.png')} title={t('CHALLENGES')} onPress={showSoonToast} />
           </View>
           <View style={[styles.secondRow]}>
             <GameButton
@@ -108,13 +117,15 @@ const MainScreen: React.FC<Props<'Main'>> = observer(({ navigation }) => {
               img={require('@/assets/achievements.png')}
               title={t('ACHIEVEMENTS')}
               iconStyle={styles.gameButtonIcon}
+              onPress={showSoonToast}
             />
-            <GameButton style={styles.rightGameButton} img={require('@/assets/shop.png')} title={t('SHOP')} />
+            <GameButton style={styles.rightGameButton} img={require('@/assets/shop.png')} title={t('SHOP')} onPress={showSoonToast} />
             <GameButton
               style={styles.rightSmallGameButton}
               img={require('@/assets/leaderboard.png')}
               title={t('LEADERBOARD')}
               iconStyle={styles.gameButtonIcon}
+              onPress={showSoonToast}
             />
           </View>
         </View>

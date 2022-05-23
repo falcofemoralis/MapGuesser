@@ -30,6 +30,7 @@ export const SelectCarousel = <T extends Card>({ cards, onSelect }: CarouselProp
   };
 
   onSelect(cards[currentIndex]);
+  console.log(cards[currentIndex]);
 
   return (
     <Carousel

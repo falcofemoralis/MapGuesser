@@ -1,6 +1,6 @@
 import { GameButton } from '@/components/interface/GameButton/GameButton';
 import { userStore } from '@/store/user.store';
-import { GlobalColors } from '@/values';
+import { GlobalColors, GlobalStyles } from '@/values';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
@@ -35,7 +35,7 @@ export const ProgressAvatar: React.FC<ProgressAvatarProps> = observer(({ style, 
         {
           height: size,
           width: size
-        }
+        },
       ]}
     >
       <GameButton
@@ -55,11 +55,12 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   avatar: {
-    height: '90%',
-    width: '90%',
+    height: '80%',
+    width: '80%',
     zIndex: 2,
     borderRadius: 100,
     overflow: 'hidden',
+    padding: 2
   },
   progress: {
     position: 'absolute',

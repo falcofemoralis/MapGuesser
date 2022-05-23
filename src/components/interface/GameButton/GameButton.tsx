@@ -25,6 +25,7 @@ interface GameButtonProps {
   textIconStyle?: StyleProp<ImageStyle>;
   /** Disabled button option */
   disabled?: boolean;
+  /** Icon as container size */
   fullIcon?: boolean;
 }
 export const GameButton: React.FC<GameButtonProps> = ({

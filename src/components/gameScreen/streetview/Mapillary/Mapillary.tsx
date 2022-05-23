@@ -93,8 +93,17 @@ export const Mapillary: React.FC<MapillaryProps> = ({ onMove, onInit, gameSettin
        */
       if (!gameData?.country) throw new Error("Country wasn't provided");
 
-      const countries = Utils.randomFromArray(Object.values(MapillaryCountriesList));
-      places = countries[gameData.country]
+      const values = Object.values(MapillaryCountriesList);
+      for (const val of values) {
+        const keys = Object.keys(val);
+        for (const key of keys) {
+          if (key == gameData.country) {
+            places = val[gameData.country];
+            break;
+          }
+        }
+        if (places) break;
+      }
     }
 
     if (places) {
@@ -112,6 +121,7 @@ export const Mapillary: React.FC<MapillaryProps> = ({ onMove, onInit, gameSettin
           if (images.length > 0) {
             onSuccess(images);
           } else {
+            console.log('onFail: no images');
             onFail();
           }
         })
@@ -120,6 +130,8 @@ export const Mapillary: React.FC<MapillaryProps> = ({ onMove, onInit, gameSettin
           onFail();
         });
     } else {
+      console.log('onFail: places undefined');
+
       onFail();
     }
   };

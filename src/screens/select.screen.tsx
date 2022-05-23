@@ -1,3 +1,4 @@
+import { CountryImages } from '@/assets/countries';
 import { GameButton } from '@/components/interface/GameButton/GameButton';
 import { SelectCarousel } from '@/components/selectScreen/Carousel/Carousel';
 import { Slider } from '@/components/selectScreen/Slider/Slider';
@@ -27,7 +28,11 @@ const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, route })
   const gameCard = route.params.gameCard;
   const [streetViewMode, setStreetViewMode] = React.useState(StreetViewMode.FREE);
   const [gameMode, setGameMode] = React.useState<GameMode>({ isRounds: false, isTimer: false });
-  const [difficulty, setDifficulty] = React.useState(userStore.progress.lvl > Misc.UNLOCK_ALL_LVL ? Difficulty.NORMAL : Difficulty.EASY);
+  const [difficulty, setDifficulty] = React.useState(
+    userStore.progress.lvl <= Misc.UNLOCK_ALL_LVL && gameCard.playMode == PlayMode.NORMAL ? Difficulty.EASY : Difficulty.NORMAL
+  );
+  console.log(difficulty);
+
   const [time, setTime] = React.useState(Misc.GAME_MODE_TIME_ST);
   const [rounds, setRounds] = React.useState(Misc.GAME_MODE_ROUNDS_ST);
   const [adLoaded, setAdLoaded] = React.useState(false);
@@ -63,8 +68,19 @@ const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, route })
       return;
     }
 
+    if (selectedCountry == Country.Ukraine && streetViewMode == StreetViewMode.FREE) {
+      ToastAndroid.showWithGravityAndOffset(t('SOON'), ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
+      return;
+    }
+
     navigation.replace('Game', {
-      gameSettings: { playMode: gameCard.playMode, streetViewMode, difficulty, isRounds: gameMode.isRounds, isTimer: gameMode.isTimer },
+      gameSettings: {
+        playMode: gameCard.playMode,
+        streetViewMode,
+        difficulty,
+        isRounds: gameMode.isRounds,
+        isTimer: gameMode.isTimer
+      },
       gameData: { continent: selectedContinent, country: selectedCountry, time, rounds }
     });
   };
@@ -93,6 +109,10 @@ const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, route })
       // not allowed
       return false;
     }
+  };
+
+  const showSoonToast = () => {
+    ToastAndroid.showWithGravityAndOffset(t('SOON'), ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
   };
 
   /**
@@ -138,33 +158,15 @@ const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, route })
     { title: t('AF'), img: require('@/assets/africa.jpg'), continent: Continent.af },
     { title: t('AU'), img: require('@/assets/australia.jpg'), continent: Continent.au }
   ];
-  const countryCards: CountryCard[] = [
-    {
-      title: 'Canada',
-      img: require('@/assets/countries/canada.jpg'),
-      country: Country.Canada
-    },
-    {
-      title: 'Mexico',
-      img: require('@/assets/countries/mexico.jpg'),
-      country: Country.Mexico
-    },
-    {
-      title: 'USA',
-      img: require('@/assets/countries/usa.jpg'),
-      country: Country.UnitedStates
-    },
-    {
-      title: 'Argentina',
-      img: require('@/assets/countries/argentina.jpg'),
-      country: Country.Argentina
-    },
-    {
-      title: 'Brazil',
-      img: require('@/assets/countries/brazil.jpg'),
-      country: Country.Brazil
+
+  const getCountryCards = (): CountryCard[] => {
+    const cards: CountryCard[] = [];
+    for (const country of Object.values(Country)) {
+      cards.push({ title: t(country.toString() as any), img: CountryImages[country], country });
     }
-  ];
+
+    return cards;
+  };
 
   return (
     <View style={styles.container}>
@@ -180,7 +182,9 @@ const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, route })
           {gameCard.playMode == PlayMode.CONTINENTS && (
             <SelectCarousel cards={continentCards} onSelect={continentCard => (selectedContinent = continentCard.continent)} />
           )}
-          {gameCard.playMode == PlayMode.COUNTRIES && <SelectCarousel cards={countryCards} onSelect={countryCard => (selectedCountry = countryCard.country)} />}
+          {gameCard.playMode == PlayMode.COUNTRIES && (
+            <SelectCarousel cards={getCountryCards()} onSelect={countryCard => (selectedCountry = countryCard.country)} />
+          )}
           <Switch initial={0} onSelect={value => setGameMode(value)} options={gameModes} />
           {gameMode.isTimer && (
             <Slider
@@ -225,7 +229,7 @@ const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, route })
               textIconStyle={{ width: '15%' }}
               onPress={playGame}
             />
-            <GameButton style={styles.smallButton} img={require('@/assets/shop.png')} />
+            <GameButton style={styles.smallButton} img={require('@/assets/shop.png')} onPress={showSoonToast} />
           </View>
         </View>
       </ScrollView>

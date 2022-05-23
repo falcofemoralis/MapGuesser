@@ -89,19 +89,6 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
     };
   }, []);
 
-  /**
-   * BackPress override. BackPress wil do nothing.
-   */
-  const onBackPress = () => {
-    console.log('stuck here 1');
-
-    return true;
-  };
-  BackHandler.addEventListener('hardwareBackPress', onBackPress);
-
-  const resetScreen = () => {
-    BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-  };
 
   /**
    * Navigate to next round
@@ -110,7 +97,6 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
     if (interstitialLoaded) {
       interstitial.show();
     }
-    resetScreen();
     gameStore.addRound({ from: currentCoordinates, to: selectedCoordinates });
     navigation.replace('Game', { gameSettings, gameData: route.params.gameData });
   };
@@ -127,7 +113,6 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
       interstitial.show();
     }
 
-    resetScreen();
     navigation.replace('Main');
   };
 

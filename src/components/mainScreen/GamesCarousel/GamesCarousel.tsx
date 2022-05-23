@@ -9,7 +9,7 @@ import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'rea
 import Carousel from 'react-native-snap-carousel'; // Version can be specified in package.json
 
 const SLIDER_WIDTH = Dimensions.get('window').width - MAIN_CONTAINER_PADDING * 2;
-const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.95);
+const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.95); //0.95
 const ITEM_HEIGHT = Math.round((ITEM_WIDTH * 5) / 9);
 
 const DECK_SIZE = '35%';

@@ -36,7 +36,7 @@ export const LoadingPanel: React.FC<LoadingPanelProps> = ({ progress }) => {
 
         setIndex(i);
       }
-    }, 3000 + index * 1000);
+    }, 5000 + index * 2000);
   };
 
   updateHint();
