@@ -19,8 +19,6 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
   const gameSettings = route.params.gameSettings;
   const gameData = route.params.gameData;
   const [startTime, setStartTime] = React.useState<number | null>();
-  let fromCoordinates: LatLng; // user street view coordinates
-  let toCoordinates: LatLng; // marker coordinates
 
   React.useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -53,7 +51,9 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
   const onStreetViewInit = () => {
     setStartTime(Date.now());
 
-    if (gameSettings.streetViewMode == StreetViewMode.PAID) {
+    if (gameSettings.streetViewMode == StreetViewMode.PAID && gameStore.rounds.length == 0) {
+      console.log('minus');
+      
       userStore.updateCoins(Misc.COINS_FOR_PAID_GAME, '-');
     }
   };
@@ -63,7 +63,7 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
    * @param coordinates - new user street view coordinates
    */
   const onMove = (coordinates: LatLng) => {
-    fromCoordinates = coordinates;
+    gameStore.fromCoordinates = coordinates;
   };
 
   /**
@@ -71,14 +71,19 @@ const GameScreen: React.FC<Props<'Game'>> = ({ navigation, route }) => {
    * @param coordinates - marker coordinates
    */
   const onMarkerSet = (coordinates: LatLng) => {
-    toCoordinates = coordinates;
+    gameStore.toCoordinates = coordinates;
   };
 
   /**
    * Complete button handler
    */
   const handleComplete = () => {
-    navigation.replace('Result', { from: fromCoordinates, to: toCoordinates, playtime: getPlaytime(), ...route.params });
+    console.log(gameStore.fromCoordinates);
+
+    if (gameStore.fromCoordinates) {
+      navigation.replace('Result', { from: gameStore.fromCoordinates, to: gameStore.toCoordinates, playtime: getPlaytime(), ...route.params });
+      gameStore.resetCoordinates();
+    }
   };
 
   /**

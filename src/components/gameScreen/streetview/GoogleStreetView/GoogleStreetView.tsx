@@ -2,6 +2,7 @@ import { LoadingPanel } from '@/components/interface/LoadingPanel/LoadingPanel';
 import { Country } from '@/constants/country';
 import { PlayMode } from '@/constants/playmode';
 import { StreetViewSettings } from '@/types/streetviewsettings';
+import { Utils } from '@/utils/utils';
 import React from 'react';
 import { LatLng } from 'react-native-maps';
 import { GoogleCountriesList } from './data/googleCountriesList';
@@ -14,20 +15,21 @@ export const GoogleStreetView: React.FC<GoogleStreetViewProps> = ({ onMove, onIn
   const onLoaded = (coordinates: LatLng) => {
     onMove(coordinates);
     if (!init) {
-      onInit();
-      setInit(true);
+      setTimeout(() => {
+        onInit();
+        setInit(true);
+      }, 500);
     }
   };
 
   const getCountry = () => {
     if (gameSettings.playMode == PlayMode.NORMAL) {
-      const values = Object.values(GoogleCountriesList);
-      const continent = values[Math.floor(Math.random() * values.length)];
-      return continent[Math.floor(Math.random() * continent.length)];
+      const continent = Utils.randomFromArray(Object.values(GoogleCountriesList));
+      return Utils.randomFromArray(continent);
     } else if (gameSettings.playMode == PlayMode.CONTINENTS) {
       if (!gameData?.continent) throw new Error('Continent mode must have selected continent');
-      const continent = GoogleCountriesList[gameData.continent]; // get random continent
-      return continent[Math.floor(Math.random() * continent.length)];
+      const continent = GoogleCountriesList[gameData.continent];
+      return Utils.randomFromArray(continent);
     } else if (gameSettings.playMode == PlayMode.COUNTRIES) {
       if (!gameData?.country) throw new Error("Country wasn't provided");
       return gameData?.country;

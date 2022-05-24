@@ -37,8 +37,11 @@ export const Mapillary: React.FC<MapillaryProps> = ({ onMove, onInit, gameSettin
   const onSuccess = (images: Image[]) => {
     console.log('onSuccess');
     availableImages = images;
-    updateCurrentImage(getRandomImage(images));
-    onInit();
+
+    setTimeout(() => {
+      updateCurrentImage(getRandomImage(images));
+      onInit();
+    }, 500);
   };
 
   /**
@@ -145,8 +148,6 @@ export const Mapillary: React.FC<MapillaryProps> = ({ onMove, onInit, gameSettin
   if (currentImage && currentImage.computed_geometry && currentImage.computed_geometry.coordinates) {
     onMove({ latitude: currentImage.computed_geometry.coordinates[1], longitude: currentImage.computed_geometry.coordinates[0] });
   }
-
-  //console.log(currentImage?.id);
 
   /**
    * Refresh current image from the list of available images

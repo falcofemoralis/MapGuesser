@@ -10,10 +10,10 @@ export const formatText = (text: string, style: StyleProp<TextStyle>, ...args: F
   let i = 0;
 
   const getString = (s: string) => {
-    if (s.includes('$s')) {
+    if (s.includes('$s')) {      
       const arg = args[i];
-      i++;
-      return <Text key={s} style={arg.style}>{s.replace('$s', arg.text.toString())}</Text>;
+      i++;      
+      return <Text key={`${s}_${i}_${arg.text}`} style={arg.style}>{s.replace('$s', arg.text.toString())}</Text>;
     } else {
       return s;
     }

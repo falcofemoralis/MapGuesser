@@ -26,12 +26,12 @@ export const SelectCarousel = <T extends Card>({ cards, onSelect }: CarouselProp
   };
 
   const onSnap = (i: number) => {
-  //  setIndex(i);
+    //  setIndex(i);
     onSelect(cards[i]);
   };
 
- // onSelect(cards[currentIndex]);
- // console.log(cards[currentIndex]);
+  // onSelect(cards[currentIndex]);
+  // console.log(cards[currentIndex]);
 
   return (
     <Carousel

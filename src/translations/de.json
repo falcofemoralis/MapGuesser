@@ -41,13 +41,11 @@
   "ACHIEVEMENTS": "Erfolge",
   "SHOP": "Shop",
   "LEADERBOARD": "Bestenliste",
-  "SINGLE": "EINZEL",
+  "SINGLE": "Einzel",
   "ROUNDS": "Runden",
   "TIME": "Zeit",
   "FREE": "Kostenlos",
   "PAID": "Kostenpflichtig",
-  "FREE_MODE_DESC": "Das Spielerlebnis ist bei kostenpflichtigen Spielen besser, da Panoramabilder von besserer Qualität sind",
-  "PAID_MODE_DESC": "Für das kostenpflichtige Spiel sind $s Münzen erforderlich. Jetzt hast du $s. Sie werden Münzen im kostenlosen Spiel verdienen. Sie können Anzeigen ansehen oder Münzen im Shop kaufen",
   "PLAY": "Spiel",
   "EASY": "Einfach",
   "NORMAL": "Normal",
@@ -57,8 +55,10 @@
   "TIME_EXPIRED": "Zeit ist abgelaufen",
   "LOADING_HINT_1": "Erzeuge zufälligen Standort...",
   "LOADING_HINT_2": "Standortverfeinerung...",
-  "LOADING_HINT_3": "Schwierig, Standort zu bestimmen...",
-  "LOADING_HINT_4": "Warte noch eine Weile",
+  "LOADING_HINT_3": "Die Kartographen anrufen...",
+  "LOADING_HINT_4": "Die Gegend erkunden...",
+  "FREE_MODE_DESC": "Bezahlmodus ausprobieren! Es hat ein besseres Gameplay, weil Panoramabilder von besserer Qualität sind",
+  "PAID_MODE_DESC": "Für das kostenpflichtige Spiel sind $s Münzen erforderlich. Jetzt haben Sie $s Münzen. Sie verdienen $s Münzen pro Spiel oder Sie können Werbung ansehen oder Münzen im Shop kaufen",
   "SOON": "Kommt bald",
   "ad": "Andorra",
   "au": "Australien",
@@ -116,5 +116,4 @@
   "ua": "Ukraine",
   "gb": "Vereinigtes Königreich",
   "us": "Vereinigte Staaten"
-
 }

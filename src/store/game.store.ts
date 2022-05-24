@@ -1,10 +1,12 @@
+import { LatLng } from 'react-native-maps';
 import { CountryCard } from '@/types/card.type';
 import { makeAutoObservable } from 'mobx';
 import Round from '../types/round.type';
 
 class GameStore {
   rounds: Round[] = []; // list of played rounds
-  countryCards: CountryCard[] | null = null;
+  fromCoordinates: LatLng | undefined; // user street view coordinates
+  toCoordinates: LatLng | undefined; // marker coordinates
 
   constructor() {
     makeAutoObservable(this, {}, { deep: true });
@@ -23,6 +25,11 @@ class GameStore {
    */
   resetRounds() {
     this.rounds = [];
+  }
+
+  resetCoordinates() {
+    this.fromCoordinates = undefined;
+    this.toCoordinates = undefined;
   }
 }
 

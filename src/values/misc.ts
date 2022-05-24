@@ -8,7 +8,7 @@ export const Misc = {
   SEARCH_DELAY_MS: 80, // Delay between typing in places search dialog
   COINS_FOR_PAID_GAME: 10, // Amount of coins that user paid for paid game (if premium wasn't bought)
   COINS_PER_AD: 5, // Amount of coins that user gets after watching an ad
-  COINS_PER_FREE_GAME: 1, // Amount of coins that user gets after playing a free game
+  COINS_PER_GAME: 1, // Amount of coins that user gets after playing a game
   GAME_MODE_TIME_MIN: 1,
   GAME_MODE_TIME_ST: 10,
   GAME_MODE_TIME_MAX: 15,

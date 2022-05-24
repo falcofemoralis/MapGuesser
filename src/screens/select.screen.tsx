@@ -21,24 +21,26 @@ import { useTranslation } from 'react-i18next';
 import { Dimensions, Image, StyleSheet, Text, ToastAndroid, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { RewardedAd, RewardedAdEventType, TestIds } from 'react-native-google-mobile-ads';
+import NetInfo from '@react-native-community/netinfo';
 
 const rewarded = RewardedAd.createForAdRequest(__DEV__ ? TestIds.REWARDED : Keys.rewardIds.SelectScreen);
 
 const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, route }) => {
   const { t } = useTranslation();
   const gameCard = route.params.gameCard;
+  const playMode = gameCard.playMode;
   const [streetViewMode, setStreetViewMode] = React.useState(StreetViewMode.FREE);
   const [gameMode, setGameMode] = React.useState<GameMode>({ isRounds: false, isTimer: false });
   const [difficulty, setDifficulty] = React.useState(
-    userStore.progress.lvl <= Misc.UNLOCK_ALL_LVL && gameCard.playMode == PlayMode.NORMAL ? Difficulty.EASY : Difficulty.NORMAL
+    userStore.progress.lvl <= Misc.UNLOCK_ALL_LVL && playMode == PlayMode.NORMAL ? Difficulty.EASY : Difficulty.NORMAL
   );
   const [time, setTime] = React.useState(Misc.GAME_MODE_TIME_ST);
   const [rounds, setRounds] = React.useState(Misc.GAME_MODE_ROUNDS_ST);
   const [adLoaded, setAdLoaded] = React.useState(false);
+
   /**
    * Carousels data
    */
-  let selectedContinent: Continent;
   const continentCards: ContinentCard[] = [
     { title: t('AS'), img: require('@/assets/asia.jpg'), continent: Continent.as },
     { title: t('EU'), img: require('@/assets/europe.jpg'), continent: Continent.eu },
@@ -47,6 +49,9 @@ const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, route })
     { title: t('AF'), img: require('@/assets/africa.jpg'), continent: Continent.af },
     { title: t('AU'), img: require('@/assets/australia.jpg'), continent: Continent.au }
   ];
+  const [selectedContinentCard, setSelectedContinentCard] = React.useState<ContinentCard | undefined>(
+    playMode == PlayMode.CONTINENTS ? continentCards[0] : undefined
+  );
 
   const getCountryCards = (): CountryCard[] => {
     const cards: CountryCard[] = [];
@@ -54,15 +59,10 @@ const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, route })
       cards.push({ title: t(country.toString() as any), img: CountryImages[country], country });
     }
 
-    console.log('cards');
-
-    return cards;
+    return cards.sort((a, b) => a.title.localeCompare(b.title));
   };
-  const [selectedCountryCard, setSelectedCountryCard] = React.useState<CountryCard>();
-  if (!gameStore.countryCards) {
-    gameStore.countryCards = getCountryCards();
-    setSelectedCountryCard(gameStore.countryCards[0]);
-  }
+  const countryCards: CountryCard[] = getCountryCards();
+  const [selectedCountryCard, setSelectedCountryCard] = React.useState<CountryCard | undefined>(playMode == PlayMode.COUNTRIES ? countryCards[0] : undefined);
 
   React.useEffect(() => {
     const unsubscribeLoaded = rewarded.addAdEventListener(RewardedAdEventType.LOADED, () => {
@@ -98,15 +98,24 @@ const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, route })
       return;
     }
 
-    navigation.replace('Game', {
-      gameSettings: {
-        playMode: gameCard.playMode,
-        streetViewMode,
-        difficulty,
-        isRounds: gameMode.isRounds,
-        isTimer: gameMode.isTimer
-      },
-      gameData: { continent: selectedContinent, country: selectedCountryCard?.country, time, rounds }
+    console.log(selectedContinentCard);
+    console.log(selectedCountryCard);
+
+    NetInfo.fetch().then(state => {
+      if (state.isConnected) {
+        navigation.replace('Game', {
+          gameSettings: {
+            playMode,
+            streetViewMode,
+            difficulty,
+            isRounds: gameMode.isRounds,
+            isTimer: gameMode.isTimer
+          },
+          gameData: { continent: selectedContinentCard?.continent, country: selectedCountryCard?.country, time, rounds }
+        });
+      } else {
+        ToastAndroid.showWithGravityAndOffset(t('NO_INTERNET'), ToastAndroid.SHORT, ToastAndroid.BOTTOM, 25, 50);
+      }
     });
   };
 
@@ -169,7 +178,8 @@ const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, route })
       style: styles.hintBold,
       text: Misc.COINS_FOR_PAID_GAME
     },
-    { style: styles.hintBold, text: userStore.coins.toFixed(0) }
+    { style: styles.hintBold, text: userStore.coins.toFixed(0) },
+    { style: styles.hintBold, text: Misc.COINS_PER_GAME }
   );
 
   return (
@@ -183,12 +193,8 @@ const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, route })
       </View>
       <ScrollView style={styles.scroll}>
         <View style={[GlobalStyles.ccc, styles.mainContainer]}>
-          {gameCard.playMode == PlayMode.CONTINENTS && (
-            <SelectCarousel cards={continentCards} onSelect={continentCard => (selectedContinent = continentCard.continent)} />
-          )}
-          {gameCard.playMode == PlayMode.COUNTRIES && (
-            <SelectCarousel cards={gameStore.countryCards} onSelect={countryCard => setSelectedCountryCard(countryCard)} />
-          )}
+          {playMode == PlayMode.CONTINENTS && <SelectCarousel cards={continentCards} onSelect={continentCard => setSelectedContinentCard(continentCard)} />}
+          {playMode == PlayMode.COUNTRIES && <SelectCarousel cards={countryCards} onSelect={countryCard => setSelectedCountryCard(countryCard)} />}
           <Switch initial={0} onSelect={value => setGameMode(value)} options={gameModes} />
           {gameMode.isTimer && (
             <Slider
@@ -210,7 +216,7 @@ const SelectScreen: React.FC<Props<'Select'>> = observer(({ navigation, route })
           )}
           <Switch initial={streetViewMode} onSelect={value => setStreetViewMode(value)} options={streetViewModes} />
           {streetViewMode == StreetViewMode.FREE ? freeHintText : paidHintText}
-          {streetViewMode == StreetViewMode.FREE && gameCard.playMode == PlayMode.NORMAL && (
+          {streetViewMode == StreetViewMode.FREE && playMode == PlayMode.NORMAL && (
             <Switch initial={difficulty} onSelect={value => setDifficulty(value)} options={difficulties} />
           )}
           <View style={[GlobalStyles.rcc, styles.buttons]}>
@@ -307,6 +313,8 @@ const styles = StyleSheet.create({
     width: SCREEN_WIDTH / 4 / 1.5
   },
   hintText: {
+    width: '100%',
+    padding: 5,
     color: GlobalColors.white,
     fontSize: GlobalDimens.normalText
   },

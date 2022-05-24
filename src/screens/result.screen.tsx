@@ -31,14 +31,14 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
   const from = point([currentCoordinates?.latitude, currentCoordinates?.longitude]); // 'from' point
   const playtime = route.params.playtime; // user playtime
   const [interstitialLoaded, setInterstitialLoaded] = React.useState(false);
+  let selectedCoordinates: LatLng | undefined = undefined;
+  let distance: number;
+  let miles: number;
+  let xp: number;
+  let accuracy: number;
 
-  let selectedCoordinates: LatLng | undefined = undefined,
-    distance: number,
-    miles: number,
-    xp: number,
-    accuracy: number;
   if (route.params.to) {
-    selectedCoordinates = { ...route.params.to };
+    selectedCoordinates = { ...route.params.to };    
     const to = point([selectedCoordinates?.latitude, selectedCoordinates?.longitude]); // 'to' point
     distance = turfDistance(from, to, { units: Unit.KM }); // calculate distance between 'from' and 'to' points (in km)
     miles = turfDistance(from, to, { units: Unit.ML }); // in miles
@@ -57,7 +57,6 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
       setInterstitialLoaded(true);
     });
 
-    console.log(`ads counter: ${settingsStore.adsCounter % Misc.ADS_PER_COUNTER}`);
     if (settingsStore.adsCounter % Misc.ADS_PER_COUNTER == 0) {
       // Start loading the interstitial straight away
       interstitial.load();
@@ -75,9 +74,7 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
     }
 
     if (selectedCoordinates) {
-      if (gameSettings.streetViewMode == StreetViewMode.FREE) {
-        userStore.updateCoins(Misc.COINS_PER_FREE_GAME, '+');
-      }
+      userStore.updateCoins(Misc.COINS_PER_GAME, '+');
     }
 
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => true);
@@ -88,7 +85,6 @@ const ResultScreen: React.FC<Props<'Result'>> = ({ route, navigation }) => {
       backHandler.remove();
     };
   }, []);
-
 
   /**
    * Navigate to next round

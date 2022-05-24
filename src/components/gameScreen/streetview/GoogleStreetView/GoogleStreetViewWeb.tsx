@@ -24,7 +24,7 @@ class GoogleStreetViewWeb extends React.Component<GoogleStreetViewWebProps> {
   onInit = () => {
     if (!this.isReady) {
       console.log(this.props.country);
-
+      
       this.webview?.injectJavaScript(`
       $("#countries").val("${this.props.country}").change();
       setTimeout(() => {
@@ -49,11 +49,12 @@ class GoogleStreetViewWeb extends React.Component<GoogleStreetViewWebProps> {
 
           panorama.addListener("position_changed", () => {
               postPosition();
-          })
+              $('div[style*="position: absolute; background-color: rgb(34, 34, 34); border-radius: 2px;"]').hide();
+          });
 
           const ccb = document.getElementsByClassName("cc_button")[0];
           if(ccb) ccb.click();
-      }, 1000)
+         }, 1000)
       `);
       this.isReady = true;
     }
