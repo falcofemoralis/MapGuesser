@@ -13,7 +13,7 @@ interface BannerProps {
 export const Banner: React.FC<BannerProps> = ({ position, id }) => {
   return (
     <View style={[styles.banner, position == Position.TOP ? { top: 0 } : { bottom: 0 }]}>
-      {/* <BannerAd unitId={__DEV__ ? TestIds.BANNER : id} size={BannerAdSize.BANNER} /> */}
+      <BannerAd unitId={__DEV__ ? TestIds.BANNER : id} size={BannerAdSize.BANNER} />
     </View>
   );
 };

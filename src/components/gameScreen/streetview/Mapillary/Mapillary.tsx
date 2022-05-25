@@ -6,16 +6,15 @@ import { StreetViewMode } from '@/constants/streetviewmode';
 import { Places } from '@/types/places.type';
 import { StreetViewSettings } from '@/types/streetviewsettings';
 import { generateCoordinate } from '@/utils/coordinates.util';
+import { Utils } from '@/utils/utils';
 import { Misc } from '@/values';
-import { runInAction } from 'mobx';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, StyleProp, StyleSheet, Text, ToastAndroid, ViewStyle } from 'react-native';
-import { MapillaryCountriesList } from './data/mapillaryCountriesList';
+import { Alert, StyleProp, ToastAndroid, ViewStyle } from 'react-native';
+import MapillaryImagesService, { Image } from '@/services/mapillaryImages.service';
 import { EasyPlaces } from './data/easyPlaces';
-import MapillaryImagesService, { Image } from './MapillaryImages.service';
+import { MapillaryCountriesList } from './data/mapillaryCountriesList';
 import MapillaryWeb from './MapillaryWeb';
-import { Utils } from '@/utils/utils';
 
 interface MapillaryProps extends StreetViewSettings {
   /** Margin of sequence button */

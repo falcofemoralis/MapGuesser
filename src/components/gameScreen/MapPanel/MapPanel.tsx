@@ -50,7 +50,6 @@ const MapPanel: React.FC<MapPanelProps> = ({ onMarkerSet, onComplete, buttonStyl
         closeRootStyle={styles.closeBtn}
         searchRootStyle={styles.searchBtn}
         barContainerStyle={styles.bar}
-        style={styles.panel}
       >
         <SelectableMap style={styles.selectableMap} onMarkerSet={handleMarkerSet} onComplete={onComplete} />
       </SwipeablePanel>
@@ -63,9 +62,6 @@ const styles = StyleSheet.create({
   selectableMap: {
     width: '100%',
     height: Dimensions.get('window').height - 125
-  },
-  panel: {
-    zIndex: 20
   },
   closeBtn: {
     marginTop: 25,

@@ -3,6 +3,7 @@ import { axiosOSM } from './index';
 export interface SearchPlace {
   properties: {
     display_name: string;
+    icon: string;
   };
   bbox: number[];
   geometry: {
@@ -20,9 +21,18 @@ export default class MapService {
    * @param q - text
    * @returns collection of places
    */
-  static async searchForPlace(q: string): Promise<SearchCollection> {
+  static async searchForPlace(q: string, language: string): Promise<SearchCollection> {
+    // convert language i118 code to accept-language code
+    // http://www.lingoes.net/en/translator/langcode.htm
+    let lng = language;
+    if (lng == 'ua') {
+      lng = 'uk-UA';
+    }
+
+    console.log(lng);
+
     try {
-      const { data } = await axiosOSM.get<SearchCollection>(`/search?q=${q}&format=geojson`);
+      const { data } = await axiosOSM.get<SearchCollection>(`/search?q=${q}&format=geojson&accept-language=${lng}`);
       return data;
     } catch (e: any) {
       throw e;

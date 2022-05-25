@@ -2,12 +2,11 @@ import { GameButton } from '@/components/interface/GameButton/GameButton';
 import MapService, { SearchPlace } from '@/services/map.service';
 import { searchStore } from '@/store/search.store';
 import { Utils } from '@/utils/utils';
-import { Misc, GlobalDimens } from '@/values';
+import { Misc, GlobalDimens, GlobalColors } from '@/values';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, Dimensions, FlatList, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Dimensions, FlatList, Modal, StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 import SearchBar from 'react-native-platform-searchbar';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 interface SearchPanelProps {
   /** Windows visibility */
@@ -16,7 +15,7 @@ interface SearchPanelProps {
   onClose: () => void;
 }
 export const SearchPanel: React.FC<SearchPanelProps> = ({ visible, onClose }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [value, setValue] = React.useState(''); // state of the search bar value
   const [data, setData] = React.useState<SearchPlace[]>([]); // state of retrieved places
   const [loading, setLoading] = React.useState(false); // state of visibility of the loading bar
@@ -53,7 +52,7 @@ export const SearchPanel: React.FC<SearchPanelProps> = ({ visible, onClose }) =>
         searchStore.searchDelay++;
       }
 
-      MapService.searchForPlace(searchStore.placeForSearch).then(data => {
+      MapService.searchForPlace(searchStore.placeForSearch, i18n.language).then(data => {
         setLoading(false);
         setData(data.features);
       });
@@ -89,7 +88,7 @@ export const SearchPanel: React.FC<SearchPanelProps> = ({ visible, onClose }) =>
             {loading ? <ActivityIndicator style={{ marginRight: 10 }} /> : undefined}
           </SearchBar>
           {data.length > 0 ? (
-            <FlatList style={styles.list} data={data} renderItem={({ item }) => <Item text={item.properties.display_name} onPress={() => select(item)} />} />
+            <FlatList style={styles.list} data={data} renderItem={({ item }) => <Item text={item.properties.display_name} iconUrl={item.properties.icon} onPress={() => select(item)} />} />
           ) : (
             <></>
           )}
@@ -108,7 +107,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 10,
-    backgroundColor: Colors.background,
+    backgroundColor: GlobalColors.background,
     borderRadius: 10,
     padding: 15,
     alignItems: 'center',
@@ -122,13 +121,13 @@ const styles = StyleSheet.create({
     elevation: 5
   },
   searchBar: {
-    marginTop: 25
+    marginTop: 15
   },
   searchBarInput: {
-    backgroundColor: Colors.backgroundOpposite
+    backgroundColor: GlobalColors.backgroundOpposite
   },
   title: {
-    color: Colors.white,
+    color: GlobalColors.white,
     fontSize: GlobalDimens.headText,
     fontWeight: 'bold'
   },
@@ -140,7 +139,7 @@ const styles = StyleSheet.create({
     width: 42,
     padding: 14,
     borderRadius: 32,
-    backgroundColor: Colors.backgroundTransparent,
+    backgroundColor: GlobalColors.backgroundTransparent,
     zIndex: 101
   },
   list: {
@@ -150,25 +149,35 @@ const styles = StyleSheet.create({
   },
   item: {
     flex: 1,
+    flexDirection: 'row',
     padding: 10,
     marginBottom: 5,
     height: 44,
     width: '100%',
-    backgroundColor: Colors.backgroundOpposite
+    backgroundColor: GlobalColors.backgroundOpposite
   },
   itemText: {
-    color: Colors.white,
+    color: GlobalColors.white,
     fontSize: 18
+  },
+  itemIcon: {
+    alignSelf: 'center',
+    height: '70%',
+    marginEnd: 5,
+    aspectRatio: 1,
+    tintColor: GlobalColors.white
   }
 });
 
 interface ItemProps {
   text: string;
+  iconUrl: string;
   onPress: () => void;
 }
-const Item: React.FC<ItemProps> = ({ text, onPress }) => {
+const Item: React.FC<ItemProps> = ({ text, onPress, iconUrl }) => {  
   return (
     <TouchableOpacity style={styles.item} onPress={onPress} activeOpacity={0.5}>
+      <Image style={styles.itemIcon} source={{uri: iconUrl}}/>
       <Text style={styles.itemText}>{text}</Text>
     </TouchableOpacity>
   );
